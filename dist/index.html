@@ -4,13 +4,25 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webpack Starter Kit</title>
+  <title>Up And Away</title>
 </head>
 <body>
-  <img src="./images/turing-logo.png" alt="turing logo">
-  
-  <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
+  <header>
+    <h1>up&AWAY</h1>
+    <h2>Welcome to Your Fantasy Vacation, <span class="traveller">Rebecca</span></h2>
+  </header>
+  <main>
+    <section class="trips-container">
+      <h3>Trips:</h3>
+      <ul class="trips-list">
+        <!-- trips will go here -->
+      </ul>
+    </section>
+    <section class="spent-container">
+      <h3>Total Spent:</h3>
+      <p class="dollars-spent">$0</p>
+    </section>
+  </main>
   <script src="bundle.js"></script>
-
 </body>
 </html>
