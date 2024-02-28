@@ -1,0 +1,22 @@
+import { prepareData } from './apiCalls';
+
+let currentTraveler;
+let allTrips;
+let allDestinations;
+
+function getAllData(id) {
+    prepareData(id)
+    .then(([traveler, trips, destinations]) => {
+        currentTraveler = traveler;
+        allTrips = trips.trips;
+        allDestinations = destinations.destinations;
+        renderDom(currentTraveler);
+    })
+}
+
+function renderDom(traveler) {
+    
+}
+
+getAllData(7);
+
