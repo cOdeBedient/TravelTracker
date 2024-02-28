@@ -17,9 +17,11 @@ function getAllData(id) {
 }
 
 function prepareData(id) {
-    Promise.all(getAllData(id))
+    return Promise.all(getAllData(id))
     .then(response => {
-        return Promise.all(response.map((element) => { element.json() }))
+        return Promise.all(response.map((element) => {
+            return element.json();
+        }))
     })
 }
 
