@@ -1,0 +1,3 @@
+import { prepareData } from './apiCalls';
+
+console.log(prepareData(7));
