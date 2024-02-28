@@ -1,4 +1,4 @@
-import { prepareData } from './apiCalls';
+import { prepareData } from './api-calls';
 
 let currentTraveler;
 let allTrips;

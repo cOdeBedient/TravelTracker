@@ -1,4 +1,4 @@
-[
+const sampleDestinations = [
     {
         id: 1,
         destination: "Tokyo, Japan",
@@ -47,4 +47,4 @@
         image: "https://example.com/nyc.jpg",
         alt: "Manhattan skyline with Empire State Building"
     }
-  ]
+];

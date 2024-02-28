@@ -1,4 +1,4 @@
-[
+const sampleTravelers = [
     {
       id: 1,
       name: "John Smith",
@@ -29,4 +29,6 @@
       name: "Sarah Miller",
       travelerType: "thrill-seeker"
     }
-  ]
+];
+
+export { sampleTravelers };
