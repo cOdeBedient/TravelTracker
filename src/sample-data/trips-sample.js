@@ -60,3 +60,5 @@ const sampleTrips = [
         suggestedActivities: []
     }
 ];
+
+export { sampleTrips };
