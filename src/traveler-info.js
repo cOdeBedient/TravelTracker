@@ -35,14 +35,23 @@ function computeTotalSpent(id, trips, destinations) {
                 && (trip.date.replaceAll('/', '') > today - 10000);
     });
     let approvedPastDestinations = getDestinations(id, approvedRecentTrips, destinations);
-    let totalCost = approvedPastDestinations.reduce((total, destination) => {
+    let tripSpending = approvedPastDestinations.reduce((total, destination) => {
         total += destination.estimatedLodgingCostPerDay
         total += destination.estimatedFlightCostPerPerson
 
         return total;
     }, 0)
+    let agentFee = tripSpending / 10;
 
-    return totalCost;
+    return tripSpending + agentFee;
+}
+
+function updateTraveler(traveler, trips, destinations) {
+    traveler.trips = getTrips(traveler.id, trips);
+    traveler.destinations = getDestinations(traveler.id, trips, destinations);
+    traveler.totalSpent = computeTotalSpent(traveler.id, trips, destinations);
+
+    return traveler;
 }
 
 export {
@@ -50,5 +59,6 @@ export {
     getTrips,
     getDestinations,
     getDate,
-    computeTotalSpent
+    computeTotalSpent,
+    updateTraveler
 }
