@@ -1,4 +1,4 @@
-import { prepareData } from './apiCalls';
+import { prepareData } from './api-calls';
 
 let currentTraveler;
 let allTrips;
@@ -6,16 +6,16 @@ let allDestinations;
 
 function getAllData(id) {
     prepareData(id)
-    .then(([traveler, trips, destinations]) => {
+    .then(([traveler, tripData, destinationData]) => {
         currentTraveler = traveler;
-        allTrips = trips.trips;
-        allDestinations = destinations.destinations;
+        allTrips = tripData.trips;
+        allDestinations = destinationData.destinations;
         renderDom(currentTraveler);
     })
 }
 
 function renderDom(traveler) {
-    
+
 }
 
 getAllData(7);
