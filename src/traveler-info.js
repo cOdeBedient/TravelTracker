@@ -22,17 +22,19 @@ function getDestinations(id, trips, destinations) {
 function getDate() {
     const today = new Date();
     const todayYear = today.getFullYear();
-    const todayMonth = today.getMonth().toString().padStart(2, '0')
+    const todayMonth = (today.getMonth() + 1).toString().padStart(2, '0')
     const todayDay = today.getDate().toString().padStart(2, '0')
     return `${todayYear}${todayMonth}${todayDay}`
 }
 
-function computeTotalCost(id, trips, destinations) {
+function computeTotalSpent(id, trips, destinations) {
     const today = getDate();
-    let approvedPastTrips = trips.filter((trip) => {
-        return (trip.status === approved) && trip.date.replace('/', '') === today;
+    let approvedRecentTrips = trips.filter((trip) => {
+        return (trip.status === 'approved')
+                && (trip.date.replaceAll('/', '') < today)
+                && (trip.date.replaceAll('/', '') > today - 10000);
     });
-    let approvedPastDestinations = getDestinations(id, approvedPastTrips, destinations);
+    let approvedPastDestinations = getDestinations(id, approvedRecentTrips, destinations);
     let totalCost = approvedPastDestinations.reduce((total, destination) => {
         total += destination.estimatedLodgingCostPerDay
         total += destination.estimatedFlightCostPerPerson
@@ -48,5 +50,5 @@ export {
     getTrips,
     getDestinations,
     getDate,
-    computeTotalCost
+    computeTotalSpent
 }
