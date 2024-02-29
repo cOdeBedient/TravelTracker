@@ -48,3 +48,5 @@ const sampleDestinations = [
         alt: "Manhattan skyline with Empire State Building"
     }
 ];
+
+export { sampleDestinations };
