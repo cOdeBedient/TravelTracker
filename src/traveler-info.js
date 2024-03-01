@@ -13,16 +13,16 @@ function getTrips(id, trips) {
 
 function appendDestinations(trips, destinations) {
     // console.log('trips inside AD', trips)
-    let updatedTrips = trips;
-    trips.forEach((trip, index) => {
+    let updatedTrips = trips.map((trip) => {
         let foundDestination = destinations.find((destination) => {
             return destination.id === trip.destinationID
         });
-        // console.log(updatedTrips[index])
-        updatedTrips[index].destination = foundDestination;
+        return {
+          ...trip,
+          destination: foundDestination
+        }
     })
-    
-    // console.log('updatedTrips', updatedTrips)
+
     return updatedTrips;
 }
 
@@ -43,10 +43,12 @@ function computeTripCost(trip) {
 
 function compileTripData(trips, destinations) {
     let appendedTrips = appendDestinations(trips, destinations);
-    console.log('appendedTrips', appendedTrips)
     let compiledTrips = appendedTrips.map((trip) => {
         trip.cost = computeTripCost(trip);
-        return trip;
+        return {
+            ...trip,
+            cost: trip.cost
+          }
     })
 
     return compiledTrips;
@@ -79,7 +81,7 @@ function computeTotalSpent(trips) {
 }
 
 function updateTraveler(traveler, trips, destinations) {
-    console.log("traveler", traveler)
+    // console.log("traveler", traveler)
     let updatedTraveler = traveler;
     let updatedTravelerTrips = getTrips(traveler.id, trips);
     let updatedTrips = compileTripData(updatedTravelerTrips, destinations)
