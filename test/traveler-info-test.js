@@ -11,6 +11,8 @@ describe('traveler-info.js', function() {
   let traveler1Trips;
   let traveler2Trips
   let traveler4Trips;
+  let trip1;
+  let trip2;
   // let traveler1Destinations;
   // let traveler2Destinations;
   // let traveler4Destinations;
@@ -18,8 +20,11 @@ describe('traveler-info.js', function() {
     traveler1 = getTraveler(1, sampleTravelers);
     traveler2 = getTraveler(2, sampleTravelers);
     traveler1Trips = getTrips(1, sampleTrips);
+    console.log("traveler1Trips", traveler1Trips)
     traveler2Trips = getTrips(2, sampleTrips);
     traveler4Trips = getTrips(4, sampleTrips);
+    trip1 = traveler1Trips[0];
+    trip2 = traveler2Trips[0];
     // traveler1Destinations = getDestinations(1, sampleTrips, sampleDestinations);
     // traveler2Destinations = getDestinations(2, sampleTrips, sampleDestinations);
     // traveler4Destinations = getDestinations(4, sampleTrips, sampleDestinations);
@@ -72,10 +77,12 @@ describe('traveler-info.js', function() {
     });
   });
 
-  describe('append destinations', function() {
-    it('should attach destinations to an array of trips', function() {
+  describe('find destination', function() {
+    it('should find destination associated with a trip', function() {
+      // console.log("traveler1Trips[0] before", traveler1Trips[0])
       let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
       let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+      // console.log("traveler1Trips[0]", traveler1Trips[0])
 
       expect(traveler1UpdatedTrips[0]).to.deep.equal(
         {
@@ -112,8 +119,8 @@ describe('traveler-info.js', function() {
 
   describe('compute trip cost', function() {
     it('should return an object with cost data', function() {
-      let tripCost1 = computeTripCost(traveler1Trips[0]);
-      let tripCost2 = computeTripCost(traveler2Trips[0]);
+      let tripCost1 = computeTripCost(trip1);
+      let tripCost2 = computeTripCost(trip2);
 
       expect(tripCost1).to.deep.equal({totalPerPerson: 1870, totalGroup: 11220});
       expect(tripCost2).to.deep.equal({totalPerPerson: 880, totalGroup: 3520});

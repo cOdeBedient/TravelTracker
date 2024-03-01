@@ -3,25 +3,26 @@ function getTraveler(id, travelers) {
 }
 
 function getTrips(id, trips) {
-    return trips.filter(trip => id === trip.userID);
-}
-
-function findDestination(trip, destinations) {
-    return destinations.find((destination) => {
-        return destination.id === trip.destinationID
+    let currentTrips = trips.filter((trip) => {
+        return id === trip.userID
     });
+
+    console.log("currentTrips", currentTrips)
+    return currentTrips;
 }
 
-// function appendDestinations(trips, destinations) {
-//     trips.forEach((trip) => {
-//         let foundDestination = destinations.find((destination) => {
-//             return destination.id === trip.destinationID
-//         });
-//         trip.destination = foundDestination;
-//     })
-
-//     return trips;
-// }
+function appendDestinations(trips, destinations) {
+    console.log('trips inside AD', trips)
+    let updatedTrips = trips.forEach((trip) => {
+        let foundDestination = destinations.find((destination) => {
+            return destination.id === trip.destinationID
+        });
+        trip.destination = foundDestination;
+    })
+    console.log('trips inside AD after', trips)
+    
+    return updatedTrips;
+}
 
 function computeAgentFee(cost) {
     return Math.round(cost / 10);
@@ -38,14 +39,12 @@ function computeTripCost(trip) {
     return {totalPerPerson: totalPerPerson, totalGroup: totalGroup};
 }
 
-// return an array of trips that have destination information and cost per trip
-function compileTripData() {
-
+function compileTripData(trips, destinations) {
+    let compiledTrips = appendDestinations(trips, destinations);
+    compiledTrips.map((trip) => {
+        trip.cost = computeTripCost();
+    })
 }
-
-
-
-
 
 function getDate() {
     const today = new Date();
@@ -55,54 +54,40 @@ function getDate() {
     return `${todayYear}${todayMonth}${todayDay}`
 }
 
-//shouldn't have a destinations key, just a trips key that includes destinations and trip cost.
-function updateTraveler(traveler, trips, destinations) {
-    traveler.trips = getTrips(traveler.id, trips);
-    traveler.destinations = getDestinations(traveler.id, trips, destinations);
-    traveler.totalSpent = computeTotalSpent(traveler.id, trips, destinations);
-
-    return traveler;
-}
-
-//should just take one parameter, traveler
-function computeTotalSpent(id, trips, destinations) {
+function computeTotalSpent(trips) {
     const today = getDate();
     let approvedRecentTrips = trips.filter((trip) => {
         return (trip.status === 'approved')
                 && (trip.date.replaceAll('/', '') < today)
                 && (trip.date.replaceAll('/', '') > today - 10000);
     });
-    let approvedPastDestinations = getDestinations(id, approvedRecentTrips, destinations);
-    let tripSpending = approvedPastDestinations.reduce((total, destination) => {
-        let tripLength = approvedRecentTrips.find((trip) => {
-            return trip.destinationID === destination.id
-        }).duration;
-        console.log('tripLength', tripLength)
-        total += destination.estimatedLodgingCostPerDay * tripLength;
-        total += destination.estimatedFlightCostPerPerson;
+    let totalSpending = approvedRecentTrips.reduce((totals, trip) => {
+        totals.individual += trip.cost.totalPerPerson;
+        totals.group += trip.cost.totalGroup;
 
-        return total;
-    }, 0)
-    let agentFee = computeAgentFee(tripSpending);
+        return totals
+    }, {individual: 0, group: 0})
 
-    return tripSpending + agentFee;
+    return totalSpending;
 }
 
-
-
-function getDestination(name, destinations) {
-
-}
-
-function computeGroupTripCost(destination, destinations) {
-    return 
+function updateTraveler(traveler, trips, destinations) {
+    console.log("traveler", traveler)
+    let updatedTraveler = traveler;
+    let updatedTravelerTrips = getTrips(traveler.id, trips);
+    let updatedTrips = compileTripData(updatedTravelerTrips, destinations)
+    updatedTraveler.trips = updatedTrips;
+    traveler.spentLastYear = computeTotalSpent(trips);
+    return updatedTraveler;
 }
 
 export {
     getTraveler,
     getTrips,
     appendDestinations,
+    computeAgentFee,
     computeTripCost,
+    compileTripData,
     getDate,
     computeTotalSpent,
     updateTraveler
