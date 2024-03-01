@@ -6,18 +6,39 @@ function getTrips(id, trips) {
     return trips.filter(trip => id === trip.userID);
 }
 
-function getDestinations(id, trips, destinations) {
-    let tripsById = getTrips(id, trips);
-    let foundDestinations = [];
-    tripsById.forEach((trip) => {
+// refactor to appendDestination (append a single destination to each trip)
+function appendDestinations(trips, destinations) {
+    trips.forEach((trip) => {
         let foundDestination = destinations.find((destination) => {
             return destination.id === trip.destinationID
         });
-        foundDestinations.push(foundDestination);
+        trip.destination = foundDestination;
     })
 
-    return foundDestinations;
+    return trips;
 }
+
+function addDestination(trip, destinations) {
+
+}
+
+function computeAgentFee(cost) {
+    return cost += Math.round(cost / 10);
+}
+
+// single trip cost
+function computeTripCost(trip, destination) {
+
+}
+
+// return an array of trips that have destination information and cost per trip
+function compileTripData() {
+
+}
+
+
+
+
 
 function getDate() {
     const today = new Date();
@@ -27,6 +48,16 @@ function getDate() {
     return `${todayYear}${todayMonth}${todayDay}`
 }
 
+//shouldn't have a destinations key, just a trips key that includes destinations and trip cost.
+function updateTraveler(traveler, trips, destinations) {
+    traveler.trips = getTrips(traveler.id, trips);
+    traveler.destinations = getDestinations(traveler.id, trips, destinations);
+    traveler.totalSpent = computeTotalSpent(traveler.id, trips, destinations);
+
+    return traveler;
+}
+
+//should just take one parameter, traveler
 function computeTotalSpent(id, trips, destinations) {
     const today = getDate();
     let approvedRecentTrips = trips.filter((trip) => {
@@ -36,28 +67,34 @@ function computeTotalSpent(id, trips, destinations) {
     });
     let approvedPastDestinations = getDestinations(id, approvedRecentTrips, destinations);
     let tripSpending = approvedPastDestinations.reduce((total, destination) => {
-        total += destination.estimatedLodgingCostPerDay
-        total += destination.estimatedFlightCostPerPerson
+        let tripLength = approvedRecentTrips.find((trip) => {
+            return trip.destinationID === destination.id
+        }).duration;
+        console.log('tripLength', tripLength)
+        total += destination.estimatedLodgingCostPerDay * tripLength;
+        total += destination.estimatedFlightCostPerPerson;
 
         return total;
     }, 0)
-    let agentFee = tripSpending / 10;
+    let agentFee = computeAgentFee(tripSpending);
 
     return tripSpending + agentFee;
 }
 
-function updateTraveler(traveler, trips, destinations) {
-    traveler.trips = getTrips(traveler.id, trips);
-    traveler.destinations = getDestinations(traveler.id, trips, destinations);
-    traveler.totalSpent = computeTotalSpent(traveler.id, trips, destinations);
 
-    return traveler;
+
+function getDestination(name, destinations) {
+
+}
+
+function computeGroupTripCost(destination, destinations) {
+    return 
 }
 
 export {
     getTraveler,
     getTrips,
-    getDestinations,
+    appendDestinations,
     getDate,
     computeTotalSpent,
     updateTraveler

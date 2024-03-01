@@ -1,6 +1,6 @@
 import chai from 'chai';
 const expect = chai.expect;
-import { getTraveler, getTrips, getDestinations, computeTotalSpent, updateTraveler } from '../src/traveler-info';
+import { getTraveler, getTrips, appendDestinations, computeTotalSpent, updateTraveler } from '../src/traveler-info';
 import { sampleTravelers } from '../src/sample-data/travelers-sample';
 import { sampleTrips } from '../src/sample-data/trips-sample';
 import { sampleDestinations } from '../src/sample-data/destinations-sample';
@@ -9,18 +9,20 @@ describe('traveler-info.js', function() {
   let traveler1;
   let traveler2;
   let traveler1Trips;
+  let traveler2Trips
   let traveler4Trips;
-  let traveler1Destinations;
-  let traveler2Destinations;
-  let traveler4Destinations;
+  // let traveler1Destinations;
+  // let traveler2Destinations;
+  // let traveler4Destinations;
   beforeEach(function() {
     traveler1 = getTraveler(1, sampleTravelers);
     traveler2 = getTraveler(2, sampleTravelers);
     traveler1Trips = getTrips(1, sampleTrips);
+    traveler2Trips = getTrips(2, sampleTrips);
     traveler4Trips = getTrips(4, sampleTrips);
-    traveler1Destinations = getDestinations(1, sampleTrips, sampleDestinations);
-    traveler2Destinations = getDestinations(2, sampleTrips, sampleDestinations);
-    traveler4Destinations = getDestinations(4, sampleTrips, sampleDestinations);
+    // traveler1Destinations = getDestinations(1, sampleTrips, sampleDestinations);
+    // traveler2Destinations = getDestinations(2, sampleTrips, sampleDestinations);
+    // traveler4Destinations = getDestinations(4, sampleTrips, sampleDestinations);
   });
 
   describe('get traveler', function() {
@@ -70,25 +72,32 @@ describe('traveler-info.js', function() {
     });
   });
 
-  describe('get destinations', function() {
-    it('should return an array of destinations for a given traveler id', function() {
-      expect(traveler1Destinations).to.deep.equal([
+  describe('append destinations', function() {
+    it('should attach destinations to an array of trips', function() {
+      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+
+      expect(traveler1UpdatedTrips[0]).to.deep.equal(
         {
-          id: 2,
-          destination: "Paris, France",
-          estimatedLodgingCostPerDay: 220,
-          estimatedFlightCostPerPerson: 600,
-          image: "https://example.com/paris.jpg",
-          alt: "Eiffel Tower with blue sky in the background"
+          id: 1,
+          userID: 1,
+          destinationID: 2,
+          travelers: 6,
+          date: "2023/09/23",
+          duration: 5,
+          status: "approved",
+          suggestedActivities: [],
+          destination: {
+            id: 2,
+            destination: "Paris, France",
+            estimatedLodgingCostPerDay: 220,
+            estimatedFlightCostPerPerson: 600,
+            image: "https://example.com/paris.jpg",
+            alt: "Eiffel Tower with blue sky in the background"
+          }
         },
-        {
-          id: 5,
-          destination: "Rio de Janeiro, Brazil",
-          estimatedLodgingCostPerDay: 130,
-          estimatedFlightCostPerPerson: 750,
-          image: "https://example.com/rio.jpg",
-          alt: "View of Christ the Redeemer statue overlooking Rio"
-        },
+      );
+      expect(traveler2UpdatedTrips[0].destination).to.deep.equal(
         {
           id: 6,
           destination: "New York City, USA",
@@ -96,11 +105,8 @@ describe('traveler-info.js', function() {
           estimatedFlightCostPerPerson: 400,
           image: "https://example.com/nyc.jpg",
           alt: "Manhattan skyline with Empire State Building"
-        }]);
-      });
-
-    it('should return an empty array if traveler has no trips', function() {
-        expect(traveler4Destinations).to.deep.equal([]);
+        }
+      );
     });
   });
 
@@ -108,7 +114,7 @@ describe('traveler-info.js', function() {
     it('should return the total spent on trips this year by traveler with given id', function() {
       let traveler1TotalSpent = computeTotalSpent(1, sampleTrips, sampleDestinations);
 
-      expect(traveler1TotalSpent).to.equal(1870);
+      expect(traveler1TotalSpent).to.equal(12254);
     });
 
     it('should not factor in pending trips', function() {
