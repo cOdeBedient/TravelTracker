@@ -63,14 +63,16 @@ function getDate() {
     return `${todayYear}${todayMonth}${todayDay}`
 }
 
-function computeTotalSpent(trips) {
+function computeYearSpent(trips) {
     const today = getDate();
     let approvedRecentTrips = trips.filter((trip) => {
         return (trip.status === 'approved')
                 && (trip.date.replaceAll('/', '') < today)
                 && (trip.date.replaceAll('/', '') > today - 10000);
     });
+    console.log('approvedRecentTrips', approvedRecentTrips)
     let totalSpending = approvedRecentTrips.reduce((totals, trip) => {
+        console.log('trip.cost.totalGroup', trip.cost.totalGroup)
         totals.individual += trip.cost.totalPerPerson;
         totals.group += trip.cost.totalGroup;
 
@@ -99,6 +101,6 @@ export {
     computeTripCost,
     compileTripData,
     getDate,
-    computeTotalSpent,
+    computeYearSpent,
     updateTraveler
 }
