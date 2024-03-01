@@ -31,14 +31,14 @@ function renderDom(traveler) {
         newTrip.className = 'trip';
         newTrip.id = `trip-${trip.id}`
         newTrip.innerHTML = `
-            <h3 class='name'>${trip.destination.name}</h3>
+            <h3 class='name'>${trip.destination.destination}</h3>
             <h4 class='date'>${trip.date}</h4>
             `
         const newTripDetails = document.createElement('div')
         newTripDetails.className = 'trip-details';
         newTripDetails.id = `trip-${trip.id}-details`
         newTripDetails.innerHTML = `
-            <img class='trip-image' src="${trip.destination.image} alt=${trip.destination.alt}>
+            <img class='trip-image' src="${trip.destination.image}" alt=${trip.destination.alt}>
             <h5 class='trip-travelers'>Number of Travelers: ${trip.travelers}</h5>
             <h5 class='trip-duration'>Length of Trip: ${trip.duration}</h5>
             <h5 class='trip-cost-ind'>Group Cost: ${trip.cost.totalGroup}</h5>
