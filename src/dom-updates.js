@@ -28,7 +28,7 @@ function renderDom(traveler) {
     console.log('currentTraveler', currentTraveler)
     traveler.trips.forEach((trip) => {
         const newTrip = document.createElement('div')
-        newTrip.className = 'trip';
+        newTrip.className = 'trip-header';
         newTrip.id = `trip-${trip.id}`
         newTrip.innerHTML = `
             <h3 class='name'>${trip.destination.destination}</h3>
