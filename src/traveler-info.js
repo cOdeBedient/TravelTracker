@@ -7,12 +7,10 @@ function getTrips(id, trips) {
         return id === trip.userID
     });
 
-    // console.log("currentTrips", currentTrips)
     return currentTrips;
 }
 
 function appendDestinations(trips, destinations) {
-    // console.log('trips inside AD', trips)
     let updatedTrips = trips.map((trip) => {
         let foundDestination = destinations.find((destination) => {
             return destination.id === trip.destinationID
@@ -70,9 +68,7 @@ function computeYearSpent(trips) {
                 && (trip.date.replaceAll('/', '') < today)
                 && (trip.date.replaceAll('/', '') > today - 10000);
     });
-    console.log('approvedRecentTrips', approvedRecentTrips)
     let totalSpending = approvedRecentTrips.reduce((totals, trip) => {
-        console.log('trip.cost.totalGroup', trip.cost.totalGroup)
         totals.individual += trip.cost.totalPerPerson;
         totals.group += trip.cost.totalGroup;
 
@@ -83,12 +79,11 @@ function computeYearSpent(trips) {
 }
 
 function updateTraveler(traveler, trips, destinations) {
-    // console.log("traveler", traveler)
     let updatedTraveler = traveler;
     let updatedTravelerTrips = getTrips(traveler.id, trips);
     let updatedTrips = compileTripData(updatedTravelerTrips, destinations)
     updatedTraveler.trips = updatedTrips;
-    traveler.spentLastYear = computeTotalSpent(trips);
+    traveler.spentLastYear = computeYearSpent(updatedTrips);
 
     return updatedTraveler;
 }
