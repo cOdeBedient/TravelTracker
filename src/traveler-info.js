@@ -6,29 +6,36 @@ function getTrips(id, trips) {
     return trips.filter(trip => id === trip.userID);
 }
 
-// refactor to appendDestination (append a single destination to each trip)
-function appendDestinations(trips, destinations) {
-    trips.forEach((trip) => {
-        let foundDestination = destinations.find((destination) => {
-            return destination.id === trip.destinationID
-        });
-        trip.destination = foundDestination;
-    })
-
-    return trips;
+function findDestination(trip, destinations) {
+    return destinations.find((destination) => {
+        return destination.id === trip.destinationID
+    });
 }
 
-function addDestination(trip, destinations) {
+// function appendDestinations(trips, destinations) {
+//     trips.forEach((trip) => {
+//         let foundDestination = destinations.find((destination) => {
+//             return destination.id === trip.destinationID
+//         });
+//         trip.destination = foundDestination;
+//     })
 
-}
+//     return trips;
+// }
 
 function computeAgentFee(cost) {
-    return cost += Math.round(cost / 10);
+    return Math.round(cost / 10);
 }
 
-// single trip cost
-function computeTripCost(trip, destination) {
+function computeTripCost(trip) {
+    const singleLodgingTotal = trip.destination.estimatedLodgingCostPerDay * trip.duration;
+    const singleFlight = trip.destination.estimatedFlightCostPerPerson;
+    const netPerPerson = singleLodgingTotal + singleFlight;
+    const agentFeePerPerson = computeAgentFee(netPerPerson);
+    const totalPerPerson = netPerPerson + agentFeePerPerson;
+    const totalGroup = totalPerPerson * trip.travelers;
 
+    return {totalPerPerson: totalPerPerson, totalGroup: totalGroup};
 }
 
 // return an array of trips that have destination information and cost per trip
@@ -95,6 +102,7 @@ export {
     getTraveler,
     getTrips,
     appendDestinations,
+    computeTripCost,
     getDate,
     computeTotalSpent,
     updateTraveler

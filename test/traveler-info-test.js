@@ -1,6 +1,6 @@
 import chai from 'chai';
 const expect = chai.expect;
-import { getTraveler, getTrips, appendDestinations, computeTotalSpent, updateTraveler } from '../src/traveler-info';
+import { getTraveler, getTrips, appendDestinations, computeTripCost, computeTotalSpent, updateTraveler } from '../src/traveler-info';
 import { sampleTravelers } from '../src/sample-data/travelers-sample';
 import { sampleTrips } from '../src/sample-data/trips-sample';
 import { sampleDestinations } from '../src/sample-data/destinations-sample';
@@ -109,6 +109,17 @@ describe('traveler-info.js', function() {
       );
     });
   });
+
+  describe('compute trip cost', function() {
+    it('should return an object with cost data', function() {
+      let tripCost1 = computeTripCost(traveler1Trips[0]);
+      let tripCost2 = computeTripCost(traveler2Trips[0]);
+
+      expect(tripCost1).to.deep.equal({totalPerPerson: 1870, totalGroup: 11220});
+      expect(tripCost2).to.deep.equal({totalPerPerson: 880, totalGroup: 3520});
+    });
+  });
+
 
   describe('compute total spent', function() {
     it('should return the total spent on trips this year by traveler with given id', function() {
