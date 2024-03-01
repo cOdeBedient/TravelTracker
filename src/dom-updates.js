@@ -20,5 +20,5 @@ function getAllData(id) {
 
 // }
 
-getAllData(7);
+getAllData(2);
 
