@@ -7,20 +7,22 @@ function getTrips(id, trips) {
         return id === trip.userID
     });
 
-    console.log("currentTrips", currentTrips)
+    // console.log("currentTrips", currentTrips)
     return currentTrips;
 }
 
 function appendDestinations(trips, destinations) {
-    console.log('trips inside AD', trips)
-    let updatedTrips = trips.forEach((trip) => {
+    // console.log('trips inside AD', trips)
+    let updatedTrips = trips;
+    trips.forEach((trip, index) => {
         let foundDestination = destinations.find((destination) => {
             return destination.id === trip.destinationID
         });
-        trip.destination = foundDestination;
+        // console.log(updatedTrips[index])
+        updatedTrips[index].destination = foundDestination;
     })
-    console.log('trips inside AD after', trips)
     
+    // console.log('updatedTrips', updatedTrips)
     return updatedTrips;
 }
 
@@ -40,17 +42,22 @@ function computeTripCost(trip) {
 }
 
 function compileTripData(trips, destinations) {
-    let compiledTrips = appendDestinations(trips, destinations);
-    compiledTrips.map((trip) => {
-        trip.cost = computeTripCost();
+    let appendedTrips = appendDestinations(trips, destinations);
+    console.log('appendedTrips', appendedTrips)
+    let compiledTrips = appendedTrips.map((trip) => {
+        trip.cost = computeTripCost(trip);
+        return trip;
     })
+
+    return compiledTrips;
 }
 
 function getDate() {
     const today = new Date();
     const todayYear = today.getFullYear();
-    const todayMonth = (today.getMonth() + 1).toString().padStart(2, '0')
-    const todayDay = today.getDate().toString().padStart(2, '0')
+    const todayMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+    const todayDay = today.getDate().toString().padStart(2, '0');
+
     return `${todayYear}${todayMonth}${todayDay}`
 }
 
@@ -66,7 +73,7 @@ function computeTotalSpent(trips) {
         totals.group += trip.cost.totalGroup;
 
         return totals
-    }, {individual: 0, group: 0})
+    }, {individual: 0, group: 0});
 
     return totalSpending;
 }
@@ -78,6 +85,7 @@ function updateTraveler(traveler, trips, destinations) {
     let updatedTrips = compileTripData(updatedTravelerTrips, destinations)
     updatedTraveler.trips = updatedTrips;
     traveler.spentLastYear = computeTotalSpent(trips);
+
     return updatedTraveler;
 }
 
