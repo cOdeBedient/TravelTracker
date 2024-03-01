@@ -1,6 +1,6 @@
 import chai from 'chai';
 const expect = chai.expect;
-import { getTraveler, getTrips, getDestinations, computeTotalSpent, updateTraveler } from '../src/traveler-info';
+import { getTraveler, getTrips, appendDestinations, computeTripCost, compileTripData, computeYearSpent, updateTraveler } from '../src/traveler-info';
 import { sampleTravelers } from '../src/sample-data/travelers-sample';
 import { sampleTrips } from '../src/sample-data/trips-sample';
 import { sampleDestinations } from '../src/sample-data/destinations-sample';
@@ -9,18 +9,28 @@ describe('traveler-info.js', function() {
   let traveler1;
   let traveler2;
   let traveler1Trips;
+  let traveler2Trips
+  let traveler3Trips
   let traveler4Trips;
-  let traveler1Destinations;
-  let traveler2Destinations;
-  let traveler4Destinations;
+  let traveler5Trips;
+  let trip1;
+  let trip2;
+  // let traveler1Destinations;
+  // let traveler2Destinations;
+  // let traveler4Destinations;
   beforeEach(function() {
     traveler1 = getTraveler(1, sampleTravelers);
     traveler2 = getTraveler(2, sampleTravelers);
     traveler1Trips = getTrips(1, sampleTrips);
+    traveler2Trips = getTrips(2, sampleTrips);
+    traveler3Trips = getTrips(3, sampleTrips);
     traveler4Trips = getTrips(4, sampleTrips);
-    traveler1Destinations = getDestinations(1, sampleTrips, sampleDestinations);
-    traveler2Destinations = getDestinations(2, sampleTrips, sampleDestinations);
-    traveler4Destinations = getDestinations(4, sampleTrips, sampleDestinations);
+    traveler5Trips = getTrips(5, sampleTrips);
+    trip1 = traveler1Trips[0];
+    trip2 = traveler2Trips[0];
+    // traveler1Destinations = getDestinations(1, sampleTrips, sampleDestinations);
+    // traveler2Destinations = getDestinations(2, sampleTrips, sampleDestinations);
+    // traveler4Destinations = getDestinations(4, sampleTrips, sampleDestinations);
   });
 
   describe('get traveler', function() {
@@ -70,25 +80,32 @@ describe('traveler-info.js', function() {
     });
   });
 
-  describe('get destinations', function() {
-    it('should return an array of destinations for a given traveler id', function() {
-      expect(traveler1Destinations).to.deep.equal([
+  describe('append destination', function() {
+    it('should append destinations to trips', function() {
+      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+
+      expect(traveler1UpdatedTrips[0]).to.deep.equal(
         {
-          id: 2,
-          destination: "Paris, France",
-          estimatedLodgingCostPerDay: 220,
-          estimatedFlightCostPerPerson: 600,
-          image: "https://example.com/paris.jpg",
-          alt: "Eiffel Tower with blue sky in the background"
+          id: 1,
+          userID: 1,
+          destinationID: 2,
+          travelers: 6,
+          date: "2023/09/23",
+          duration: 5,
+          status: "approved",
+          suggestedActivities: [],
+          destination: {
+            id: 2,
+            destination: "Paris, France",
+            estimatedLodgingCostPerDay: 220,
+            estimatedFlightCostPerPerson: 600,
+            image: "https://example.com/paris.jpg",
+            alt: "Eiffel Tower with blue sky in the background"
+          }
         },
-        {
-          id: 5,
-          destination: "Rio de Janeiro, Brazil",
-          estimatedLodgingCostPerDay: 130,
-          estimatedFlightCostPerPerson: 750,
-          image: "https://example.com/rio.jpg",
-          alt: "View of Christ the Redeemer statue overlooking Rio"
-        },
+      );
+      expect(traveler2UpdatedTrips[0].destination).to.deep.equal(
         {
           id: 6,
           destination: "New York City, USA",
@@ -96,37 +113,99 @@ describe('traveler-info.js', function() {
           estimatedFlightCostPerPerson: 400,
           image: "https://example.com/nyc.jpg",
           alt: "Manhattan skyline with Empire State Building"
-        }]);
-      });
+        }
+      );
+    });
+  });
 
-    it('should return an empty array if traveler has no trips', function() {
-        expect(traveler4Destinations).to.deep.equal([]);
+  describe('compute trip cost', function() {
+    it('should return an object with cost data', function() {
+      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+      let tripCost1 = computeTripCost(traveler1UpdatedTrips[0]);
+      let tripCost2 = computeTripCost(traveler2UpdatedTrips[0]);
+
+      expect(tripCost1).to.deep.equal({totalPerPerson: 1870, totalGroup: 11220});
+      expect(tripCost2).to.deep.equal({totalPerPerson: 880, totalGroup: 3520});
+    });
+  });
+
+  describe('compile trip data', function() {
+    it('should return an object with cost data', function() {
+      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
+      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
+
+      expect(compiledTrips1[0].cost).to.deep.equal({totalPerPerson: 1870, totalGroup: 11220});
+      expect(compiledTrips2[0].destination).to.deep.equal({
+        id: 6,
+        destination: "New York City, USA",
+        estimatedLodgingCostPerDay: 200,
+        estimatedFlightCostPerPerson: 400,
+        image: "https://example.com/nyc.jpg",
+        alt: "Manhattan skyline with Empire State Building"
+      });
     });
   });
 
   describe('compute total spent', function() {
     it('should return the total spent on trips this year by traveler with given id', function() {
-      let traveler1TotalSpent = computeTotalSpent(1, sampleTrips, sampleDestinations);
+      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+      let traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
+      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
+      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
+      let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
+      let traveler1YearSpent = computeYearSpent(compiledTrips1);
+      let traveler2YearSpent = computeYearSpent(compiledTrips2);
 
-      expect(traveler1TotalSpent).to.equal(1870);
+      expect(traveler1YearSpent).to.deep.equal({individual: 3839, group: 25003});
     });
 
+    
     it('should not factor in pending trips', function() {
-      let traveler5TotalSpent = computeTotalSpent(5, sampleTrips, sampleDestinations);
+      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+      let traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
+      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
+      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
+      let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
+      let traveler1YearSpent = computeYearSpent(compiledTrips1);
+      let traveler2YearSpent = computeYearSpent(compiledTrips2);
+      let traveler5TotalSpent = computeYearSpent(compiledTrips5);
 
-      expect(traveler5TotalSpent).to.equal(0);
+      expect(traveler5TotalSpent).to.deep.equal({ individual: 0, group: 0 });
     });
 
     it('should not factor in future trips', function() {
-      let traveler3TotalSpent = computeTotalSpent(3, sampleTrips, sampleDestinations);
+      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+      let traveler3UpdatedTrips = appendDestinations(traveler3Trips, sampleDestinations)
+      let traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
+      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
+      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
+      let compiledTrips3 = compileTripData(traveler3UpdatedTrips, sampleDestinations);
+      let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
+      let traveler1YearSpent = computeYearSpent(compiledTrips1);
+      let traveler2YearSpent = computeYearSpent(compiledTrips2);
+      let traveler3TotalSpent = computeYearSpent(compiledTrips3);
 
-      expect(traveler3TotalSpent).to.equal(0);
+      expect(traveler3TotalSpent).to.deep.equal({ individual: 0, group: 0 });
     })
 
     it('should not factor in trips taken more than a year ago', function() {
-      let traveler2TotalSpent = computeTotalSpent(2, sampleTrips, sampleDestinations);
+      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+      let traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
+      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
+      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
+      let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
+      let traveler1YearSpent = computeYearSpent(compiledTrips1);
+      let traveler2YearSpent = computeYearSpent(compiledTrips2);
+      let traveler2TotalSpent = computeYearSpent(compiledTrips2);
 
-      expect(traveler2TotalSpent).to.equal(0);
+      expect(traveler2TotalSpent).to.deep.equal({ individual: 0, group: 0 });
     });
   });
 
@@ -135,38 +214,28 @@ describe('traveler-info.js', function() {
       let updatedTraveler1 = updateTraveler(traveler1, sampleTrips, sampleDestinations);
       let updatedTraveler2 = updateTraveler(traveler2, sampleTrips, sampleDestinations);
 
-      expect(updatedTraveler1.trips).to.deep.equal([
+      expect(updatedTraveler1.trips[0]).to.deep.equal(
         {
-        id: 1,
-        userID: 1,
-        destinationID: 2,
-        travelers: 6,
-        date: "2023/09/23",
-        duration: 5,
-        status: "approved",
-        suggestedActivities: []
-        },
-        {
-          id: 3,
+          id: 1,
           userID: 1,
-          destinationID: 5,
-          travelers: 7,
-          date: "2024/02/28",
-          duration: 8,
+          destinationID: 2,
+          travelers: 6,
+          date: "2023/09/23",
+          duration: 5,
           status: "approved",
-          suggestedActivities: []
-        },
-        {
-          id: 5,
-          userID: 1,
-          destinationID: 6,
-          travelers: 5,
-          date: "2025/10/29",
-          duration: 10,
-          status: "pending",
-          suggestedActivities: []
-      }]);
-      expect(updatedTraveler2.destinations).to.deep.equal([
+          suggestedActivities: [],
+          destination: {
+            id: 2,
+            destination: "Paris, France",
+            estimatedLodgingCostPerDay: 220,
+            estimatedFlightCostPerPerson: 600,
+            image: "https://example.com/paris.jpg",
+            alt: "Eiffel Tower with blue sky in the background"
+          },
+          cost: {totalPerPerson: 1870, totalGroup: 11220}
+        }
+     );
+      expect(updatedTraveler2.trips[0].destination).to.deep.equal(
         {
           id: 6,
           destination: "New York City, USA",
@@ -174,17 +243,9 @@ describe('traveler-info.js', function() {
           estimatedFlightCostPerPerson: 400,
           image: "https://example.com/nyc.jpg",
           alt: "Manhattan skyline with Empire State Building"
-        },
-        {
-          id: 1,
-          destination: "Tokyo, Japan",
-          estimatedLodgingCostPerDay: 180,
-          estimatedFlightCostPerPerson: 800,
-          image: "https://example.com/tokyo.jpg",
-          alt: "Skyline of Tokyo with illuminated skyscrapers"
         }
-      ]);
-      expect(updatedTraveler1.totalSpent).to.equal(1870)
+      );
+      expect(updatedTraveler1.spentLastYear).to.deep.equal({ individual: 3839, group: 25003 })
     });
   });
 });

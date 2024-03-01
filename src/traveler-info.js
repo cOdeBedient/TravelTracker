@@ -3,62 +3,99 @@ function getTraveler(id, travelers) {
 }
 
 function getTrips(id, trips) {
-    return trips.filter(trip => id === trip.userID);
+    let currentTrips = trips.filter((trip) => {
+        return id === trip.userID
+    });
+
+    return currentTrips;
 }
 
-function getDestinations(id, trips, destinations) {
-    let tripsById = getTrips(id, trips);
-    let foundDestinations = [];
-    tripsById.forEach((trip) => {
+function appendDestinations(trips, destinations) {
+    let updatedTrips = trips.map((trip) => {
         let foundDestination = destinations.find((destination) => {
             return destination.id === trip.destinationID
         });
-        foundDestinations.push(foundDestination);
+        return {
+          ...trip,
+          destination: foundDestination
+        }
     })
 
-    return foundDestinations;
+    return updatedTrips;
+}
+
+function computeAgentFee(cost) {
+    return Math.round(cost / 10);
+}
+
+function computeTripCost(trip) {
+    const singleLodgingTotal = trip.destination.estimatedLodgingCostPerDay * trip.duration;
+    const singleFlight = trip.destination.estimatedFlightCostPerPerson;
+    const netPerPerson = singleLodgingTotal + singleFlight;
+    const agentFeePerPerson = computeAgentFee(netPerPerson);
+    const totalPerPerson = netPerPerson + agentFeePerPerson;
+    const totalGroup = totalPerPerson * trip.travelers;
+
+    return {totalPerPerson: totalPerPerson, totalGroup: totalGroup};
+}
+
+function compileTripData(trips, destinations) {
+    let appendedTrips = appendDestinations(trips, destinations);
+    let compiledTrips = appendedTrips.map((trip) => {
+        trip.cost = computeTripCost(trip);
+        return {
+            ...trip,
+            cost: trip.cost
+          }
+    })
+
+    return compiledTrips;
 }
 
 function getDate() {
     const today = new Date();
     const todayYear = today.getFullYear();
-    const todayMonth = (today.getMonth() + 1).toString().padStart(2, '0')
-    const todayDay = today.getDate().toString().padStart(2, '0')
+    const todayMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+    const todayDay = today.getDate().toString().padStart(2, '0');
+
     return `${todayYear}${todayMonth}${todayDay}`
 }
 
-function computeTotalSpent(id, trips, destinations) {
+function computeYearSpent(trips) {
     const today = getDate();
     let approvedRecentTrips = trips.filter((trip) => {
         return (trip.status === 'approved')
                 && (trip.date.replaceAll('/', '') < today)
                 && (trip.date.replaceAll('/', '') > today - 10000);
     });
-    let approvedPastDestinations = getDestinations(id, approvedRecentTrips, destinations);
-    let tripSpending = approvedPastDestinations.reduce((total, destination) => {
-        total += destination.estimatedLodgingCostPerDay
-        total += destination.estimatedFlightCostPerPerson
+    let totalSpending = approvedRecentTrips.reduce((totals, trip) => {
+        totals.individual += trip.cost.totalPerPerson;
+        totals.group += trip.cost.totalGroup;
 
-        return total;
-    }, 0)
-    let agentFee = tripSpending / 10;
+        return totals
+    }, {individual: 0, group: 0});
 
-    return tripSpending + agentFee;
+    return totalSpending;
 }
 
 function updateTraveler(traveler, trips, destinations) {
-    traveler.trips = getTrips(traveler.id, trips);
-    traveler.destinations = getDestinations(traveler.id, trips, destinations);
-    traveler.totalSpent = computeTotalSpent(traveler.id, trips, destinations);
+    let updatedTraveler = traveler;
+    let updatedTravelerTrips = getTrips(traveler.id, trips);
+    let updatedTrips = compileTripData(updatedTravelerTrips, destinations)
+    updatedTraveler.trips = updatedTrips;
+    traveler.spentLastYear = computeYearSpent(updatedTrips);
 
-    return traveler;
+    return updatedTraveler;
 }
 
 export {
     getTraveler,
     getTrips,
-    getDestinations,
+    appendDestinations,
+    computeAgentFee,
+    computeTripCost,
+    compileTripData,
     getDate,
-    computeTotalSpent,
+    computeYearSpent,
     updateTraveler
 }
