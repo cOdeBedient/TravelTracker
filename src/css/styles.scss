@@ -24,18 +24,23 @@ ul {
     transform: rotate(-5deg);
     transform-origin: 0% 100%;
     margin-bottom: 5px;
+    padding-left: 7px;
+    padding-right: 7px;
     background-color: white;
 }
 
 
 .trips-list {
+  z-index: 2;
   img {
     height: 90%;
   }
 
   .trip-header {
-    width: 100%;
     display: flex;
+    align-content: center;
+    width: 100%;
+    height: 50px;
     background-color: rgb(76, 254, 195);
     margin-top: 8px;
     padding-left: 10px;
@@ -69,6 +74,7 @@ ul {
 
   div {
     width: fit-content;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -81,4 +87,14 @@ ul {
   p {
     margin-left: 10px;
   }
+}
+
+#trip-89-details {
+  // display: flex;
+}
+
+.test {
+  z-index: 1;
+  background-color: grey;
+  transform: rotate(-80deg);
 }
