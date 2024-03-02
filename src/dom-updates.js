@@ -11,7 +11,7 @@ const destinationsListContainer = document.querySelector('.destinations-list')
 window.addEventListener('load', getAllData(2));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
-        retrieveTripInfo(event);
+        retrieveInputs(event);
     }
 });
 
@@ -81,10 +81,6 @@ function renderDestinations() {
                 </div>
                 <input class="travelers-field" id="travelers" type="number" min="0" placeholder="number of travelers" required>
                 <div class="form-element">
-                    <label for="duration">Length of Trip:</label>
-                </div>
-                <input class="duration-field" id="duration" type="number" min="0" max="50" placeholder="trip length" required>
-                <div class="form-element">
                     <label for="departure">Departure Date:</label>
                 </div>
                 <input class="departure-date-field" id="departure" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
@@ -104,14 +100,14 @@ function renderDestinations() {
     })
 }
 
-function retrieveTripInfo(event) {
+function retrieveInputs(event) {
     event.preventDefault();
-    console.log(event.target.closest('form'));
     let destinationForm = event.target.closest('form')
     let newTripData = destinationForm.querySelectorAll('input');
-    let [numTravelers, tripLength, departureDate, returnDate] = newTripData;
-    console.log("numTravelers", numTravelers.value);
-    // const formId = event.target.id
-    // const destinationForm = document.getElementById(`${formId}`);
-    // console.log("destinationForm", destinationForm);
+    let [numTravelers, departureDate, returnDate] = newTripData;
+    return {
+        travelers: numTravelers.value,
+        departureDate: departureDate,
+        returnDate: returnDate
+    }
 }
