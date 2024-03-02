@@ -113,7 +113,6 @@ function computeDuration(date1, date2) {
         return differenceDays;
 }
 
-
 function retrieveInputs(event) {
     event.preventDefault();
     let destinationForm = event.target.closest('form')
@@ -122,8 +121,13 @@ function retrieveInputs(event) {
     const [numTravelers, departureDate, returnDate] = newTripData;
     const tripDuration = computeDuration(departureDate.value, returnDate.value);
     return {
-        travelers: numTravelers.value,
+        id: allTrips.length + 1,
+        userID: currentTraveler.id,
+        destinationID: parseInt(destinationId),
+        travelers: parseInt(numTravelers.value),
+        date: departureDate.value,
         duration: tripDuration,
-        destinationID: destinationId
+        status: "pending",
+        suggestedActivities: []
     }
 }
