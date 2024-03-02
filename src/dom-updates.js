@@ -47,8 +47,8 @@ function renderMyTrips() {
             <img class='trip-image' src="${trip.destination.image}" alt=${trip.destination.alt}>
             <h5 class='trip-travelers'>Number of Travelers: ${trip.travelers}</h5>
             <h5 class='trip-duration'>Length of Trip: ${trip.duration}</h5>
-            <h5 class='trip-cost-ind'>Group Cost: ${trip.cost.totalGroup}</h5>
-            <h5 class='trip-cost-grp'>Per Person: ${trip.cost.totalPerPerson}
+            <h5 class='trip-cost-ind'>Group Cost: $${trip.cost.totalGroup}</h5>
+            <h5 class='trip-cost-grp'>Cost Per Person: $${trip.cost.totalPerPerson}
             `
             tripsListContainer.appendChild(newTrip);
             tripsListContainer.appendChild(newTripDetails);
@@ -68,10 +68,29 @@ function renderDestinations() {
         newDestinationDetails.id = `destination-${destination.id}-details`
         newDestinationDetails.innerHTML = `
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
-            <h5 class='destination-travelers'>Number of Travelers: 5 </h5>
-            <h5 class='destination-duration'>Length of destination: 5 </h5>
-            <h5 class='destination-cost-ind'>Group Cost: 5 </h5>
-            <h5 class='destination-cost-grp'>Per Person: 5 </h5>
+            <form class='trip-form'>
+                <div class="form-element">
+                    <label for="travelers">Number of Travelers:</label>
+                </div>
+                <input class="travelers-field" id="travelers" type="number" min="0" placeholder="number of travelers" required>
+                <div class="form-element">
+                    <label for="duration">Length of Trip:</label>
+                </div>
+                <input class="duration-field" id="duration" type="number" min="0" max="50" placeholder="trip length" required>
+                <div class="form-element">
+                    <label for="departure">Departure Date:</label>
+                </div>
+                <input class="departure-date-field" id="departure" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
+                <div class="form-element">
+                    <label for="return">Return Date:</label>
+                </div>
+                <input class="return-date-field" id="return" type="date" min="2024-04-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
+                <div class="form-element">
+                    <button class="submit-button" type="submit">Submit Trip!</button>
+                </div>
+            </form>
+            <h5 class='destination-cost-ind'>Group Cost:</h5>
+            <h5 class='destination-cost-grp'>Cost Per Person:</h5>
             `
             destinationsListContainer.appendChild(newDestination);
             destinationsListContainer.appendChild(newDestinationDetails);
