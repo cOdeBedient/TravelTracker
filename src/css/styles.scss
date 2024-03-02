@@ -2,13 +2,45 @@ body {
   background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
 }
 
+h1 {
+  color: white;
+  margin-bottom: 5px;
+}
+
+h2 {
+  margin-top: 0px;
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+
+
+ul {
+  margin-left: 0;
+}
+
+.trips-heading {
+    width: fit-content;
+    transform: rotate(-5deg);
+    transform-origin: 0% 100%;
+    margin-bottom: 5px;
+    background-color: white;
+}
+
+
 .trips-list {
   img {
     height: 90%;
   }
 
   .trip-header {
+    width: 100%;
     display: flex;
+    background-color: rgb(76, 254, 195);
+    margin-top: 8px;
+    padding-left: 10px;
+    transform: rotate(-5deg);
+    transform-origin: 0% 100%;
   }
 
   .name {
@@ -19,7 +51,34 @@ body {
     display: flex;
     justify-content: space-evenly;
     height: 10vh;
-    // display: none;
+    background-color: rgb(183, 250, 228);
+    transform: rotate(-5deg);
+    transform-origin: 0% 100%;
+    display: none;
+  }
+}
+
+.spent-container {
+  width: 100%;
+  margin-right: 0;
+  margin-top: 8px;
+  transform: rotate(-5deg);
+  transform-origin: 0% 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  div {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 50px;
   }
 
+  p {
+    margin-left: 10px;
+  }
 }

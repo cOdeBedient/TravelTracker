@@ -3,7 +3,7 @@ import { updateTraveler} from './traveler-info'
 
 // QUERY SELECTORS
 const tripsListContainer = document.querySelector('.trips-list');
-
+const dollarsSpent = document.querySelector('.dollars-spent');
 
 
 let currentTraveler;
@@ -20,13 +20,17 @@ function getAllData(id) {
         allDestinations = destinationData.destinations;
         currentTraveler = updateTraveler(traveler, allTrips, allDestinations);
         console.log('currentTraveler', currentTraveler)
-        renderDom(currentTraveler);
+        renderDom();
     })
 }
 
-function renderDom(traveler) {
-    console.log('currentTraveler', currentTraveler)
-    traveler.trips.forEach((trip) => {
+function renderDom() {
+    renderMyTrips();
+    dollarsSpent.innerText = `Dollars Spent`
+}
+
+function renderMyTrips() {
+    currentTraveler.trips.forEach((trip) => {
         const newTrip = document.createElement('div')
         newTrip.className = 'trip-header';
         newTrip.id = `trip-${trip.id}`
@@ -48,4 +52,3 @@ function renderDom(traveler) {
             tripsListContainer.appendChild(newTripDetails);
     })
 }
-
