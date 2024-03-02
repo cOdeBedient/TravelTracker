@@ -7,13 +7,22 @@ const dollarsSpent = document.querySelector('.dollars-spent');
 const destinationsListContainer = document.querySelector('.destinations-list')
 
 
+// EVENT LISTENERS
+window.addEventListener('load', getAllData(2));
+destinationsListContainer.addEventListener('click', function(event) {
+    if(event.target.tagName === "BUTTON") {
+        retrieveTripInfo(event);
+    }
+});
+
+
+// GLOBAL VARIABLES
 let currentTraveler;
 let allTrips;
 let allDestinations;
 
-window.addEventListener('load', getAllData(2))
 
-
+// FUNCTIONS
 function getAllData(id) {
     prepareData(id)
     .then(([traveler, tripData, destinationData]) => {
@@ -60,15 +69,13 @@ function renderDestinations() {
         const newDestination = document.createElement('div')
         newDestination.className = 'destination-header';
         newDestination.id = `destination-${destination.id}`
-        newDestination.innerHTML = `
-            <h3 class='destination-name'>${destination.destination}</h3>
-            `
+        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3>`
         const newDestinationDetails = document.createElement('div')
         newDestinationDetails.className = 'destination-details';
         newDestinationDetails.id = `destination-${destination.id}-details`
         newDestinationDetails.innerHTML = `
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
-            <form class='trip-form'>
+            <form class='trip-form' id='form-${destination.id}'>
                 <div class="form-element">
                     <label for="travelers">Number of Travelers:</label>
                 </div>
@@ -95,4 +102,16 @@ function renderDestinations() {
             destinationsListContainer.appendChild(newDestination);
             destinationsListContainer.appendChild(newDestinationDetails);
     })
+}
+
+function retrieveTripInfo(event) {
+    event.preventDefault();
+    console.log(event.target.closest('form'));
+    let destinationForm = event.target.closest('form')
+    let newTripData = destinationForm.querySelectorAll('input');
+    let [numTravelers, tripLength, departureDate, returnDate] = newTripData;
+    console.log("numTravelers", numTravelers.value);
+    // const formId = event.target.id
+    // const destinationForm = document.getElementById(`${formId}`);
+    // console.log("destinationForm", destinationForm);
 }
