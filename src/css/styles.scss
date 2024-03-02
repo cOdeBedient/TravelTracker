@@ -29,12 +29,8 @@ ul {
     background-color: white;
 }
 
-
 .trips-list {
-  z-index: 2;
-  img {
-    height: 90%;
-  }
+  // z-index: 2;
 
   .trip-header {
     display: flex;
@@ -60,6 +56,10 @@ ul {
     transform: rotate(-5deg);
     transform-origin: 0% 100%;
     display: none;
+
+    img {
+      height: 90%;
+    }
   }
 }
 
@@ -94,7 +94,47 @@ ul {
 }
 
 .test {
-  z-index: 1;
+  // z-index: 1;
   background-color: grey;
   transform: rotate(-80deg);
 }
+
+.destinations-list {
+  // z-index: 2;
+}
+
+.destination-header {
+  display: flex;
+  align-content: center;
+  width: 100%;
+  height: 30px;
+  background-color: rgb(114, 114, 114);
+  margin-top: 8px;
+  padding-left: 10px;
+  transform: rotate(5deg);
+  transform-origin: 0% 100%;
+}
+
+.destination-name {
+  align-self: center;
+  margin-right: 1%;
+  font-size: 1em;
+  margin-top: 0%;
+  margin-bottom: 0%;
+}
+
+.destination-details {
+  display: flex;
+  justify-content: space-evenly;
+  height: 10vh;
+  background-color: rgb(185, 185, 185);
+  transform: rotate(5deg);
+  transform-origin: 0% 0%;
+  display: none;
+}
+
+.destination-image {
+  height: 90%;
+}
+
+

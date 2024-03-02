@@ -90,6 +90,10 @@ function updateTraveler(traveler, trips, destinations) {
     return updatedTraveler;
 }
 
+function createTrip(trip){
+    return trip;
+}
+
 export {
     getTraveler,
     getTrips,
