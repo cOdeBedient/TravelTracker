@@ -11,7 +11,7 @@ const destinationsListContainer = document.querySelector('.destinations-list')
 window.addEventListener('load', getAllData(2));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
-        retrieveInputs(event);
+        console.log('retrieveInputs(event)', retrieveInputs(event));
     }
 });
 
@@ -29,7 +29,6 @@ function getAllData(id) {
         allTrips = tripData.trips;
         allDestinations = destinationData.destinations;
         currentTraveler = updateTraveler(traveler, allTrips, allDestinations);
-        console.log('currentTraveler', currentTraveler)
         renderDom();
     })
 }
@@ -100,14 +99,31 @@ function renderDestinations() {
     })
 }
 
+function makeNewTrip(event) {
+    let inputData = retrieveInputs(event);
+
+}
+
+function computeDuration(date1, date2) {
+        var parsedDate1 = new Date(date1);
+        var parsedDate2 = new Date(date2);
+        var difference = parsedDate2 - parsedDate1;
+        var differenceDays = Math.ceil(difference / (1000 * 60 * 60 * 24));
+    
+        return differenceDays;
+}
+
+
 function retrieveInputs(event) {
     event.preventDefault();
     let destinationForm = event.target.closest('form')
+    let destinationId = destinationForm.id.split('-')[1];
     let newTripData = destinationForm.querySelectorAll('input');
-    let [numTravelers, departureDate, returnDate] = newTripData;
+    const [numTravelers, departureDate, returnDate] = newTripData;
+    const tripDuration = computeDuration(departureDate.value, returnDate.value);
     return {
         travelers: numTravelers.value,
-        departureDate: departureDate,
-        returnDate: returnDate
+        duration: tripDuration,
+        destinationID: destinationId
     }
 }
