@@ -1,4 +1,4 @@
-import { prepareData } from './api-calls';
+import { handleFetch, handleTripPost } from './api-calls';
 import { updateTraveler} from './traveler-info'
 
 // QUERY SELECTORS
@@ -11,7 +11,7 @@ const destinationsListContainer = document.querySelector('.destinations-list')
 window.addEventListener('load', getAllData(2));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
-        console.log('retrieveInputs(event)', retrieveInputs(event));
+        handleTripSubmit(event);
     }
 });
 
@@ -24,13 +24,26 @@ let allDestinations;
 
 // FUNCTIONS
 function getAllData(id) {
-    prepareData(id)
+    handleFetch(id)
     .then(([traveler, tripData, destinationData]) => {
         allTrips = tripData.trips;
         allDestinations = destinationData.destinations;
         currentTraveler = updateTraveler(traveler, allTrips, allDestinations);
         renderDom();
     })
+}
+
+function handleTripSubmit(event) {
+    const newTrip = retrieveInputs(event);
+    allTrips.push(newTrip);
+    console.log('allTrips', allTrips)
+    console.log('newTrip', newTrip);
+    handleTripPost(newTrip, 'http://localhost:3001/api/v1/trips')
+    .then(returnedTrip => {
+        currentTraveler = updateTraveler(currentTraveler, allTrips, allDestinations);
+        console.log('returnedTrip', returnedTrip)
+        renderDom()
+    });
 }
 
 function renderDom() {
@@ -40,6 +53,7 @@ function renderDom() {
 }
 
 function renderMyTrips() {
+    tripsListContainer.innerHTML = '';
     currentTraveler.trips.forEach((trip) => {
         const newTrip = document.createElement('div')
         newTrip.className = 'trip-header';
@@ -99,10 +113,9 @@ function renderDestinations() {
     })
 }
 
-function makeNewTrip(event) {
-    let inputData = retrieveInputs(event);
-
-}
+// function makeNewTrip(event) {
+//     return retrieveInputs(event);
+// }
 
 function computeDuration(date1, date2) {
         var parsedDate1 = new Date(date1);
@@ -125,7 +138,7 @@ function retrieveInputs(event) {
         userID: currentTraveler.id,
         destinationID: parseInt(destinationId),
         travelers: parseInt(numTravelers.value),
-        date: departureDate.value,
+        date: departureDate.value.replaceAll('-', '/'),
         duration: tripDuration,
         status: "pending",
         suggestedActivities: []
