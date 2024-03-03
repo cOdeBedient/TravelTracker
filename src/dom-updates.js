@@ -61,7 +61,10 @@ function renderMyTrips() {
         newTrip.innerHTML = `
             <h3 class='name'>${trip.destination.destination}</h3>
             <h4 class='date'>${trip.date}</h4>
-            `
+            `;
+        if(trip.status === 'pending') {
+            newTrip.classList.add('pending');
+        }
         const newTripDetails = document.createElement('div')
         newTripDetails.className = 'trip-details';
         newTripDetails.id = `trip-${trip.id}-details`
