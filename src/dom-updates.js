@@ -4,22 +4,32 @@ import { updateTraveler} from './traveler-info'
 // QUERY SELECTORS
 const tripsListContainer = document.querySelector('.trips-list');
 const dollarsSpent = document.querySelector('.dollars-spent');
-const destinationsListContainer = document.querySelector('.destinations-list')
+const destinationsListContainer = document.querySelector('.destinations-list');
+const loginPage = document.querySelector('.login-form');
+const usernameField = document.querySelector('#username');
+const passwordField = document.querySelector('#password');
+const loginSubmitButton = document.querySelector('.login-submit-button');
+const mainPage = document.querySelector('main');
 
 
 // EVENT LISTENERS
-window.addEventListener('load', getAllData(2));
+// window.addEventListener('load', getAllData());
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
         handleTripSubmit(event);
     }
 });
+loginSubmitButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    logIn(event);
+})
 
 
 // GLOBAL VARIABLES
 let currentTraveler;
 let allTrips;
 let allDestinations;
+let passwordError;
 
 
 // FUNCTIONS
@@ -146,4 +156,27 @@ function retrieveInputs(event) {
         status: "pending",
         suggestedActivities: []
     }
+}
+
+function logIn(event) {
+    event.preventDefault();
+    let userId = parseInt(usernameField.value.replace('traveler', ''));
+    let password = passwordField.value
+    console.log('userId', userId);
+    console.log('password', password);
+    if (userId < 51 && password === 'travel') {
+        console.log('made it here')
+        toggleFromLogin();
+        getAllData(userId);
+        } else if(userId > 50) {
+            passwordError = 'Invalid Username'
+        } else {
+            passwordError = 'Invalid Password'
+        }
+}
+
+function toggleFromLogin() {
+    console.log('made it here now')
+    loginPage.classList.add('hidden');
+    mainPage.classList.remove('hidden')
 }

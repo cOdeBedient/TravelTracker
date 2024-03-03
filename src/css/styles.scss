@@ -148,12 +148,12 @@ ul {
 .trip-form {
   display: flex;
   align-items: center;
-}
 
-input {
-  height: 25%;
-  margin-left: 3px;
-  margin-right: 10px;
+  input {
+    height: 25%;
+    margin-left: 3px;
+    margin-right: 10px;
+  }
 }
 
 .pending {
@@ -184,6 +184,11 @@ input {
 
 .login-form {
   margin-top: 200px;
+
+  input {
+    height: 25%;
+    margin-left: 3px;
+  }
 }
 
 // .password-container {
