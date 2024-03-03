@@ -1,28 +1,59 @@
-import { prepareData } from './api-calls';
+import { handleFetch, handleTripPost } from './api-calls';
 import { updateTraveler} from './traveler-info'
 
 // QUERY SELECTORS
 const tripsListContainer = document.querySelector('.trips-list');
 const dollarsSpent = document.querySelector('.dollars-spent');
-const destinationsListContainer = document.querySelector('.destinations-list')
+const destinationsListContainer = document.querySelector('.destinations-list');
+const loginPage = document.querySelector('.login-form');
+const usernameField = document.querySelector('#username');
+const passwordField = document.querySelector('#password');
+const loginSubmitButton = document.querySelector('.login-submit-button');
+const mainPage = document.querySelector('main');
 
 
+// EVENT LISTENERS
+// window.addEventListener('load', getAllData());
+destinationsListContainer.addEventListener('click', function(event) {
+    if(event.target.tagName === "BUTTON") {
+        handleTripSubmit(event);
+    }
+});
+loginSubmitButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    logIn(event);
+})
+
+
+// GLOBAL VARIABLES
 let currentTraveler;
 let allTrips;
 let allDestinations;
+let passwordError;
 
-window.addEventListener('load', getAllData(2))
 
-
+// FUNCTIONS
 function getAllData(id) {
-    prepareData(id)
+    handleFetch(id)
     .then(([traveler, tripData, destinationData]) => {
         allTrips = tripData.trips;
         allDestinations = destinationData.destinations;
         currentTraveler = updateTraveler(traveler, allTrips, allDestinations);
-        console.log('currentTraveler', currentTraveler)
         renderDom();
     })
+}
+
+function handleTripSubmit(event) {
+    const newTrip = retrieveInputs(event);
+    allTrips.push(newTrip);
+    console.log('allTrips', allTrips)
+    console.log('newTrip', newTrip);
+    handleTripPost(newTrip, 'http://localhost:3001/api/v1/trips')
+    .then(returnedTrip => {
+        currentTraveler = updateTraveler(currentTraveler, allTrips, allDestinations);
+        console.log('returnedTrip', returnedTrip)
+        renderDom()
+    });
 }
 
 function renderDom() {
@@ -32,6 +63,7 @@ function renderDom() {
 }
 
 function renderMyTrips() {
+    tripsListContainer.innerHTML = '';
     currentTraveler.trips.forEach((trip) => {
         const newTrip = document.createElement('div')
         newTrip.className = 'trip-header';
@@ -39,7 +71,10 @@ function renderMyTrips() {
         newTrip.innerHTML = `
             <h3 class='name'>${trip.destination.destination}</h3>
             <h4 class='date'>${trip.date}</h4>
-            `
+            `;
+        if(trip.status === 'pending') {
+            newTrip.classList.add('pending');
+        }
         const newTripDetails = document.createElement('div')
         newTripDetails.className = 'trip-details';
         newTripDetails.id = `trip-${trip.id}-details`
@@ -60,23 +95,17 @@ function renderDestinations() {
         const newDestination = document.createElement('div')
         newDestination.className = 'destination-header';
         newDestination.id = `destination-${destination.id}`
-        newDestination.innerHTML = `
-            <h3 class='destination-name'>${destination.destination}</h3>
-            `
+        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3>`
         const newDestinationDetails = document.createElement('div')
         newDestinationDetails.className = 'destination-details';
         newDestinationDetails.id = `destination-${destination.id}-details`
         newDestinationDetails.innerHTML = `
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
-            <form class='trip-form'>
+            <form class='trip-form' id='form-${destination.id}'>
                 <div class="form-element">
                     <label for="travelers">Number of Travelers:</label>
                 </div>
                 <input class="travelers-field" id="travelers" type="number" min="0" placeholder="number of travelers" required>
-                <div class="form-element">
-                    <label for="duration">Length of Trip:</label>
-                </div>
-                <input class="duration-field" id="duration" type="number" min="0" max="50" placeholder="trip length" required>
                 <div class="form-element">
                     <label for="departure">Departure Date:</label>
                 </div>
@@ -84,7 +113,7 @@ function renderDestinations() {
                 <div class="form-element">
                     <label for="return">Return Date:</label>
                 </div>
-                <input class="return-date-field" id="return" type="date" min="2024-04-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
+                <input class="return-date-field" id="return" type="date" min="2024-03-04" max="2026-03-03" placeholder="MM/DD/YYYY" required>
                 <div class="form-element">
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
@@ -95,4 +124,59 @@ function renderDestinations() {
             destinationsListContainer.appendChild(newDestination);
             destinationsListContainer.appendChild(newDestinationDetails);
     })
+}
+
+// function makeNewTrip(event) {
+//     return retrieveInputs(event);
+// }
+
+function computeDuration(date1, date2) {
+        var parsedDate1 = new Date(date1);
+        var parsedDate2 = new Date(date2);
+        var difference = parsedDate2 - parsedDate1;
+        var differenceDays = Math.ceil(difference / (1000 * 60 * 60 * 24));
+    
+        return differenceDays;
+}
+
+function retrieveInputs(event) {
+    event.preventDefault();
+    let destinationForm = event.target.closest('form')
+    let destinationId = destinationForm.id.split('-')[1];
+    let newTripData = destinationForm.querySelectorAll('input');
+    const [numTravelers, departureDate, returnDate] = newTripData;
+    const tripDuration = computeDuration(departureDate.value, returnDate.value);
+    return {
+        id: allTrips.length + 1,
+        userID: currentTraveler.id,
+        destinationID: parseInt(destinationId),
+        travelers: parseInt(numTravelers.value),
+        date: departureDate.value.replaceAll('-', '/'),
+        duration: tripDuration,
+        status: "pending",
+        suggestedActivities: []
+    }
+}
+
+function logIn(event) {
+    event.preventDefault();
+    let userId = parseInt(usernameField.value.replace('traveler', ''));
+    let password = passwordField.value
+    console.log('userId', userId);
+    console.log('password', password);
+    if (userId < 51 && password === 'travel') {
+        console.log('made it here')
+        toggleFromLogin();
+        getAllData(userId);
+        } else if(userId > 50) {
+            passwordError = 'Invalid Username'
+        } else {
+            passwordError = 'Invalid Password'
+        }
+}
+
+function toggleFromLogin() {
+    console.log('made it here now')
+    loginPage.classList.add('hidden');
+    mainPage.classList.remove('hidden')
 }

@@ -12,7 +12,8 @@ function getDestinations() {
 
 function postTrip(trip, url) {
     const tripOptions = prepTripOptions(trip);
-    return fetch('url', tripOptions);
+    console.log('tripOptions', tripOptions)
+    return fetch(url, tripOptions);
 }
 
 function prepTripOptions(trip) {
@@ -34,18 +35,23 @@ function prepTripOptions(trip) {
     }
 }
 
-function prepareNewTripData(trip, url) {
-    postTrip(trip, url)
+function handleTripPost(trip, url) {
+    return postTrip(trip, url)
     .then(response => response.json())
 }
 
-function getAllData(id) {
+function submitTrip(trip, url) {
+    postTrip(trip, url)
+    .then(data => data)
+}
+
+function getData(id) {
     let allData = [getTraveler(id), getTrips(), getDestinations()];
     return allData;
 }
 
-function prepareData(id) {
-    return Promise.all(getAllData(id))
+function handleFetch(id) {
+    return Promise.all(getData(id))
     .then(response => {
         return Promise.all(response.map((element) => {
             return element.json();
@@ -53,4 +59,4 @@ function prepareData(id) {
     })
 }
 
-export { prepareData };
+export { handleFetch, handleTripPost };

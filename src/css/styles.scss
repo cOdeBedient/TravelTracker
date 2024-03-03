@@ -148,13 +148,56 @@ ul {
 .trip-form {
   display: flex;
   align-items: center;
+
+  input {
+    height: 25%;
+    margin-left: 3px;
+    margin-right: 10px;
+  }
 }
 
-input {
-  height: 25%;
-  margin-left: 3px;
-  margin-right: 10px;
+.pending {
+  background-color: grey !important;
 }
+
+.hidden {
+  display: none;
+}
+
+.username-container,
+.password-container,
+.button-container {
+  background-color: rgb(76, 254, 195);
+  display: flex;
+  margin-top: 5px;
+}
+
+.username-container,
+.button-container,
+.password-container {
+  width: 60%;
+  justify-content: flex-end;
+  margin-right: 40vh;
+  transform: rotate(-5deg);
+  transform-origin: 0% 100%;
+}
+
+.login-form {
+  margin-top: 200px;
+
+  input {
+    height: 25%;
+    margin-left: 3px;
+  }
+}
+
+// .password-container {
+//   width: 60%;
+//   margin-left: 40%;;
+// }
+
+
+
 
 
 

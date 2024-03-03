@@ -7,7 +7,9 @@ function getTrips(id, trips) {
         return id === trip.userID
     });
 
-    return currentTrips;
+    let sortedCurrentTrips = sortTrips(currentTrips)
+
+    return sortedCurrentTrips;
 }
 
 function appendDestinations(trips, destinations) {
@@ -90,8 +92,26 @@ function updateTraveler(traveler, trips, destinations) {
     return updatedTraveler;
 }
 
-function createTrip(trip){
-    return trip;
+function sortTrips(trips) {
+    let chronTrips = trips.sort((a, b) => {
+        a.date - b.date;
+    })
+    let pendingTrips = [];
+    let upcomingApprovedTrips = [];
+    let pastTrips = [];
+
+    chronTrips.forEach((trip) => {
+        if(trip.status === 'pending') {
+            pendingTrips.push(trip);
+        } else if(trip.date.replaceAll('/', '') < 20200301) {
+            upcomingApprovedTrips.push(trip);
+        } else {
+            pastTrips.push(trip);
+        }
+    })
+
+    return pendingTrips.concat(upcomingApprovedTrips, pastTrips)
+
 }
 
 export {
