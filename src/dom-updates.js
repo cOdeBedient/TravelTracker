@@ -103,7 +103,7 @@ function renderDestinations() {
                 <div class="form-element">
                     <label for="return">Return Date:</label>
                 </div>
-                <input class="return-date-field" id="return" type="date" min="2024-04-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
+                <input class="return-date-field" id="return" type="date" min="2024-03-04" max="2026-03-03" placeholder="MM/DD/YYYY" required>
                 <div class="form-element">
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>

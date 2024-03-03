@@ -160,6 +160,40 @@ input {
   background-color: grey !important;
 }
 
+.hidden {
+  display: none;
+}
+
+.username-container,
+.password-container,
+.button-container {
+  background-color: rgb(76, 254, 195);
+  display: flex;
+  margin-top: 5px;
+}
+
+.username-container,
+.button-container,
+.password-container {
+  width: 60%;
+  justify-content: flex-end;
+  margin-right: 40vh;
+  transform: rotate(-5deg);
+  transform-origin: 0% 100%;
+}
+
+.login-form {
+  margin-top: 200px;
+}
+
+// .password-container {
+//   width: 60%;
+//   margin-left: 40%;;
+// }
+
+
+
+
 
 
 
