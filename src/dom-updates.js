@@ -85,7 +85,7 @@ function clearDestinationData(event, numTravelers, departureDate, duration) {
 
 function findCostFields(event) {
     const destinationDetails = event.target.closest('.destination-details');
-    return destinationDetails.querySelectorAll('h5');
+    return destinationDetails.querySelectorAll('p');
 }
 
 function renderDom() {
@@ -150,8 +150,16 @@ function renderDestinations() {
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
             </form>
-            <h5 class='destination-cost-ind'>Group Cost:</h5>
-            <h5 class='destination-cost-grp'>Cost Per Person:</h5>
+            <div class="new-costs-container">
+                <div class='new-costs'>
+                    <h5 class='destination-cost-ind'>Cost Per Person:</h5>
+                    <p></p>
+                </div>
+                <div class='new-costs'>
+                    <h5 class='destination-cost-grp'>Cost Per Group:</h5>
+                    <p></p>
+                </div>   
+            </div>
             `
             destinationsListContainer.appendChild(newDestination);
             destinationsListContainer.appendChild(newDestinationDetails);
@@ -217,6 +225,6 @@ function updateTripCost(event, destinationId, numTravelers, departureDate, durat
     const tripCostGroup = compiledTrip[0].cost.totalGroup;
     console.log('costData', costData)
     const [perPerson, perGroup] = costData;
-    perPerson.innerText = `Cost Per Person: $${tripCostPerPerson}`;
-    perGroup.innerText = `Cost Per Group: $${tripCostGroup}`;
+    perPerson.innerText = `$${tripCostPerPerson}`;
+    perGroup.innerText = `$${tripCostGroup}`;
 }
