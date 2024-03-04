@@ -1,5 +1,6 @@
 body {
-  // background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  // background-color: rgb(247, 255, 128);
+  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
 }
 
 .background-color {
@@ -15,7 +16,11 @@ h2 {
 }
 
 header {
-    h1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 {
     margin-bottom: 5px;
     margin-left: 27px;
   }
@@ -26,6 +31,17 @@ header {
     margin-bottom: 40px;
     margin-left: 20px;
   }
+
+  button {
+    height: fit-content;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1em;
+  }
+
 }
 
 ul {
@@ -33,7 +49,8 @@ ul {
 }
 
 .trips-container {
-  margin-top: 50px;
+  margin-top: 40px;
+  margin-bottom: 50px;
 }
 
 .trips-heading {
@@ -113,12 +130,6 @@ ul {
 
 #trip-89-details {
   // display: flex;
-}
-
-.test {
-  // z-index: 1;
-  background-color: grey;
-  transform: rotate(-80deg);
 }
 
 .destinations-list {

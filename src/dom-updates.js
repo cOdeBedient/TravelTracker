@@ -3,6 +3,7 @@ import { updateTraveler, compileTripData } from './traveler-info'
 import { userLogins } from './login-data/user-logins'
 
 // QUERY SELECTORS
+const tripsContainer = document.querySelector('.trips-container');
 const tripsListContainer = document.querySelector('.trips-list');
 const dollarsSpent = document.querySelector('.dollars-spent');
 const destinationsListContainer = document.querySelector('.destinations-list');
@@ -15,6 +16,7 @@ const header = document.querySelector('header');
 const errorPage = document.querySelector('.error-message');
 const passwordError = document.querySelector('.password-error');
 const body = document.querySelector('body');
+const myTripsButton = document.querySelector('.my-trips-button');
 
 
 // EVENT LISTENERS
@@ -22,7 +24,7 @@ loginSubmitButton.addEventListener('click', function(event) {
     event.preventDefault();
     logIn(event);
 })
-// window.addEventListener('load', getAllData(15));
+window.addEventListener('load', getAllData(15));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
         let destinationForm = event.target.closest('form')
@@ -59,6 +61,7 @@ destinationsListContainer.addEventListener('click', function(event) {
             clickedDestinationDetails.classList.toggle("hidden");
     }
 })
+myTripsButton.addEventListener('click', showMyTrips);
 
 
 // GLOBAL VARIABLES
@@ -202,6 +205,16 @@ function renderDestinations() {
             newDestinationContainer.appendChild(newDestination);
             newDestinationContainer.appendChild(newDestinationDetails);
     })
+}
+
+function showMyTrips() {
+    renderMyTrips()
+    tripsContainer.classList.toggle('hidden');
+    if (myTripsButton.innerText === 'my trips') {
+        myTripsButton.innerText = 'hide trips';
+    } else {
+        myTripsButton.innerText = 'my trips';
+    }
 }
 
 // function makeNewTrip(event) {
