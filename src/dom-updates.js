@@ -20,7 +20,6 @@ destinationsListContainer.addEventListener('click', function(event) {
         let destinationId = destinationForm.id.split('-')[1];
         let newTripData = destinationForm.querySelectorAll('input');
         const [numTravelers, departureDate, duration] = newTripData;
-        console.log('numTravelers.vale', numTravelers.value)
         if(numTravelers.value && departureDate.value && duration.value) {
             handleTripSubmit(event, destinationId, numTravelers, departureDate, duration);
         }
@@ -31,11 +30,8 @@ destinationsListContainer.addEventListener('keyup', function(event) {
         let destinationForm = event.target.closest('form')
         let destinationId = destinationForm.id.split('-')[1];
         let newTripData = destinationForm.querySelectorAll('input');
-        const [numTravelers, departureDate, duration] = newTripData;
-        
+        const [numTravelers, departureDate, duration] = newTripData; 
         if(numTravelers.value && departureDate.value && duration.value) {
-            console.log('numTravelers.vale', numTravelers.value);
-            console.log('duration', duration.value);
             const destDetails = event.target.closest('.destination-details');
             const costData = destDetails.querySelectorAll('h5');
             updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData);
@@ -83,7 +79,7 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
 function renderDom() {
     renderMyTrips();
     renderDestinations();
-    dollarsSpent.innerText = `Dollars Spent`
+    dollarsSpent.innerText = `$${currentTraveler.spentLastYear.group}`
 }
 
 function renderMyTrips() {
