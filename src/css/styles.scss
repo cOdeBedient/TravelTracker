@@ -55,7 +55,6 @@ ul {
     background-color: rgb(183, 250, 228);
     transform: rotate(-5deg);
     transform-origin: 0% 100%;
-    display: none;
 
     img {
       height: 90%;
@@ -154,14 +153,38 @@ ul {
     margin-left: 3px;
     margin-right: 10px;
   }
+
+  .travelers-field,
+  .duration-field {
+    width: 50px;
+  }
 }
+
+.new-costs-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.new-costs {
+  height: fit-content;
+  display: flex;
+
+  h5, p {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  h5 {
+    font-size: 1em;
+    margin-right: 5px;
+  }
+
+}
+
 
 .pending {
   background-color: grey !important;
-}
-
-.hidden {
-  display: none;
 }
 
 .username-container,
@@ -184,11 +207,31 @@ ul {
 
 .login-form {
   margin-top: 200px;
+  // display: none;
 
   input {
     height: 25%;
     margin-left: 3px;
   }
+}
+
+.password-error {
+  transform: rotate(-5deg);
+  transform-origin: 0% 100%;
+  margin-left: 40vh;
+  margin-top: -1%;
+  color: white;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.error-message {
+  margin-top: 25%;
+  text-align: center;
+  font-size: 2em;
+  background-color: rgb(76, 254, 195);
 }
 
 // .password-container {
