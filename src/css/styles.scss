@@ -55,7 +55,6 @@ ul {
     background-color: rgb(183, 250, 228);
     transform: rotate(-5deg);
     transform-origin: 0% 100%;
-    display: none;
 
     img {
       height: 90%;
@@ -154,6 +153,11 @@ ul {
     margin-left: 3px;
     margin-right: 10px;
   }
+
+  .travelers-field,
+  .duration-field {
+    width: 50px;
+  }
 }
 
 .new-costs-container {
@@ -183,10 +187,6 @@ ul {
   background-color: grey !important;
 }
 
-.hidden {
-  display: none;
-}
-
 .username-container,
 .password-container,
 .button-container {
@@ -213,6 +213,10 @@ ul {
     height: 25%;
     margin-left: 3px;
   }
+}
+
+.hidden {
+  display: none !important;
 }
 
 // .password-container {

@@ -13,6 +13,10 @@ const mainPage = document.querySelector('main');
 
 
 // EVENT LISTENERS
+// loginSubmitButton.addEventListener('click', function(event) {
+//     event.preventDefault();
+//     logIn(event);
+// })
 window.addEventListener('load', getAllData(15));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
@@ -38,10 +42,18 @@ destinationsListContainer.addEventListener('keyup', function(event) {
         
     }
 });
-// loginSubmitButton.addEventListener('click', function(event) {
-//     event.preventDefault();
-//     logIn(event);
-// })
+tripsListContainer.addEventListener('click', function(event) {
+    const clickedTrip = event.target.closest('.trip-container');
+    console.log("clickedTrip", clickedTrip);
+    const clickedTripDetails = clickedTrip.querySelector('.trip-details');
+    console.log('clickedTripDetails', clickedTripDetails);
+    clickedTripDetails.classList.toggle("hidden");
+})
+destinationsListContainer.addEventListener('click', function(event) {
+    const clickedDestination = event.target.closest('.destination-container');
+    const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
+    clickedDestinationDetails.classList.toggle("hidden");
+})
 
 
 // GLOBAL VARIABLES
@@ -97,18 +109,20 @@ function renderDom() {
 function renderMyTrips() {
     tripsListContainer.innerHTML = '';
     currentTraveler.trips.forEach((trip) => {
+        const newTripContainer = document.createElement('div');
+        newTripContainer.className = 'trip-container';
         const newTrip = document.createElement('div')
         newTrip.className = 'trip-header';
-        newTrip.id = `trip-${trip.id}`
+        newTrip.id = `trip-${trip.id}`;
         newTrip.innerHTML = `
             <h3 class='name'>${trip.destination.destination}</h3>
             <h4 class='date'>${trip.date}</h4>
             `;
         if(trip.status === 'pending') {
             newTrip.classList.add('pending');
-        }
+        };
         const newTripDetails = document.createElement('div')
-        newTripDetails.className = 'trip-details';
+        newTripDetails.className = 'trip-details hidden';
         newTripDetails.id = `trip-${trip.id}-details`
         newTripDetails.innerHTML = `
             <img class='trip-image' src="${trip.destination.image}" alt=${trip.destination.alt}>
@@ -117,13 +131,16 @@ function renderMyTrips() {
             <h5 class='trip-cost-ind'>Group Cost: $${trip.cost.totalGroup}</h5>
             <h5 class='trip-cost-grp'>Cost Per Person: $${trip.cost.totalPerPerson}
             `
-            tripsListContainer.appendChild(newTrip);
-            tripsListContainer.appendChild(newTripDetails);
+            tripsListContainer.appendChild(newTripContainer);
+            newTripContainer.appendChild(newTrip);
+            newTripContainer.appendChild(newTripDetails);
     })
 }
 
 function renderDestinations() {
     allDestinations.forEach((destination) => {
+        const newDestinationContainer = document.createElement('div');
+        newDestinationContainer.className = 'destination-container';
         const newDestination = document.createElement('div')
         newDestination.className = 'destination-header';
         newDestination.id = `destination-${destination.id}`
@@ -137,7 +154,7 @@ function renderDestinations() {
                 <div class="form-element">
                     <label for="travelers">Number of Travelers:</label>
                 </div>
-                <input class="travelers-field" id="travelers" type="number" min="1" placeholder="number of travelers" required>
+                <input class="travelers-field" id="travelers" type="number" min="1" placeholder="# of travelers" required>
                 <div class="form-element">
                     <label for="departure">Departure Date:</label>
                 </div>
@@ -145,7 +162,7 @@ function renderDestinations() {
                 <div class="form-element">
                     <label for="duration">Trip Length:</label>
                 </div>
-                <input class="duration-field" id="duration" type="number" min="1"  placeholder="number of nights" required>
+                <input class="duration-field" id="duration" type="number" min="1"  placeholder="# of nights" required>
                 <div class="form-element">
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
@@ -161,8 +178,9 @@ function renderDestinations() {
                 </div>   
             </div>
             `
-            destinationsListContainer.appendChild(newDestination);
-            destinationsListContainer.appendChild(newDestinationDetails);
+            destinationsListContainer.appendChild(newDestinationContainer)
+            newDestinationContainer.appendChild(newDestination);
+            newDestinationContainer.appendChild(newDestinationDetails);
     })
 }
 
