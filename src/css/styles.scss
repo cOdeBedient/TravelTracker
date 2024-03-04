@@ -201,10 +201,13 @@ ul {
     font-size: 1em;
     margin-right: 5px;
   }
-
 }
 
 .pending {
+  background-color: rgb(180, 222, 208) !important;
+}
+
+.past {
   background-color: grey !important;
 }
 

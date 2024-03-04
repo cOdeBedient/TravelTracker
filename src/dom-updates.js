@@ -138,7 +138,9 @@ function renderMyTrips() {
             `;
         if(trip.status === 'pending') {
             newTrip.classList.add('pending');
-        };
+        } else if(trip.status === 'past') {
+            newTrip.classList.add('past');
+        }
         const newTripDetails = document.createElement('div')
         newTripDetails.className = 'trip-details hidden';
         newTripDetails.id = `trip-${trip.id}-details`

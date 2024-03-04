@@ -93,9 +93,10 @@ function updateTraveler(traveler, trips, destinations) {
 }
 
 function sortTrips(trips) {
-    let chronTrips = trips.sort((a, b) => {
-        a.date - b.date;
+    const chronTrips = trips.sort((a, b) => {
+        new Date(a.date) - new Date(b.date);
     })
+    console.log('chronTrips', chronTrips);
     let pendingTrips = [];
     let upcomingApprovedTrips = [];
     let pastTrips = [];
@@ -103,13 +104,16 @@ function sortTrips(trips) {
     chronTrips.forEach((trip) => {
         if(trip.status === 'pending') {
             pendingTrips.push(trip);
-        } else if(trip.date.replaceAll('/', '') < 20200301) {
+        } else if(trip.date.replaceAll('/', '') > 20200301) {
             upcomingApprovedTrips.push(trip);
         } else {
+            trip.status = 'past';
             pastTrips.push(trip);
         }
     })
-
+    console.log("pendingTrips", pendingTrips)
+    console.log("upcomingApprovedTrips", upcomingApprovedTrips)
+    console.log("pastTrips", pastTrips)
     return pendingTrips.concat(upcomingApprovedTrips, pastTrips)
 }
 
