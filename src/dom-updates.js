@@ -1,5 +1,6 @@
 import { handleFetch, handleTripPost } from './api-calls';
 import { updateTraveler, compileTripData } from './traveler-info'
+import { userLogins } from './login-data/user-logins'
 
 // QUERY SELECTORS
 const tripsListContainer = document.querySelector('.trips-list');
@@ -10,14 +11,17 @@ const usernameField = document.querySelector('#username');
 const passwordField = document.querySelector('#password');
 const loginSubmitButton = document.querySelector('.login-submit-button');
 const mainPage = document.querySelector('main');
+const header = document.querySelector('header');
+const errorPage = document.querySelector('.error-message');
+const passwordError = document.querySelector('.password-error');
 
 
 // EVENT LISTENERS
-// loginSubmitButton.addEventListener('click', function(event) {
-//     event.preventDefault();
-//     logIn(event);
-// })
-window.addEventListener('load', getAllData(15));
+loginSubmitButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    logIn(event);
+})
+// window.addEventListener('load', getAllData(15));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
         let destinationForm = event.target.closest('form')
@@ -44,15 +48,15 @@ destinationsListContainer.addEventListener('keyup', function(event) {
 });
 tripsListContainer.addEventListener('click', function(event) {
     const clickedTrip = event.target.closest('.trip-container');
-    console.log("clickedTrip", clickedTrip);
     const clickedTripDetails = clickedTrip.querySelector('.trip-details');
-    console.log('clickedTripDetails', clickedTripDetails);
     clickedTripDetails.classList.toggle("hidden");
 })
 destinationsListContainer.addEventListener('click', function(event) {
-    const clickedDestination = event.target.closest('.destination-container');
-    const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
-    clickedDestinationDetails.classList.toggle("hidden");
+        const clickedDestination = event.target.closest('.destination-container');
+        const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
+        if(!event.target.closest('.destination-details')) {
+            clickedDestinationDetails.classList.toggle("hidden");
+    }
 })
 
 
@@ -60,7 +64,6 @@ destinationsListContainer.addEventListener('click', function(event) {
 let currentTraveler;
 let allTrips;
 let allDestinations;
-let passwordError;
 
 
 // FUNCTIONS
@@ -72,6 +75,9 @@ function getAllData(id) {
         currentTraveler = updateTraveler(traveler, allTrips, allDestinations);
         renderDom();
     })
+    .catch(error => {
+        displayError(error.message);
+    })
 }
 
 function handleTripSubmit(event, destinationId, numTravelers, departureDate, duration) {
@@ -80,9 +86,20 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
     clearDestinationData(event, numTravelers, departureDate, duration);
     handleTripPost(newTrip, 'http://localhost:3001/api/v1/trips')
     .then(returnedTrip => {
-        currentTraveler = updateTraveler(currentTraveler, allTrips, allDestinations);
-        renderDom()
-    });
+        if(returnedTrip.ok) {
+            currentTraveler = updateTraveler(currentTraveler, allTrips, allDestinations);
+            renderDom()
+        } else {
+            console.log('returnedTrip.statusText', returnedTrip.statusText)
+            console.log('returnedTrip.status,', returnedTrip.status)
+            let code = returnedTrip.status;
+            let message = returnedTrip.statusText;
+            throw new Error(`Oh no! Failed to Post: ${code} - ${message}.`)
+        }
+    })
+    .catch(error => {
+        displayError(error.message);
+    })
 }
 
 function clearDestinationData(event, numTravelers, departureDate, duration) {
@@ -146,7 +163,7 @@ function renderDestinations() {
         newDestination.id = `destination-${destination.id}`
         newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3>`
         const newDestinationDetails = document.createElement('div')
-        newDestinationDetails.className = 'destination-details';
+        newDestinationDetails.className = 'destination-details hidden';
         newDestinationDetails.id = `destination-${destination.id}-details`
         newDestinationDetails.innerHTML = `
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
@@ -212,25 +229,34 @@ function retrieveInputs(event, destinationId, numTravelers, departureDate, durat
         }
 }
 
-function logIn(event) {
-    event.preventDefault();
-    let userId = parseInt(usernameField.value.replace('traveler', ''));
-    let password = passwordField.value
-    console.log('userId', userId);
-    console.log('password', password);
-    if (userId < 51 && password === 'travel') {
-        console.log('made it here')
-        toggleFromLogin();
-        getAllData(userId);
-        } else if(userId > 50) {
-            passwordError = 'Invalid Username'
-        } else {
-            passwordError = 'Invalid Password'
-        }
+function checkLogin(event) {
+
 }
 
+function logIn(event) {
+    event.preventDefault();
+    passwordError.innerText = '';
+    checkLogin(event);
+    // let userId = parseInt(usernameField.value.replace('traveler', ''));
+    const username = usernameField.value;
+    const password = passwordField.value;
+    const foundUser = userLogins.find((login) => {
+        return login.username === username && login.password === password;
+    });
+    if(foundUser) {
+        const userId = parseInt(usernameField.value.replace('traveler', ''));
+        toggleFromLogin();
+        getAllData(userId);
+    } else if (userLogins.find (login => login.username === username)) {
+        passwordError.innerText = 'invalid password'
+    } else {
+        passwordError.innerText = 'username not found'
+    }
+}
+
+
+
 function toggleFromLogin() {
-    console.log('made it here now')
     loginPage.classList.add('hidden');
     mainPage.classList.remove('hidden')
 }
@@ -246,3 +272,11 @@ function updateTripCost(event, destinationId, numTravelers, departureDate, durat
     perPerson.innerText = `$${tripCostPerPerson}`;
     perGroup.innerText = `$${tripCostGroup}`;
 }
+
+function displayError(error) {
+    mainPage.classList.add('hidden');
+    header.classList.add('hidden');
+    loginPage.classList.add('hidden');
+    errorPage.classList.remove('hidden');
+    errorPage.innerHTML = error;
+  };
