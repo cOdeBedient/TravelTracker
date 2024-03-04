@@ -1,5 +1,5 @@
 import { handleFetch, handleTripPost } from './api-calls';
-import { updateTraveler} from './traveler-info'
+import { updateTraveler, compileTripData } from './traveler-info'
 
 // QUERY SELECTORS
 const tripsListContainer = document.querySelector('.trips-list');
@@ -13,16 +13,40 @@ const mainPage = document.querySelector('main');
 
 
 // EVENT LISTENERS
-// window.addEventListener('load', getAllData());
+window.addEventListener('load', getAllData(15));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
-        handleTripSubmit(event);
+        let destinationForm = event.target.closest('form')
+        let destinationId = destinationForm.id.split('-')[1];
+        let newTripData = destinationForm.querySelectorAll('input');
+        const [numTravelers, departureDate, duration] = newTripData;
+        console.log('numTravelers.vale', numTravelers.value)
+        if(numTravelers.value && departureDate.value && duration.value) {
+            handleTripSubmit(event, destinationId, numTravelers, departureDate, duration);
+        }
     }
 });
-loginSubmitButton.addEventListener('click', function(event) {
-    event.preventDefault();
-    logIn(event);
-})
+destinationsListContainer.addEventListener('keyup', function(event) {
+    if(event.target.tagName === "INPUT") {
+        let destinationForm = event.target.closest('form')
+        let destinationId = destinationForm.id.split('-')[1];
+        let newTripData = destinationForm.querySelectorAll('input');
+        const [numTravelers, departureDate, duration] = newTripData;
+        
+        if(numTravelers.value && departureDate.value && duration.value) {
+            console.log('numTravelers.vale', numTravelers.value);
+            console.log('duration', duration.value);
+            const destDetails = event.target.closest('.destination-details');
+            const costData = destDetails.querySelectorAll('h5');
+            updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData);
+        }
+        
+    }
+});
+// loginSubmitButton.addEventListener('click', function(event) {
+//     event.preventDefault();
+//     logIn(event);
+// })
 
 
 // GLOBAL VARIABLES
@@ -43,8 +67,8 @@ function getAllData(id) {
     })
 }
 
-function handleTripSubmit(event) {
-    const newTrip = retrieveInputs(event);
+function handleTripSubmit(event, destinationId, numTravelers, departureDate, duration) {
+    const newTrip = retrieveInputs(event, destinationId, numTravelers, departureDate, duration);
     allTrips.push(newTrip);
     console.log('allTrips', allTrips)
     console.log('newTrip', newTrip);
@@ -105,15 +129,15 @@ function renderDestinations() {
                 <div class="form-element">
                     <label for="travelers">Number of Travelers:</label>
                 </div>
-                <input class="travelers-field" id="travelers" type="number" min="0" placeholder="number of travelers" required>
+                <input class="travelers-field" id="travelers" type="number" min="1" placeholder="number of travelers" required>
                 <div class="form-element">
                     <label for="departure">Departure Date:</label>
                 </div>
                 <input class="departure-date-field" id="departure" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
                 <div class="form-element">
-                    <label for="return">Return Date:</label>
+                    <label for="duration">Trip Length:</label>
                 </div>
-                <input class="return-date-field" id="return" type="date" min="2024-03-04" max="2026-03-03" placeholder="MM/DD/YYYY" required>
+                <input class="duration-field" id="duration" type="number" min="1"  placeholder="number of nights" required>
                 <div class="form-element">
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
@@ -130,32 +154,28 @@ function renderDestinations() {
 //     return retrieveInputs(event);
 // }
 
-function computeDuration(date1, date2) {
-        var parsedDate1 = new Date(date1);
-        var parsedDate2 = new Date(date2);
-        var difference = parsedDate2 - parsedDate1;
-        var differenceDays = Math.ceil(difference / (1000 * 60 * 60 * 24));
+// function computeDuration(date1, date2) {
+//         var parsedDate1 = new Date(date1);
+//         var parsedDate2 = new Date(date2);
+//         var difference = parsedDate2 - parsedDate1;
+//         var differenceDays = Math.ceil(difference / (1000 * 60 * 60 * 24));
     
-        return differenceDays;
-}
+//         return differenceDays;
+// }
 
-function retrieveInputs(event) {
+function retrieveInputs(event, destinationId, numTravelers, departureDate, duration) {
     event.preventDefault();
-    let destinationForm = event.target.closest('form')
-    let destinationId = destinationForm.id.split('-')[1];
-    let newTripData = destinationForm.querySelectorAll('input');
-    const [numTravelers, departureDate, returnDate] = newTripData;
-    const tripDuration = computeDuration(departureDate.value, returnDate.value);
-    return {
-        id: allTrips.length + 1,
-        userID: currentTraveler.id,
-        destinationID: parseInt(destinationId),
-        travelers: parseInt(numTravelers.value),
-        date: departureDate.value.replaceAll('-', '/'),
-        duration: tripDuration,
-        status: "pending",
-        suggestedActivities: []
-    }
+    // const tripDuration = computeDuration(departureDate.value, returnDate.value);
+        return {
+            id: allTrips.length + 1,
+            userID: currentTraveler.id,
+            destinationID: parseInt(destinationId),
+            travelers: parseInt(numTravelers.value),
+            date: departureDate.value.replaceAll('-', '/'),
+            duration: parseInt(duration.value),
+            status: "pending",
+            suggestedActivities: []
+        }
 }
 
 function logIn(event) {
@@ -179,4 +199,16 @@ function toggleFromLogin() {
     console.log('made it here now')
     loginPage.classList.add('hidden');
     mainPage.classList.remove('hidden')
+}
+
+function updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData) {
+    const selectedTrip = retrieveInputs(event, destinationId, numTravelers, departureDate, duration);
+    const compiledTrip = compileTripData([selectedTrip], allDestinations);
+    console.log('compiledTrip', compiledTrip)
+    const tripCostPerPerson = compiledTrip[0].cost.totalPerPerson;
+    const tripCostGroup = compiledTrip[0].cost.totalGroup;
+    console.log('costData', costData)
+    const [perPerson, perGroup] = costData;
+    perPerson.innerText = `Cost Per Person: $${tripCostPerPerson}`;
+    perGroup.innerText = `Cost Per Group: $${tripCostGroup}`;
 }

@@ -111,7 +111,6 @@ function sortTrips(trips) {
     })
 
     return pendingTrips.concat(upcomingApprovedTrips, pastTrips)
-
 }
 
 export {
