@@ -1,22 +1,39 @@
 body {
+  // background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+}
+
+.background-color {
   background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
 }
 
 h1 {
   color: white;
-  margin-bottom: 5px;
 }
 
 h2 {
-  margin-top: 0px;
   font-size: 20px;
-  margin-bottom: 40px;
 }
 
-
+header {
+    h1 {
+    margin-bottom: 5px;
+    margin-left: 27px;
+  }
+  
+  h2 {
+    margin-top: 0px;
+    font-size: 20px;
+    margin-bottom: 40px;
+    margin-left: 20px;
+  }
+}
 
 ul {
   margin-left: 0;
+}
+
+.trips-container {
+  margin-top: 50px;
 }
 
 .trips-heading {
@@ -80,7 +97,7 @@ ul {
     background-color: white;
     padding-left: 10px;
     padding-right: 10px;
-    margin-right: 50px;
+    margin-right: 10px;
   }
 
   p {
@@ -90,7 +107,7 @@ ul {
 
 .destinations-heading {
   text-align: center;
-  background-color:rgb(254, 252, 131);
+  background-color: rgb(247, 255, 128);
   margin-bottom: 5px;
 }
 
@@ -108,12 +125,17 @@ ul {
   // z-index: 2;
 }
 
+// .destinations-heading {
+//   transform: rotate(4deg);
+//   transform-origin: 0% 100%;
+// }
+
 .destination-header {
   display: flex;
   align-content: center;
   width: 99%;
   height: 27px;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(219, 219, 219);
   margin-top: 5px;
   padding-left: 10px;
   // transform: rotate(4deg);
@@ -182,9 +204,41 @@ ul {
 
 }
 
-
 .pending {
   background-color: grey !important;
+}
+
+.login-title {
+  position: absolute;
+  top: 0;
+  left: 20px;
+}
+
+.login-container {
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  width:600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+
+  h2 {
+    margin-bottom: 100px
+  }
+
+  input {
+    height: 78%;
+    margin-left: 3px;
+  }
 }
 
 .username-container,
@@ -194,6 +248,7 @@ ul {
   display: flex;
   margin-top: 5px;
 }
+
 
 .username-container,
 .button-container,
@@ -205,22 +260,15 @@ ul {
   transform-origin: 0% 100%;
 }
 
-.login-form {
-  margin-top: 200px;
-  // display: none;
-
-  input {
-    height: 25%;
-    margin-left: 3px;
-  }
-}
-
 .password-error {
   transform: rotate(-5deg);
   transform-origin: 0% 100%;
-  margin-left: 40vh;
-  margin-top: -1%;
+  margin-left: 205px;
+  margin-top: -2%;
   color: white;
+  font-style: italic;
+  position: absolute;
+  bottom: 40%;
 }
 
 .hidden {

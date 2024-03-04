@@ -7,31 +7,37 @@
   <title>Up And Away</title>
 </head>
 <body>
-  <header>
+  <header class="hidden">
     <h1>u &nbsp&nbsp&nbsp p &nbsp&nbsp&nbsp&nbsp&nbsp & &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp w &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp y</h1>
     <h2>Y &nbsp o &nbsp u &nbsp r &nbsp&nbsp&nbsp&nbsp  F &nbsp a &nbsp n &nbsp t &nbsp a &nbsp s &nbsp y  &nbsp&nbsp&nbsp&nbsp V &nbsp a &nbsp c &nbsp a &nbsp t &nbsp i &nbsp o &nbsp n
   </header>
   <article class="error-message hidden">
     <!-- error message will go here -->
   </article>
-  <form class="login-form">
-    <div class="username-container">
+  <section class="login-container">
+    <form class="login-form">
+      <div class="login-title">
+        <h1>u &nbsp&nbsp&nbsp p &nbsp&nbsp&nbsp&nbsp&nbsp & &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp w &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp y</h1>
+        <h2>Y &nbsp o &nbsp u &nbsp r &nbsp&nbsp&nbsp&nbsp  F &nbsp a &nbsp n &nbsp t &nbsp a &nbsp s &nbsp y  &nbsp&nbsp&nbsp&nbsp V &nbsp a &nbsp c &nbsp a &nbsp t &nbsp i &nbsp o &nbsp n
+      </div>
+      <div class="username-container">
       <div class="login-form-element">
           <label for="username">username:</label>
       </div>
       <input class="username-field" id="username" type="string" placeholder="username" required>
-    </div>
-    <div class="password-container">
-      <div class="login-form-element">
-        <label for="password">password:</label>
       </div>
-      <input class="password-field" id="password" type="string" placeholder="password" required>
-    </div>
-    <div class="login-form-element button-container">
-        <button class="login-submit-button" type="submit">enter</button>
-    </div>
-    <p class="password-error"></p>
-  </form>
+      <div class="password-container">
+        <div class="login-form-element">
+          <label for="password">password:</label>
+        </div>
+        <input class="password-field" id="password" type="string" placeholder="password" required>
+      </div>
+      <div class="login-form-element button-container">
+          <button class="login-submit-button" type="submit">enter</button>
+      </div>
+      <p class="password-error"></p>
+    </form>
+  </section>
   <main class="hidden">
     <!-- will add hidden to main -->
     <section class="trips-container">

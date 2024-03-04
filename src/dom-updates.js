@@ -14,6 +14,7 @@ const mainPage = document.querySelector('main');
 const header = document.querySelector('header');
 const errorPage = document.querySelector('.error-message');
 const passwordError = document.querySelector('.password-error');
+const body = document.querySelector('body');
 
 
 // EVENT LISTENERS
@@ -163,7 +164,7 @@ function renderDestinations() {
         newDestination.id = `destination-${destination.id}`
         newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3>`
         const newDestinationDetails = document.createElement('div')
-        newDestinationDetails.className = 'destination-details hidden';
+        newDestinationDetails.className = 'destination-details';
         newDestinationDetails.id = `destination-${destination.id}-details`
         newDestinationDetails.innerHTML = `
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
@@ -171,7 +172,7 @@ function renderDestinations() {
                 <div class="form-element">
                     <label for="travelers">Number of Travelers:</label>
                 </div>
-                <input class="travelers-field" id="travelers" type="number" min="1" placeholder="# of travelers" required>
+                <input class="travelers-field" id="travelers" type="number" min="1" placeholder="#ppl" required>
                 <div class="form-element">
                     <label for="departure">Departure Date:</label>
                 </div>
@@ -179,7 +180,7 @@ function renderDestinations() {
                 <div class="form-element">
                     <label for="duration">Trip Length:</label>
                 </div>
-                <input class="duration-field" id="duration" type="number" min="1"  placeholder="# of nights" required>
+                <input class="duration-field" id="duration" type="number" min="1"  placeholder="#days" required>
                 <div class="form-element">
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
@@ -246,19 +247,29 @@ function logIn(event) {
     if(foundUser) {
         const userId = parseInt(usernameField.value.replace('traveler', ''));
         toggleFromLogin();
+        console.log('usernameField.value before clear', usernameField.value)
+        console.log('passwordField.value before clear', passwordField.value)
+        clearPasswordFields();
         getAllData(userId);
+        console.log('usernameField.value after clear', usernameField.value)
+        console.log('passwordField.value after clear', passwordField.value)
     } else if (userLogins.find (login => login.username === username)) {
-        passwordError.innerText = 'invalid password'
+        passwordError.innerText = '* invalid password *'
     } else {
-        passwordError.innerText = 'username not found'
+        passwordError.innerText = '* username not found *'
     }
 }
 
-
+function clearPasswordFields() {
+    usernameField.value = '';
+    passwordField.value = '';
+}
 
 function toggleFromLogin() {
     loginPage.classList.add('hidden');
-    mainPage.classList.remove('hidden')
+    mainPage.classList.remove('hidden');
+    header.classList.remove('hidden');
+    body.classList.add('background-color');
 }
 
 function updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData) {
