@@ -32,8 +32,7 @@ destinationsListContainer.addEventListener('keyup', function(event) {
         let newTripData = destinationForm.querySelectorAll('input');
         const [numTravelers, departureDate, duration] = newTripData; 
         if(numTravelers.value && departureDate.value && duration.value) {
-            const destDetails = event.target.closest('.destination-details');
-            const costData = destDetails.querySelectorAll('h5');
+            const costData = findCostFields(event);
             updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData);
         }
         
@@ -66,14 +65,27 @@ function getAllData(id) {
 function handleTripSubmit(event, destinationId, numTravelers, departureDate, duration) {
     const newTrip = retrieveInputs(event, destinationId, numTravelers, departureDate, duration);
     allTrips.push(newTrip);
-    console.log('allTrips', allTrips)
-    console.log('newTrip', newTrip);
+    clearDestinationData(event, numTravelers, departureDate, duration);
     handleTripPost(newTrip, 'http://localhost:3001/api/v1/trips')
     .then(returnedTrip => {
         currentTraveler = updateTraveler(currentTraveler, allTrips, allDestinations);
-        console.log('returnedTrip', returnedTrip)
         renderDom()
     });
+}
+
+function clearDestinationData(event, numTravelers, departureDate, duration) {
+    const costFields = findCostFields(event);
+    costFields.forEach((field) => {
+        field.innerText = ''
+    });
+    numTravelers.value = '';
+    departureDate.value = '';
+    duration.value = '';
+}
+
+function findCostFields(event) {
+    const destinationDetails = event.target.closest('.destination-details');
+    return destinationDetails.querySelectorAll('h5');
 }
 
 function renderDom() {
