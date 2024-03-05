@@ -94,7 +94,7 @@ function updateTraveler(traveler, trips, destinations) {
 
 function sortTrips(trips) {
     const chronTrips = trips.sort((a, b) => {
-        new Date(a.date) - new Date(b.date);
+        return new Date(b.date) - new Date(a.date);
     })
     console.log('chronTrips', chronTrips);
     let pendingTrips = [];

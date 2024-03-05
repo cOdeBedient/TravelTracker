@@ -49,16 +49,42 @@ destinationsListContainer.addEventListener('keyup', function(event) {
         
     }
 });
+tripsListContainer.addEventListener('keydown', function(event) {
+    console.log(event.key);     
+    if(event.key === 'Enter') {
+        const clickedTrip = event.target.closest('.trip-container');
+        const clickedTripHeader = event.target.closest('.trip-header');
+        const clickedTripDetails = clickedTrip.querySelector('.trip-details');
+        clickedTripDetails.classList.toggle("collapsed");
+        clickedTripHeader.setAttribute("aria-expanded", true);
+    }
+})
 tripsListContainer.addEventListener('click', function(event) {
     const clickedTrip = event.target.closest('.trip-container');
+    const clickedTripHeader = event.target.closest('.trip-header');
     const clickedTripDetails = clickedTrip.querySelector('.trip-details');
-    clickedTripDetails.classList.toggle("hidden");
+    clickedTripDetails.classList.toggle("collapsed");
+    clickedTripHeader.setAttribute("aria-expanded", true);
+    console.log('herehere', clickedTripHeader.getAttribute('aria-expanded'));
 })
 destinationsListContainer.addEventListener('click', function(event) {
         const clickedDestination = event.target.closest('.destination-container');
+        const clickedDestinationHeader = event.target.closest('.destination-header');
         const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
         if(!event.target.closest('.destination-details')) {
             clickedDestinationDetails.classList.toggle("hidden");
+            clickedDestinationHeader.setAttribute("aria-expanded", false);
+        }
+})
+destinationsListContainer.addEventListener('keydown', function(event) {
+    if(event.key === 'Enter') {
+        const clickedDestination = event.target.closest('.destination-container');
+        const clickedDestinationHeader = event.target.closest('.destination-header');
+        const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
+        if(!event.target.closest('.destination-details')) {
+            clickedDestinationDetails.classList.toggle("hidden");
+            clickedDestinationHeader.setAttribute("aria-expanded", false);
+        }
     }
 })
 myTripsButton.addEventListener('click', showMyTrips);
@@ -132,7 +158,9 @@ function renderMyTrips() {
     currentTraveler.trips.forEach((trip) => {
         const newTripContainer = document.createElement('div');
         newTripContainer.className = 'trip-container';
-        const newTrip = document.createElement('div')
+        const newTrip = document.createElement('div');
+        newTrip.setAttribute("aria-expanded", false);
+        newTrip.tabIndex = 0;
         newTrip.className = 'trip-header';
         newTrip.id = `trip-${trip.id}`;
         newTrip.innerHTML = `
@@ -145,7 +173,7 @@ function renderMyTrips() {
             newTrip.classList.add('past');
         }
         const newTripDetails = document.createElement('div')
-        newTripDetails.className = 'trip-details hidden';
+        newTripDetails.className = 'trip-details';
         newTripDetails.id = `trip-${trip.id}-details`
         newTripDetails.innerHTML = `
             <img class='trip-image' src="${trip.destination.image}" alt=${trip.destination.alt}>
@@ -166,6 +194,8 @@ function renderDestinations() {
         newDestinationContainer.className = 'destination-container';
         const newDestination = document.createElement('div')
         newDestination.className = 'destination-header';
+        newDestination.tabIndex = 0;
+        newDestination.setAttribute("aria-expanded", true);
         newDestination.id = `destination-${destination.id}`
         newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3>`
         const newDestinationDetails = document.createElement('div')

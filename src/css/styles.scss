@@ -1,10 +1,10 @@
 body {
-  // background-color: rgb(247, 255, 128);
-  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  background-color: rgb(247, 255, 128);
+  background: rgba(252,70,107,1);
 }
 
 .background-color {
-  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  background: rgba(252,70,107,1);
 }
 
 h1 {
@@ -41,7 +41,6 @@ header {
     color: white;
     font-size: 1em;
   }
-
 }
 
 ul {
@@ -85,10 +84,11 @@ ul {
   .trip-details {
     display: flex;
     justify-content: space-evenly;
-    height: 10vh;
+    height: 0vh;
     background-color: rgb(183, 250, 228);
     transform: rotate(-5deg);
     transform-origin: 0% 100%;
+    overflow: hidden;
 
     img {
       height: 90%;
@@ -128,14 +128,6 @@ ul {
   margin-bottom: 5px;
 }
 
-#trip-89-details {
-  // display: flex;
-}
-
-.destinations-list {
-  // z-index: 2;
-}
-
 // .destinations-heading {
 //   transform: rotate(4deg);
 //   transform-origin: 0% 100%;
@@ -168,6 +160,7 @@ ul {
   align-content: center;
   height: 8vh;
   background-color: rgb(185, 185, 185);
+  overflow: hidden;
   // transform: rotate(4deg);
   // transform-origin: 0% 0%;
   // display: none;
@@ -209,7 +202,7 @@ ul {
   }
 
   h5 {
-    font-size: 1em;
+    font-size: .75em;
     margin-right: 5px;
   }
 }
@@ -295,6 +288,13 @@ ul {
   font-size: 2em;
   background-color: rgb(76, 254, 195);
 }
+
+.collapsed {
+  transition: height .5s ease;
+  height: 10vh !important;
+  padding: 0;
+}
+
 
 // .password-container {
 //   width: 60%;
