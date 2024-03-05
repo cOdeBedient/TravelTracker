@@ -56,7 +56,12 @@ tripsListContainer.addEventListener('keydown', function(event) {
         const clickedTripHeader = event.target.closest('.trip-header');
         const clickedTripDetails = clickedTrip.querySelector('.trip-details');
         clickedTripDetails.classList.toggle("collapsed");
-        clickedTripHeader.setAttribute("aria-expanded", true);
+        const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
+        if(isExpanded) {
+            clickedTripHeader.setAttribute("aria-expanded", false);
+        } else {
+            clickedTripHeader.setAttribute("aria-expanded", true);
+        }
     }
 })
 tripsListContainer.addEventListener('click', function(event) {
@@ -64,8 +69,13 @@ tripsListContainer.addEventListener('click', function(event) {
     const clickedTripHeader = event.target.closest('.trip-header');
     const clickedTripDetails = clickedTrip.querySelector('.trip-details');
     clickedTripDetails.classList.toggle("collapsed");
-    clickedTripHeader.setAttribute("aria-expanded", true);
-    console.log('herehere', clickedTripHeader.getAttribute('aria-expanded'));
+    const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
+    if(isExpanded) {
+        clickedTripHeader.setAttribute("aria-expanded", false);
+    } else {
+        clickedTripHeader.setAttribute("aria-expanded", true);
+    }
+
 })
 destinationsListContainer.addEventListener('click', function(event) {
         const clickedDestination = event.target.closest('.destination-container');
@@ -73,7 +83,12 @@ destinationsListContainer.addEventListener('click', function(event) {
         const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
         if(!event.target.closest('.destination-details')) {
             clickedDestinationDetails.classList.toggle("hidden");
-            clickedDestinationHeader.setAttribute("aria-expanded", false);
+            const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
+            if(isExpanded) {
+                clickedDestinationHeader.setAttribute("aria-expanded", false);
+            } else {
+                clickedDestinationHeader.setAttribute("aria-expanded", true);
+            } 
         }
 })
 destinationsListContainer.addEventListener('keydown', function(event) {
@@ -83,7 +98,12 @@ destinationsListContainer.addEventListener('keydown', function(event) {
         const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
         if(!event.target.closest('.destination-details')) {
             clickedDestinationDetails.classList.toggle("hidden");
-            clickedDestinationHeader.setAttribute("aria-expanded", false);
+            const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
+            if(isExpanded) {
+                clickedDestinationHeader.setAttribute("aria-expanded", false);
+            } else {
+                clickedDestinationHeader.setAttribute("aria-expanded", true);
+            }
         }
     }
 })
