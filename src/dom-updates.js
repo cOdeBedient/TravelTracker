@@ -17,6 +17,7 @@ const errorPage = document.querySelector('.error-message');
 const passwordError = document.querySelector('.password-error');
 const body = document.querySelector('body');
 const myTripsButton = document.querySelector('.my-trips-button');
+const spentContainer = document.querySelector('.spent-container');
 
 
 // EVENT LISTENERS
@@ -24,7 +25,7 @@ loginSubmitButton.addEventListener('click', function(event) {
     event.preventDefault();
     logIn(event);
 })
-window.addEventListener('load', getAllData(42));
+// window.addEventListener('load', getAllData(42));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
         event.preventDefault();
@@ -213,7 +214,7 @@ function renderMyTrips() {
         } else {
             newTrip.innerHTML += `<h4 class='status'>upcoming</h4>`
         }
-        newTrip.innerHTML += `<img src='./images/plane.png' class='fly-back' id='plane' alt='plane icon'>`;
+        newTrip.innerHTML += `<img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`;
             // <div class='plane-container'>
             //     
             // </div>
@@ -243,7 +244,7 @@ function renderDestinations() {
         newDestination.tabIndex = 0;
         newDestination.setAttribute("aria-expanded", true);
         newDestination.id = `destination-${destination.id}`
-        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/plane.png' class='fly-back' id='plane' alt='plane icon'>`
+        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`
         const newDestinationDetails = document.createElement('div')
         newDestinationDetails.className = 'destination-details';
         newDestinationDetails.id = `destination-${destination.id}-details`
@@ -268,15 +269,17 @@ function renderDestinations() {
             </form>
             <div class="new-costs-container">
                 <div class='new-costs'>
-                    <h5 class='destination-cost-ind'>Cost Per Person:</h5>
+                    <h5 class='destination-cost-ind'></h5>
                     <p></p>
                 </div>
                 <div class='new-costs'>
-                    <h5 class='destination-cost-grp'>Cost Per Group:</h5>
+                    <h5 class='destination-cost-grp'>Trip Total:</h5>
                     <p></p>
                 </div>   
             </div>
             `
+            // <h5 class='destination-cost-ind'>Cost Per Person:</h5>
+            // <p></p>
             destinationsListContainer.appendChild(newDestinationContainer)
             newDestinationContainer.appendChild(newDestination);
             newDestinationContainer.appendChild(newDestinationDetails);
@@ -286,6 +289,7 @@ function renderDestinations() {
 function showMyTrips() {
     renderMyTrips()
     tripsContainer.classList.toggle('hidden');
+    spentContainer.classList.toggle('hidden');
     if (myTripsButton.innerText === 'my trips') {
         myTripsButton.innerText = 'hide trips';
     } else {
@@ -371,7 +375,7 @@ function updateTripCost(event, destinationId, numTravelers, departureDate, durat
     const tripCostGroup = compiledTrip[0].cost.totalGroup;
     console.log('costData', costData)
     const [perPerson, perGroup] = costData;
-    perPerson.innerText = `$${tripCostPerPerson}`;
+    // perPerson.innerText = `$${tripCostPerPerson}`;
     perGroup.innerText = `$${tripCostGroup}`;
 }
 

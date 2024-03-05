@@ -6,6 +6,8 @@ import './css/styles.scss';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/plane.png'
+import './images/new-plane.png'
+
 
 // DOM
 import './dom-updates.js';
