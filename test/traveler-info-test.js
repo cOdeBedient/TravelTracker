@@ -173,7 +173,6 @@ describe('traveler-info.js', function() {
       let updatedTraveler1 = updateTraveler(traveler1, sampleTrips, sampleDestinations);
       let updatedTraveler2 = updateTraveler(traveler2, sampleTrips, sampleDestinations);
 
-      console.log('updatedTraveler2.trips[0]', updatedTraveler2.trips[0])
       expect(updatedTraveler1.trips[0]).to.deep.equal(
         {
           id: 5,

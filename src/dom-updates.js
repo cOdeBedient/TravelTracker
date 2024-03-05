@@ -21,110 +21,42 @@ const spentContainer = document.querySelector('.spent-container');
 
 
 // EVENT LISTENERS
+
+// window.addEventListener('load', getAllData(42));
+
+
 loginSubmitButton.addEventListener('click', function(event) {
     event.preventDefault();
     logIn(event);
-})
-// window.addEventListener('load', getAllData(42));
+});
+
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
         event.preventDefault();
-        const clickedDestinationContainer = event.target.closest('.destination-container');
-        let destinationForm = event.target.closest('form')
-        let destinationId = destinationForm.id.split('-')[1];
-        let newTripData = destinationForm.querySelectorAll('input');
-        const [numTravelers, departureDate, duration] = newTripData;
-        if(numTravelers.value && departureDate.value && duration.value) {
-            const plane = clickedDestinationContainer.querySelector('#plane');
-            plane.classList.toggle('fly');
-            plane.classList.toggle('fly-back');
-            setTimeout(function() {plane.classList.toggle('fly')}, 3000)
-            setTimeout(function() {plane.classList.toggle('fly-back')}, 3000)
-            handleTripSubmit(event, destinationId, numTravelers, departureDate, duration);
-        }
+        handleSubmitClick(event);
     }
 });
-destinationsListContainer.addEventListener('keyup', function(event) {
-    if(event.target.tagName === "INPUT") {
-        let destinationForm = event.target.closest('form')
-        let destinationId = destinationForm.id.split('-')[1];
-        let newTripData = destinationForm.querySelectorAll('input');
-        const [numTravelers, departureDate, duration] = newTripData; 
-        if(numTravelers.value && departureDate.value && duration.value) {
-            const costData = findCostFields(event);
-            updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData);
-        }
-        
-    }
-});
-tripsListContainer.addEventListener('keydown', function(event) {
-    console.log(event.key);     
-    if(event.key === 'Enter') {
-        const clickedTrip = event.target.closest('.trip-container');
-        const clickedTripHeader = event.target.closest('.trip-header');
-        const clickedTripDetails = clickedTrip.querySelector('.trip-details');
-        clickedTripDetails.classList.toggle("collapsed");
-        const plane = clickedTripHeader.querySelector('img');
-        plane.classList.toggle('fly');
-        plane.classList.toggle('fly-back');
-        const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
-        if(isExpanded) {
-            clickedTripHeader.setAttribute("aria-expanded", false);
-        } else {
-            clickedTripHeader.setAttribute("aria-expanded", true);
-        }
-    }
-})
-tripsListContainer.addEventListener('click', function(event) {
-    const clickedTrip = event.target.closest('.trip-container');
-    const clickedTripHeader = event.target.closest('.trip-header');
-    const clickedTripDetails = clickedTrip.querySelector('.trip-details');
-    clickedTripDetails.classList.toggle("collapsed");
-    const plane = clickedTripHeader.querySelector('img');
-    plane.classList.toggle('fly');
-    plane.classList.toggle('fly-back');
-    const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
-    if(isExpanded) {
-        clickedTripHeader.setAttribute("aria-expanded", false);
-    } else {
-        clickedTripHeader.setAttribute("aria-expanded", true);
-    }
 
-})
+destinationsListContainer.addEventListener('keyup', function(event) {
+    handleFormClick(event);
+});
+
+tripsListContainer.addEventListener('keydown', function(event) {   
+    if(event.key === 'Enter') {
+        expandTripDetails(event);
+    }
+});
+
+tripsListContainer.addEventListener('click', function(event) {
+    expandTripDetails(event);
+});
+
 destinationsListContainer.addEventListener('click', function(event) {
-        const clickedDestination = event.target.closest('.destination-container');
-        const clickedDestinationHeader = event.target.closest('.destination-header');
-        const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
-        if(!event.target.closest('.destination-details')) {
-            clickedDestinationDetails.classList.toggle("hidden");
-            // const plane = clickedDestinationHeader.querySelector('img');
-            // plane.classList.toggle('fly');
-            // plane.classList.toggle('fly-back');
-            const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
-            if(isExpanded) {
-                clickedDestinationHeader.setAttribute("aria-expanded", false);
-            } else {
-                clickedDestinationHeader.setAttribute("aria-expanded", true);
-            } 
-        }
+    expandDestinationDetails(event);
 })
 destinationsListContainer.addEventListener('keydown', function(event) {
     if(event.key === 'Enter') {
-        const clickedDestination = event.target.closest('.destination-container');
-        const clickedDestinationHeader = event.target.closest('.destination-header');
-        const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
-        if(!event.target.closest('.destination-details')) {
-            clickedDestinationDetails.classList.toggle("hidden");
-            // const plane = clickedDestinationHeader.querySelector('img');
-            // plane.classList.toggle('fly');
-            // plane.classList.toggle('fly-back');
-            const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
-            if(isExpanded) {
-                clickedDestinationHeader.setAttribute("aria-expanded", false);
-            } else {
-                clickedDestinationHeader.setAttribute("aria-expanded", true);
-            }
-        }
+        expandDestinationDetails(event);
     }
 })
 myTripsButton.addEventListener('click', showMyTrips);
@@ -148,6 +80,69 @@ function getAllData(id) {
     .catch(error => {
         displayError(error.message);
     })
+}
+
+function handleSubmitClick(event) {
+    const clickedDestinationContainer = event.target.closest('.destination-container');
+    let destinationForm = event.target.closest('form')
+    let destinationId = destinationForm.id.split('-')[1];
+    let newTripData = destinationForm.querySelectorAll('input');
+    const [numTravelers, departureDate, duration] = newTripData;
+    if(numTravelers.value && departureDate.value && duration.value) {
+        const plane = clickedDestinationContainer.querySelector('#plane');
+        plane.classList.toggle('fly');
+        plane.classList.toggle('fly-back');
+        setTimeout(function() {plane.classList.toggle('fly')}, 3000)
+        setTimeout(function() {plane.classList.toggle('fly-back')}, 3000)
+        handleTripSubmit(event, destinationId, numTravelers, departureDate, duration);
+    }
+}
+
+function handleFormClick(event) {
+    if(event.target.tagName === "INPUT") {
+        let destinationForm = event.target.closest('form')
+        let destinationId = destinationForm.id.split('-')[1];
+        let newTripData = destinationForm.querySelectorAll('input');
+        const [numTravelers, departureDate, duration] = newTripData; 
+        if(numTravelers.value && departureDate.value && duration.value) {
+            const costData = findCostFields(event);
+            updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData);
+        }
+    }
+}
+
+function expandTripDetails(event) {
+    const clickedTrip = event.target.closest('.trip-container');
+    const clickedTripHeader = event.target.closest('.trip-header');
+    const clickedTripDetails = clickedTrip.querySelector('.trip-details');
+    clickedTripDetails.classList.toggle("collapsed");
+    const plane = clickedTripHeader.querySelector('img');
+    plane.classList.toggle('fly');
+    plane.classList.toggle('fly-back');
+    const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
+    if(isExpanded) {
+        clickedTripHeader.setAttribute("aria-expanded", false);
+    } else {
+        clickedTripHeader.setAttribute("aria-expanded", true);
+    }
+}
+
+function expandDestinationDetails(event) {
+    const clickedDestination = event.target.closest('.destination-container');
+    const clickedDestinationHeader = event.target.closest('.destination-header');
+    const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
+    if(!event.target.closest('.destination-details')) {
+        clickedDestinationDetails.classList.toggle("hidden");
+        // const plane = clickedDestinationHeader.querySelector('img');
+        // plane.classList.toggle('fly');
+        // plane.classList.toggle('fly-back');
+        const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
+        if(isExpanded) {
+            clickedDestinationHeader.setAttribute("aria-expanded", false);
+        } else {
+            clickedDestinationHeader.setAttribute("aria-expanded", true);
+        }
+    }
 }
 
 function handleTripSubmit(event, destinationId, numTravelers, departureDate, duration) {
@@ -301,18 +296,8 @@ function showMyTrips() {
 //     return retrieveInputs(event);
 // }
 
-// function computeDuration(date1, date2) {
-//         var parsedDate1 = new Date(date1);
-//         var parsedDate2 = new Date(date2);
-//         var difference = parsedDate2 - parsedDate1;
-//         var differenceDays = Math.ceil(difference / (1000 * 60 * 60 * 24));
-    
-//         return differenceDays;
-// }
-
 function retrieveInputs(event, destinationId, numTravelers, departureDate, duration) {
     event.preventDefault();
-    // const tripDuration = computeDuration(departureDate.value, returnDate.value);
         return {
             id: allTrips.length + 1,
             userID: currentTraveler.id,
@@ -342,12 +327,8 @@ function logIn(event) {
     if(foundUser) {
         const userId = parseInt(usernameField.value.replace('traveler', ''));
         toggleFromLogin();
-        console.log('usernameField.value before clear', usernameField.value)
-        console.log('passwordField.value before clear', passwordField.value)
         clearPasswordFields();
         getAllData(userId);
-        console.log('usernameField.value after clear', usernameField.value)
-        console.log('passwordField.value after clear', passwordField.value)
     } else if (userLogins.find (login => login.username === username)) {
         passwordError.innerText = '* invalid password *'
     } else {
