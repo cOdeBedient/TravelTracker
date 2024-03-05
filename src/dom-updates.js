@@ -190,17 +190,20 @@ function renderMyTrips() {
         newTrip.id = `trip-${trip.id}`;
         newTrip.innerHTML = `
             <h3 class='name'>${trip.destination.destination}</h3>
-            <h4 class='date'>${trip.date}</h4>
-            <img src='./images/plane.png' id='plane' alt='plane icon'>
-            `;
+            <h4 class='date'>${trip.date}</h4>`
+        if(trip.status === 'pending') {
+            newTrip.classList.add('pending');
+            newTrip.innerHTML += `<h4 class='status'>pending</h4>`
+        } else if(trip.status === 'past') {
+            newTrip.classList.add('past');
+        } else {
+            newTrip.innerHTML += `<h4 class='status'>upcoming</h4>`
+        }
+        newTrip.innerHTML += `<img src='./images/plane.png' id='plane' alt='plane icon'>`;
             // <div class='plane-container'>
             //     
             // </div>
-        if(trip.status === 'pending') {
-            newTrip.classList.add('pending');
-        } else if(trip.status === 'past') {
-            newTrip.classList.add('past');
-        }
+       
         const newTripDetails = document.createElement('div')
         newTripDetails.className = 'trip-details';
         newTripDetails.id = `trip-${trip.id}-details`
