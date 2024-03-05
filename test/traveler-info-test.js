@@ -1,6 +1,6 @@
 import chai from 'chai';
 const expect = chai.expect;
-import { getTraveler, getTrips, appendDestinations, computeTripCost, compileTripData, computeYearSpent, updateTraveler } from '../src/traveler-info';
+import { getTraveler, getTrips, appendDestinations, computeTripCost, compileTripData, computeYearSpent, updateTraveler, sortTrips } from '../src/traveler-info';
 import { sampleTravelers } from '../src/sample-data/travelers-sample';
 import { sampleTrips } from '../src/sample-data/trips-sample';
 import { sampleDestinations } from '../src/sample-data/destinations-sample';
@@ -149,7 +149,47 @@ describe('traveler-info.js', function() {
     });
   });
 
-  describe('compute total spent', function() {
+  describe('make traveler', function() {
+    it('should return an updated traveler with all relevant details added', function() {
+      let updatedTraveler1 = updateTraveler(traveler1, sampleTrips, sampleDestinations);
+      let updatedTraveler2 = updateTraveler(traveler2, sampleTrips, sampleDestinations);
+
+      expect(updatedTraveler1.trips[0]).to.deep.equal(
+        {
+          id: 1,
+          userID: 1,
+          destinationID: 2,
+          travelers: 6,
+          date: "2023/09/23",
+          duration: 5,
+          status: "approved",
+          suggestedActivities: [],
+          destination: {
+            id: 2,
+            destination: "Paris, France",
+            estimatedLodgingCostPerDay: 220,
+            estimatedFlightCostPerPerson: 600,
+            image: "https://example.com/paris.jpg",
+            alt: "Eiffel Tower with blue sky in the background"
+          },
+          cost: {totalPerPerson: 1870, totalGroup: 11220}
+        }
+     );
+      expect(updatedTraveler2.trips[0].destination).to.deep.equal(
+        {
+          id: 6,
+          destination: "New York City, USA",
+          estimatedLodgingCostPerDay: 200,
+          estimatedFlightCostPerPerson: 400,
+          image: "https://example.com/nyc.jpg",
+          alt: "Manhattan skyline with Empire State Building"
+        }
+      );
+      expect(updatedTraveler1.spentLastYear).to.deep.equal({ individual: 3839, group: 25003 })
+    });
+  });
+
+  describe('compute year spent', function() {
     it('should return the total spent on trips this year by traveler with given id', function() {
       let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
       let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
@@ -203,49 +243,68 @@ describe('traveler-info.js', function() {
       let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
       let traveler1YearSpent = computeYearSpent(compiledTrips1);
       let traveler2YearSpent = computeYearSpent(compiledTrips2);
-      let traveler2TotalSpent = computeYearSpent(compiledTrips2);
 
-      expect(traveler2TotalSpent).to.deep.equal({ individual: 0, group: 0 });
+      expect(traveler2YearSpent).to.deep.equal({ individual: 0, group: 0 });
     });
   });
 
-  describe('make traveler', function() {
-    it('should return an updated traveler with all relevant details added', function() {
-      let updatedTraveler1 = updateTraveler(traveler1, sampleTrips, sampleDestinations);
-      let updatedTraveler2 = updateTraveler(traveler2, sampleTrips, sampleDestinations);
+  describe('sort trips', function() {
+    it('should update status of past trips', function() {
+      let traveler2SortedTrips = sortTrips(traveler2Trips);
 
-      expect(updatedTraveler1.trips[0]).to.deep.equal(
+      expect(traveler2SortedTrips[2].status).to.equal('past');
+    });
+
+    it('should sort approved trips by date', function() {
+      let traveler2SortedTrips = sortTrips(traveler2Trips);
+
+      expect(traveler2SortedTrips).to.deep.equal([
         {
-          id: 1,
-          userID: 1,
-          destinationID: 2,
-          travelers: 6,
-          date: "2023/09/23",
-          duration: 5,
+          id: 4,
+          userID: 2,
+          destinationID: 1,
+          travelers: 3,
+          date: "2024/06/10",
+          duration: 6,
           status: "approved",
-          suggestedActivities: [],
-          destination: {
-            id: 2,
-            destination: "Paris, France",
-            estimatedLodgingCostPerDay: 220,
-            estimatedFlightCostPerPerson: 600,
-            image: "https://example.com/paris.jpg",
-            alt: "Eiffel Tower with blue sky in the background"
-          },
-          cost: {totalPerPerson: 1870, totalGroup: 11220}
-        }
-     );
-      expect(updatedTraveler2.trips[0].destination).to.deep.equal(
+          suggestedActivities: []
+        },
         {
-          id: 6,
-          destination: "New York City, USA",
-          estimatedLodgingCostPerDay: 200,
-          estimatedFlightCostPerPerson: 400,
-          image: "https://example.com/nyc.jpg",
-          alt: "Manhattan skyline with Empire State Building"
-        }
-      );
-      expect(updatedTraveler1.spentLastYear).to.deep.equal({ individual: 3839, group: 25003 })
-    });
-  });
+          id: 2,
+          userID: 2,
+          destinationID: 6,
+          travelers: 4,
+          date: "2022/07/13",
+          duration: 2,
+          status: "approved",
+          suggestedActivities: []
+        },
+        {
+          id: 7,
+          userID: 2,
+          destinationID: 1,
+          travelers: 7,
+          date: "2018/07/13",
+          duration: 3,
+          status: "past",
+          suggestedActivities: []
+       }]);
+    })
+
+    it('should sort pending trips first', function() {
+      let traveler1SortedTrips = sortTrips(traveler1Trips);
+
+      expect(traveler1SortedTrips[0]).to.deep.equal(
+        {
+          id: 5,
+          userID: 1,
+          destinationID: 6,
+          travelers: 5,
+          date: "2025/10/29",
+          duration: 10,
+          status: "pending",
+          suggestedActivities: []
+      });
+    })
+  })
 });

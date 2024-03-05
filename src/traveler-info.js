@@ -7,9 +7,9 @@ function getTrips(id, trips) {
         return id === trip.userID
     });
 
-    let sortedCurrentTrips = sortTrips(currentTrips)
+    // let sortedCurrentTrips = sortTrips(currentTrips)
 
-    return sortedCurrentTrips;
+    return currentTrips;
 }
 
 function appendDestinations(trips, destinations) {
@@ -67,10 +67,10 @@ function computeYearSpent(trips) {
     const today = getDate();
     let approvedRecentTrips = trips.filter((trip) => {
         return (trip.status === 'approved')
-            && (trip.date.replaceAll('/', '') < 20200301)
-            && (trip.date.replaceAll('/', '') > 20190301);
-            // && (trip.date.replaceAll('/', '') < today)
-            // && (trip.date.replaceAll('/', '') > today - 10000);
+            // && (trip.date.replaceAll('/', '') < 20200301)
+            // && (trip.date.replaceAll('/', '') > 20190301);
+            && (trip.date.replaceAll('/', '') < today)
+            && (trip.date.replaceAll('/', '') > today - 10000);
     });
     let totalSpending = approvedRecentTrips.reduce((totals, trip) => {
         totals.individual += trip.cost.totalPerPerson;
@@ -96,7 +96,6 @@ function sortTrips(trips) {
     const chronTrips = trips.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
     })
-    console.log('chronTrips', chronTrips);
     let pendingTrips = [];
     let upcomingApprovedTrips = [];
     let pastTrips = [];
@@ -124,5 +123,6 @@ export {
     compileTripData,
     getDate,
     computeYearSpent,
-    updateTraveler
+    updateTraveler,
+    sortTrips
 }
