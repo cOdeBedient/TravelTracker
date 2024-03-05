@@ -49,8 +49,8 @@ header {
   }
 }
 
-ul {
-  margin-left: 0;
+span {
+  font-style: italic;
 }
 
 .trips-container {
@@ -161,6 +161,8 @@ ul {
   margin-bottom: 5px;
   margin-top: -30px;
   font-size: 1.5em;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 // .destinations-heading {
@@ -171,13 +173,17 @@ ul {
 .destination-header {
   display: flex;
   width: 100%;
-  height: 27px;
+  height: 30px;
   background-color: rgb(219, 219, 219);
   margin-top: 5px;
   position: relative;
   cursor: pointer;
   // transform: rotate(4deg);
   // transform-origin: 0% 100%;
+
+  h3 {
+    font-size: 1.2em;
+  }
 }
 
 #plane {
@@ -236,15 +242,17 @@ ul {
   }
 }
 
-.new-costs-container {
-  display: flex;
-  margin-top: 10px;
-}
+// .new-costs-container {
+//   // display: flex;
+//   margin-top: 10px;
+// }
 
 .new-costs {
+  margin-top: 10px;
   height: fit-content;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   h4, p {
     margin-top: 0;

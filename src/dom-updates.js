@@ -18,6 +18,7 @@ const passwordError = document.querySelector('.password-error');
 const body = document.querySelector('body');
 const myTripsButton = document.querySelector('.my-trips-button');
 const spentContainer = document.querySelector('.spent-container');
+const destinationsHeading = document.querySelector('.destinations-heading');
 
 
 // EVENT LISTENERS
@@ -105,8 +106,8 @@ function handleFormClick(event) {
         let newTripData = destinationForm.querySelectorAll('input');
         const [numTravelers, departureDate, duration] = newTripData; 
         if(numTravelers.value && departureDate.value && duration.value) {
-            const costData = findCostFields(event);
-            updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData);
+            const costField = findCostField(event);
+            updateTripCost(event, destinationId, numTravelers, departureDate, duration, costField);
         }
     }
 }
@@ -136,9 +137,6 @@ function expandDestinationDetails(event) {
         const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
         if(!event.target.closest('.destination-details')) {
             clickedDestinationDetails.classList.toggle("hidden");
-            // const plane = clickedDestinationHeader.querySelector('img');
-            // plane.classList.toggle('fly');
-            // plane.classList.toggle('fly-back');
             const isExpanded = clickedDestination.getAttribute('aria-expanded') === 'true';
             if(isExpanded) {
                 clickedDestination.setAttribute("aria-expanded", false);
@@ -172,24 +170,23 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
 }
 
 function clearDestinationData(event, numTravelers, departureDate, duration) {
-    const costFields = findCostFields(event);
-    costFields.forEach((field) => {
-        field.innerText = ''
-    });
+    const costField = findCostField(event);
+    costField.innerText = ''
     numTravelers.value = '';
     departureDate.value = '';
     duration.value = '';
 }
 
-function findCostFields(event) {
+function findCostField(event) {
     const destinationDetails = event.target.closest('.destination-details');
-    return destinationDetails.querySelectorAll('p');
+    return destinationDetails.querySelector('p');
 }
 
 function renderDom() {
     renderMyTrips();
     renderDestinations();
     dollarsSpent.innerText = `$${currentTraveler.spentLastYear.group}`
+    destinationsHeading.innerHTML = `Plan Your Next Adventure, &nbsp<span>${currentTraveler.name}</span>!`
 }
 
 function renderMyTrips() {
@@ -207,7 +204,7 @@ function renderMyTrips() {
             <h4 class='date'>${trip.date}</h4>`
         if(trip.status === 'pending') {
             newTrip.classList.add('pending');
-            newTrip.innerHTML += `<h4 class='status'>pending</h4>`
+            newTrip.innerHTML += `<h4 class='status'>pending...</h4>`
         } else if(trip.status === 'past') {
             newTrip.classList.add('past');
         } else {
@@ -266,16 +263,10 @@ function renderDestinations() {
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
             </form>
-            <div class="new-costs-container">
-                <div class='new-costs'>
-                    <p class='destination-cost-ind'></p>
-                    <p></p>
-                </div>
                 <div class='new-costs'>
                     <h4 class='destination-cost-grp'>Trip Total:</h4>
                     <p></p>
                 </div>   
-            </div>
             `
             // <h5 class='destination-cost-ind'>Cost Per Person:</h5>
             // <p></p>
@@ -322,7 +313,6 @@ function logIn(event) {
     event.preventDefault();
     passwordError.innerText = '';
     checkLogin(event);
-    // let userId = parseInt(usernameField.value.replace('traveler', ''));
     const username = usernameField.value;
     const password = passwordField.value;
     const foundUser = userLogins.find((login) => {
@@ -352,16 +342,14 @@ function toggleFromLogin() {
     body.classList.add('background-color');
 }
 
-function updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData) {
+function updateTripCost(event, destinationId, numTravelers, departureDate, duration, costField) {
     const selectedTrip = retrieveInputs(event, destinationId, numTravelers, departureDate, duration);
     const compiledTrip = compileTripData([selectedTrip], allDestinations);
     console.log('compiledTrip', compiledTrip)
-    const tripCostPerPerson = compiledTrip[0].cost.totalPerPerson;
+    // const tripCostPerPerson = compiledTrip[0].cost.totalPerPerson;
     const tripCostGroup = compiledTrip[0].cost.totalGroup;
-    console.log('costData', costData)
-    const [perPerson, perGroup] = costData;
     // perPerson.innerText = `$${tripCostPerPerson}`;
-    perGroup.innerText = `$${tripCostGroup}`;
+    costField.innerText = `$${tripCostGroup}`;
 }
 
 function displayError(error) {
