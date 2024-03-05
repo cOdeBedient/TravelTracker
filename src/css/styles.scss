@@ -4,7 +4,7 @@ body {
 }
 
 .background-color {
-  background: rgba(252,70,107,1);
+  background: rgb(251, 65, 102);
 }
 
 h1 {
@@ -39,7 +39,8 @@ header {
     background: none;
     border: none;
     color: white;
-    font-size: 1em;
+    font-size: 1.2em;
+    font-weight: bold;
   }
 }
 
@@ -120,11 +121,15 @@ ul {
 .spent-container {
   width: 100%;
   margin-right: 0;
-  margin-top: 8px;
+  margin-top: -40px;
   transform: rotate(-5deg);
   transform-origin: 0% 100%;
   display: flex;
   justify-content: flex-end;
+
+  h4 {
+    font-size: 1.2em;
+  }
 
   div {
     width: fit-content;
@@ -231,12 +236,12 @@ ul {
   display: flex;
   flex-direction: column;
 
-  h5, p {
+  h6, p {
     margin-top: 0;
     margin-bottom: 0;
   }
 
-  h5 {
+  h6 {
     font-size: 1em;
     margin-right: 5px;
   }

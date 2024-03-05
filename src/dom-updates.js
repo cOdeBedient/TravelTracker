@@ -247,28 +247,28 @@ function renderDestinations() {
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
             <form class='trip-form' id='form-${destination.id}'>
                 <div class="form-element">
-                    <label for="travelers">Number of Travelers:</label>
+                    <label for="travelers-${destination.id}">Number of Travelers:</label>
                 </div>
-                <input class="travelers-field" id="travelers" type="number" min="1" placeholder="#ppl" required>
+                <input class="travelers-field" id="travelers-${destination.id}" type="number" min="1" placeholder="#ppl" required>
                 <div class="form-element">
-                    <label for="departure">Departure Date:</label>
+                    <label for="departure-${destination.id}">Departure Date:</label>
                 </div>
-                <input class="departure-date-field" id="departure" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
+                <input class="departure-date-field" id="departure-${destination.id}" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
                 <div class="form-element">
-                    <label for="duration">Trip Length:</label>
+                    <label for="duration-${destination.id}">Trip Length:</label>
                 </div>
-                <input class="duration-field" id="duration" type="number" min="1"  placeholder="#days" required>
+                <input class="duration-field" id="duration-${destination.id}" type="number" min="1"  placeholder="#days" required>
                 <div class="form-element">
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
             </form>
             <div class="new-costs-container">
                 <div class='new-costs'>
-                    <h5 class='destination-cost-ind'></h5>
+                    <h6 class='destination-cost-ind'></h6>
                     <p></p>
                 </div>
                 <div class='new-costs'>
-                    <h5 class='destination-cost-grp'>Trip Total:</h5>
+                    <h6 class='destination-cost-grp'>Trip Total:</h6>
                     <p></p>
                 </div>   
             </div>

@@ -64,11 +64,11 @@ function getDate() {
 function computeYearSpent(trips) {
     const today = getDate();
     let approvedRecentTrips = trips.filter((trip) => {
-        return (trip.status === 'approved')
-            // && (trip.date.replaceAll('/', '') < 20200301)
-            // && (trip.date.replaceAll('/', '') > 20190301);
-            && (trip.date.replaceAll('/', '') < today)
-            && (trip.date.replaceAll('/', '') > today - 10000);
+        return ((trip.status === 'approved' || trip.status === 'past')
+            && (trip.date.replaceAll('/', '') < 20200301)
+            && (trip.date.replaceAll('/', '') > 20190301));
+            // && (trip.date.replaceAll('/', '') < today)
+            // && (trip.date.replaceAll('/', '') > today - 10000);
     });
     let totalSpending = approvedRecentTrips.reduce((totals, trip) => {
         totals.individual += trip.cost.totalPerPerson;
