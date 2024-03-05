@@ -119,11 +119,11 @@ function expandTripDetails(event) {
     const plane = clickedTripHeader.querySelector('img');
     plane.classList.toggle('fly');
     plane.classList.toggle('fly-back');
-    const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
+    const isExpanded = clickedTrip.getAttribute('aria-expanded') === 'true';
     if(isExpanded) {
-        clickedTripHeader.setAttribute("aria-expanded", false);
+        clickedTrip.setAttribute("aria-expanded", false);
     } else {
-        clickedTripHeader.setAttribute("aria-expanded", true);
+        clickedTrip.setAttribute("aria-expanded", true);
     }
 }
 
@@ -136,11 +136,11 @@ function expandDestinationDetails(event) {
         // const plane = clickedDestinationHeader.querySelector('img');
         // plane.classList.toggle('fly');
         // plane.classList.toggle('fly-back');
-        const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
+        const isExpanded = clickedDestination.getAttribute('aria-expanded') === 'true';
         if(isExpanded) {
-            clickedDestinationHeader.setAttribute("aria-expanded", false);
+            clickedDestination.setAttribute("aria-expanded", false);
         } else {
-            clickedDestinationHeader.setAttribute("aria-expanded", true);
+            clickedDestination.setAttribute("aria-expanded", true);
         }
     }
 }
@@ -193,8 +193,8 @@ function renderMyTrips() {
     currentTraveler.trips.forEach((trip) => {
         const newTripContainer = document.createElement('div');
         newTripContainer.className = 'trip-container';
+        newTripContainer.setAttribute("aria-expanded", false);
         const newTrip = document.createElement('div');
-        newTrip.setAttribute("aria-expanded", false);
         newTrip.tabIndex = 0;
         newTrip.className = 'trip-header';
         newTrip.id = `trip-${trip.id}`;
@@ -234,10 +234,10 @@ function renderDestinations() {
     allDestinations.forEach((destination) => {
         const newDestinationContainer = document.createElement('div');
         newDestinationContainer.className = 'destination-container';
+        newDestinationContainer.setAttribute("aria-expanded", true);
         const newDestination = document.createElement('div')
         newDestination.className = 'destination-header';
         newDestination.tabIndex = 0;
-        newDestination.setAttribute("aria-expanded", true);
         newDestination.id = `destination-${destination.id}`
         newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`
         const newDestinationDetails = document.createElement('div')
@@ -247,28 +247,28 @@ function renderDestinations() {
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
             <form class='trip-form' id='form-${destination.id}'>
                 <div class="form-element">
-                    <label for="travelers-${destination.id}">Number of Travelers:</label>
+                    <label for="travelers-${destination.destination}">Number of Travelers:</label>
                 </div>
-                <input class="travelers-field" id="travelers-${destination.id}" type="number" min="1" placeholder="#ppl" required>
+                <input class="travelers-field" id="travelers-${destination.destination}" type="number" min="1" placeholder="#ppl" required>
                 <div class="form-element">
-                    <label for="departure-${destination.id}">Departure Date:</label>
+                    <label for="departure-${destination.destination}">Departure Date:</label>
                 </div>
-                <input class="departure-date-field" id="departure-${destination.id}" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
+                <input class="departure-date-field" id="departure-${destination.destination}" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
                 <div class="form-element">
-                    <label for="duration-${destination.id}">Trip Length:</label>
+                    <label for="duration-${destination.destination}">Trip Length:</label>
                 </div>
-                <input class="duration-field" id="duration-${destination.id}" type="number" min="1"  placeholder="#days" required>
+                <input class="duration-field" id="duration-${destination.destination}" type="number" min="1"  placeholder="#days" required>
                 <div class="form-element">
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
             </form>
             <div class="new-costs-container">
                 <div class='new-costs'>
-                    <h6 class='destination-cost-ind'></h6>
+                    <p class='destination-cost-ind'></p>
                     <p></p>
                 </div>
                 <div class='new-costs'>
-                    <h6 class='destination-cost-grp'>Trip Total:</h6>
+                    <h4 class='destination-cost-grp'>Trip Total:</h4>
                     <p></p>
                 </div>   
             </div>
