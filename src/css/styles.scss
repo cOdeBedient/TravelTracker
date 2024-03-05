@@ -1,27 +1,60 @@
 body {
-  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  // background-color: rgb(247, 255, 128);
+  // background: rgba(252,70,107,1);
+}
+
+.background-color {
+  background: rgba(252,70,107,1);
 }
 
 h1 {
   color: white;
-  margin-bottom: 5px;
 }
 
 h2 {
-  margin-top: 0px;
   font-size: 20px;
-  margin-bottom: 40px;
 }
 
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
+  h1 {
+    margin-bottom: 5px;
+    margin-left: 27px;
+  }
+  
+  h2 {
+    margin-top: 0px;
+    font-size: 20px;
+    margin-bottom: 40px;
+    margin-left: 20px;
+  }
+
+  button {
+    height: fit-content;
+    margin-right: 50px;
+    margin-bottom: 40px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1em;
+  }
+}
 
 ul {
   margin-left: 0;
 }
 
+.trips-container {
+  margin-top: -40px;
+  margin-bottom: 90px;
+}
+
 .trips-heading {
     width: fit-content;
-    transform: rotate(-5deg);
+    transform: rotate(-4.25deg);
     transform-origin: 0% 100%;
     margin-bottom: 5px;
     padding-left: 7px;
@@ -40,27 +73,49 @@ ul {
     background-color: rgb(76, 254, 195);
     margin-top: 8px;
     padding-left: 10px;
-    transform: rotate(-5deg);
+    transform: rotate(-4.25deg);
     transform-origin: 0% 100%;
   }
 
   .name {
-    margin-right: 1%
+    margin-right: 15px;
+    align-self: center;
+    
+  }
+  
+  .date {
+    margin-right: 20px;
+    align-self: center;
+    color: black;
+  }
+
+  .status {
+    margin-right: 20px;
+    font-style: italic;
+    align-self: center;
+    color: black;
   }
 
   .trip-details {
     display: flex;
     justify-content: space-evenly;
-    height: 10vh;
+    height: 0vh;
     background-color: rgb(183, 250, 228);
-    transform: rotate(-5deg);
+    transform: rotate(-4.25deg);
     transform-origin: 0% 100%;
+    overflow: hidden;
 
     img {
       height: 90%;
     }
   }
 }
+
+
+
+// .plane-container {
+//   width: 50%;
+// }
 
 .spent-container {
   width: 100%;
@@ -80,7 +135,7 @@ ul {
     background-color: white;
     padding-left: 10px;
     padding-right: 10px;
-    margin-right: 50px;
+    margin-right: 10px;
   }
 
   p {
@@ -90,42 +145,47 @@ ul {
 
 .destinations-heading {
   text-align: center;
-  background-color:rgb(254, 252, 131);
+  background-color: rgb(247, 255, 128);
   margin-bottom: 5px;
 }
 
-#trip-89-details {
-  // display: flex;
-}
-
-.test {
-  // z-index: 1;
-  background-color: grey;
-  transform: rotate(-80deg);
-}
-
-.destinations-list {
-  // z-index: 2;
-}
+// .destinations-heading {
+//   transform: rotate(4deg);
+//   transform-origin: 0% 100%;
+// }
 
 .destination-header {
   display: flex;
-  align-content: center;
-  width: 99%;
+  width: 100%;
   height: 27px;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(219, 219, 219);
   margin-top: 5px;
-  padding-left: 10px;
+  position: relative;
   // transform: rotate(4deg);
   // transform-origin: 0% 100%;
 }
 
+#plane {
+  height: 50%;
+  align-self: center;
+  display: inline-block;
+}
+
+.fly {
+  margin-left: 70%;
+  margin-right: 30px;
+  transition: margin .5s ease;
+}
+
+.fly-back {
+  margin-left: 0%;
+  transition: margin .5s ease;
+}
+
 .destination-name {
   align-self: center;
-  margin-right: 1%;
+  margin: 0 10px 0 10px;
   font-size: .85em;
-  margin-top: 0%;
-  margin-bottom: 0%;
 }
 
 .destination-details {
@@ -135,6 +195,7 @@ ul {
   align-content: center;
   height: 8vh;
   background-color: rgb(185, 185, 185);
+  overflow: hidden;
   // transform: rotate(4deg);
   // transform-origin: 0% 0%;
   // display: none;
@@ -162,13 +223,13 @@ ul {
 
 .new-costs-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  margin-top: 20px;
 }
 
 .new-costs {
   height: fit-content;
   display: flex;
+  flex-direction: column;
 
   h5, p {
     margin-top: 0;
@@ -179,12 +240,59 @@ ul {
     font-size: 1em;
     margin-right: 5px;
   }
-
 }
 
-
 .pending {
+  background-color: rgb(180, 222, 208) !important;
+}
+
+.past {
   background-color: grey !important;
+}
+
+.login-title {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  
+  h1 {
+    font-size: 2em;
+    margin-bottom: 0;
+  }
+
+  h2 {
+    margin-top: 10px;
+    font-size: 1.2em;
+  }
+}
+
+.login-container {
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.login-form {
+  
+  width:600px;
+  height: 600px;
+  background: rgba(252,70,107,1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+
+  h2 {
+    margin-bottom: 100px
+  }
+
+  input {
+    height: 78%;
+    margin-left: 3px;
+  }
 }
 
 .username-container,
@@ -194,6 +302,7 @@ ul {
   display: flex;
   margin-top: 5px;
 }
+
 
 .username-container,
 .button-container,
@@ -205,22 +314,15 @@ ul {
   transform-origin: 0% 100%;
 }
 
-.login-form {
-  margin-top: 200px;
-  // display: none;
-
-  input {
-    height: 25%;
-    margin-left: 3px;
-  }
-}
-
 .password-error {
   transform: rotate(-5deg);
   transform-origin: 0% 100%;
-  margin-left: 40vh;
-  margin-top: -1%;
+  margin-left: 205px;
+  margin-top: -2%;
   color: white;
+  font-style: italic;
+  position: absolute;
+  bottom: 40%;
 }
 
 .hidden {
@@ -233,6 +335,13 @@ ul {
   font-size: 2em;
   background-color: rgb(76, 254, 195);
 }
+
+.collapsed {
+  transition: height .5s ease;
+  height: 10vh !important;
+  padding: 0;
+}
+
 
 // .password-container {
 //   width: 60%;

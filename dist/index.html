@@ -7,40 +7,48 @@
   <title>Up And Away</title>
 </head>
 <body>
-  <header>
-    <h1>u &nbsp&nbsp&nbsp p &nbsp&nbsp&nbsp&nbsp&nbsp & &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp w &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp y</h1>
-    <h2>Y &nbsp o &nbsp u &nbsp r &nbsp&nbsp&nbsp&nbsp  F &nbsp a &nbsp n &nbsp t &nbsp a &nbsp s &nbsp y  &nbsp&nbsp&nbsp&nbsp V &nbsp a &nbsp c &nbsp a &nbsp t &nbsp i &nbsp o &nbsp n
+  <header class="hidden">
+    <section class="titles">
+      <h1>u &nbsp&nbsp&nbsp p &nbsp&nbsp&nbsp&nbsp&nbsp & &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp w &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp y</h1>
+      <h2>Y &nbsp o &nbsp u &nbsp r &nbsp&nbsp&nbsp&nbsp  F &nbsp a &nbsp n &nbsp t &nbsp a &nbsp s &nbsp y  &nbsp&nbsp&nbsp&nbsp V &nbsp a &nbsp c &nbsp a &nbsp t &nbsp i &nbsp o &nbsp n</h2>
+    </section>
+    <button class="my-trips-button">my trips</button>
   </header>
-  <article class="error-message hidden">
+  <p class="error-message hidden">
     <!-- error message will go here -->
-  </article>
-  <form class="login-form">
-    <div class="username-container">
+  </p>
+  <section class="login-container hidden99999999">
+    <form class="login-form">
+      <div class="login-title">
+        <h1>u &nbsp&nbsp&nbsp p &nbsp&nbsp&nbsp&nbsp&nbsp & &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp w &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp y</h1>
+        <h2>Y &nbsp o &nbsp u &nbsp r &nbsp&nbsp&nbsp&nbsp  F &nbsp a &nbsp n &nbsp t &nbsp a &nbsp s &nbsp y  &nbsp&nbsp&nbsp&nbsp V &nbsp a &nbsp c &nbsp a &nbsp t &nbsp i &nbsp o &nbsp n
+      </div>
+      <div class="username-container">
       <div class="login-form-element">
           <label for="username">username:</label>
       </div>
       <input class="username-field" id="username" type="string" placeholder="username" required>
-    </div>
-    <div class="password-container">
-      <div class="login-form-element">
-        <label for="password">password:</label>
       </div>
-      <input class="password-field" id="password" type="string" placeholder="password" required>
-    </div>
-    <div class="login-form-element button-container">
+      <div class="password-container">
+        <div class="login-form-element">
+          <label for="password">password:</label>
+        </div>
+        <input class="password-field" id="password" type="string" placeholder="password" required>
+      </div>
+      <div class="login-form-element button-container">
         <button class="login-submit-button" type="submit">enter</button>
-    </div>
-    <p class="password-error"></p>
-  </form>
+      </div>
+      <p class="password-error"></p>
+    </form>
+  </section>
   <main class="hidden">
-    <!-- will add hidden to main -->
-    <section class="trips-container">
+    <section class="trips-container hidden">
       <h3 class="trips-heading">My Trips:</h3>
       <div class="trips-list">
         <!-- trips will go here -->
       </div>
     </section>
-    <section class="spent-container">
+    <section class="spent-container hidden">
       <div>
         <h3>Trip Spendings This Year:</h3>
         <p class="dollars-spent">$0</p>

@@ -58,6 +58,16 @@ const sampleTrips = [
         duration: 3,
         status: "approved",
         suggestedActivities: []
+    },
+    {
+        id: 7,
+        userID: 2,
+        destinationID: 1,
+        travelers: 7,
+        date: "2018/07/13",
+        duration: 3,
+        status: "approved",
+        suggestedActivities: []
     }
 ];
 

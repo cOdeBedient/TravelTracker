@@ -6,10 +6,8 @@ function getTrips(id, trips) {
     let currentTrips = trips.filter((trip) => {
         return id === trip.userID
     });
-
-    let sortedCurrentTrips = sortTrips(currentTrips)
-
-    return sortedCurrentTrips;
+    // let sortedCurrentTrips = sortTrips(currentTrips);
+    return currentTrips;
 }
 
 function appendDestinations(trips, destinations) {
@@ -67,10 +65,10 @@ function computeYearSpent(trips) {
     const today = getDate();
     let approvedRecentTrips = trips.filter((trip) => {
         return (trip.status === 'approved')
-            && (trip.date.replaceAll('/', '') < 20200301)
-            && (trip.date.replaceAll('/', '') > 20190301);
-            // && (trip.date.replaceAll('/', '') < today)
-            // && (trip.date.replaceAll('/', '') > today - 10000);
+            // && (trip.date.replaceAll('/', '') < 20200301)
+            // && (trip.date.replaceAll('/', '') > 20190301);
+            && (trip.date.replaceAll('/', '') < today)
+            && (trip.date.replaceAll('/', '') > today - 10000);
     });
     let totalSpending = approvedRecentTrips.reduce((totals, trip) => {
         totals.individual += trip.cost.totalPerPerson;
@@ -85,7 +83,8 @@ function computeYearSpent(trips) {
 function updateTraveler(traveler, trips, destinations) {
     let updatedTraveler = traveler;
     let updatedTravelerTrips = getTrips(traveler.id, trips);
-    let updatedTrips = compileTripData(updatedTravelerTrips, destinations)
+    let sortedTravelerTrips = sortTrips(updatedTravelerTrips);
+    let updatedTrips = compileTripData(sortedTravelerTrips, destinations)
     updatedTraveler.trips = updatedTrips;
     traveler.spentLastYear = computeYearSpent(updatedTrips);
 
@@ -93,19 +92,20 @@ function updateTraveler(traveler, trips, destinations) {
 }
 
 function sortTrips(trips) {
-    let chronTrips = trips.sort((a, b) => {
-        a.date - b.date;
+    const chronTrips = trips.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
     })
     let pendingTrips = [];
     let upcomingApprovedTrips = [];
     let pastTrips = [];
 
     chronTrips.forEach((trip) => {
-        if(trip.status === 'pending') {
+        if(trip.status === 'pending' && (trip.date.replaceAll('/', '') < 20200301)) {
             pendingTrips.push(trip);
-        } else if(trip.date.replaceAll('/', '') < 20200301) {
+        } else if(trip.date.replaceAll('/', '') > 20200301) {
             upcomingApprovedTrips.push(trip);
         } else {
+            trip.status = 'past';
             pastTrips.push(trip);
         }
     })
@@ -122,5 +122,6 @@ export {
     compileTripData,
     getDate,
     computeYearSpent,
-    updateTraveler
+    updateTraveler,
+    sortTrips
 }
