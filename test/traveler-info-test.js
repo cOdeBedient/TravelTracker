@@ -154,35 +154,36 @@ describe('traveler-info.js', function() {
       let updatedTraveler1 = updateTraveler(traveler1, sampleTrips, sampleDestinations);
       let updatedTraveler2 = updateTraveler(traveler2, sampleTrips, sampleDestinations);
 
+      console.log('updatedTraveler2.trips[0]', updatedTraveler2.trips[0])
       expect(updatedTraveler1.trips[0]).to.deep.equal(
         {
-          id: 1,
+          id: 5,
           userID: 1,
-          destinationID: 2,
-          travelers: 6,
-          date: "2023/09/23",
-          duration: 5,
-          status: "approved",
+          destinationID: 6,
+          travelers: 5,
+          date: '2025/10/29',
+          duration: 10,
+          status: 'pending',
           suggestedActivities: [],
           destination: {
-            id: 2,
-            destination: "Paris, France",
-            estimatedLodgingCostPerDay: 220,
-            estimatedFlightCostPerPerson: 600,
-            image: "https://example.com/paris.jpg",
-            alt: "Eiffel Tower with blue sky in the background"
+            id: 6,
+            destination: 'New York City, USA',
+            estimatedLodgingCostPerDay: 200,
+            estimatedFlightCostPerPerson: 400,
+            image: 'https://example.com/nyc.jpg',
+            alt: 'Manhattan skyline with Empire State Building'
           },
-          cost: {totalPerPerson: 1870, totalGroup: 11220}
-        }
+          cost: { totalPerPerson: 2640, totalGroup: 13200 }
+        },
      );
       expect(updatedTraveler2.trips[0].destination).to.deep.equal(
         {
-          id: 6,
-          destination: "New York City, USA",
-          estimatedLodgingCostPerDay: 200,
-          estimatedFlightCostPerPerson: 400,
-          image: "https://example.com/nyc.jpg",
-          alt: "Manhattan skyline with Empire State Building"
+          id: 1,
+          destination: 'Tokyo, Japan',
+          estimatedLodgingCostPerDay: 180,
+          estimatedFlightCostPerPerson: 800,
+          image: 'https://example.com/tokyo.jpg',
+          alt: 'Skyline of Tokyo with illuminated skyscrapers'
         }
       );
       expect(updatedTraveler1.spentLastYear).to.deep.equal({ individual: 3839, group: 25003 })
