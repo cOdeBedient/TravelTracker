@@ -24,14 +24,21 @@ loginSubmitButton.addEventListener('click', function(event) {
     event.preventDefault();
     logIn(event);
 })
-window.addEventListener('load', getAllData(15));
+window.addEventListener('load', getAllData(42));
 destinationsListContainer.addEventListener('click', function(event) {
     if(event.target.tagName === "BUTTON") {
+        event.preventDefault();
+        const clickedDestinationContainer = event.target.closest('.destination-container');
         let destinationForm = event.target.closest('form')
         let destinationId = destinationForm.id.split('-')[1];
         let newTripData = destinationForm.querySelectorAll('input');
         const [numTravelers, departureDate, duration] = newTripData;
         if(numTravelers.value && departureDate.value && duration.value) {
+            const plane = clickedDestinationContainer.querySelector('#plane');
+            plane.classList.toggle('fly');
+            plane.classList.toggle('fly-back');
+            setTimeout(function() {plane.classList.toggle('fly')}, 3000)
+            setTimeout(function() {plane.classList.toggle('fly-back')}, 3000)
             handleTripSubmit(event, destinationId, numTravelers, departureDate, duration);
         }
     }
@@ -56,6 +63,9 @@ tripsListContainer.addEventListener('keydown', function(event) {
         const clickedTripHeader = event.target.closest('.trip-header');
         const clickedTripDetails = clickedTrip.querySelector('.trip-details');
         clickedTripDetails.classList.toggle("collapsed");
+        const plane = clickedTripHeader.querySelector('img');
+        plane.classList.toggle('fly');
+        plane.classList.toggle('fly-back');
         const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
         if(isExpanded) {
             clickedTripHeader.setAttribute("aria-expanded", false);
@@ -70,13 +80,13 @@ tripsListContainer.addEventListener('click', function(event) {
     const clickedTripDetails = clickedTrip.querySelector('.trip-details');
     clickedTripDetails.classList.toggle("collapsed");
     const plane = clickedTripHeader.querySelector('img');
+    plane.classList.toggle('fly');
+    plane.classList.toggle('fly-back');
     const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
     if(isExpanded) {
         clickedTripHeader.setAttribute("aria-expanded", false);
-        plane.classList.remove('fly')
     } else {
         clickedTripHeader.setAttribute("aria-expanded", true);
-        plane.classList.add('fly');
     }
 
 })
@@ -86,8 +96,9 @@ destinationsListContainer.addEventListener('click', function(event) {
         const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
         if(!event.target.closest('.destination-details')) {
             clickedDestinationDetails.classList.toggle("hidden");
-            const plane = clickedDestinationHeader.querySelector('img');
-            plane.classList.add('fly');
+            // const plane = clickedDestinationHeader.querySelector('img');
+            // plane.classList.toggle('fly');
+            // plane.classList.toggle('fly-back');
             const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
             if(isExpanded) {
                 clickedDestinationHeader.setAttribute("aria-expanded", false);
@@ -103,6 +114,9 @@ destinationsListContainer.addEventListener('keydown', function(event) {
         const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
         if(!event.target.closest('.destination-details')) {
             clickedDestinationDetails.classList.toggle("hidden");
+            // const plane = clickedDestinationHeader.querySelector('img');
+            // plane.classList.toggle('fly');
+            // plane.classList.toggle('fly-back');
             const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
             if(isExpanded) {
                 clickedDestinationHeader.setAttribute("aria-expanded", false);
@@ -199,7 +213,7 @@ function renderMyTrips() {
         } else {
             newTrip.innerHTML += `<h4 class='status'>upcoming</h4>`
         }
-        newTrip.innerHTML += `<img src='./images/plane.png' id='plane' alt='plane icon'>`;
+        newTrip.innerHTML += `<img src='./images/plane.png' class='fly-back' id='plane' alt='plane icon'>`;
             // <div class='plane-container'>
             //     
             // </div>
@@ -229,7 +243,7 @@ function renderDestinations() {
         newDestination.tabIndex = 0;
         newDestination.setAttribute("aria-expanded", true);
         newDestination.id = `destination-${destination.id}`
-        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/plane.png' id='plane' alt='plane icon'>`
+        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/plane.png' class='fly-back' id='plane' alt='plane icon'>`
         const newDestinationDetails = document.createElement('div')
         newDestinationDetails.className = 'destination-details';
         newDestinationDetails.id = `destination-${destination.id}-details`

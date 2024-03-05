@@ -102,7 +102,7 @@ function sortTrips(trips) {
     let pastTrips = [];
 
     chronTrips.forEach((trip) => {
-        if(trip.status === 'pending') {
+        if(trip.status === 'pending' && (trip.date.replaceAll('/', '') < 20200301)) {
             pendingTrips.push(trip);
         } else if(trip.date.replaceAll('/', '') > 20200301) {
             upcomingApprovedTrips.push(trip);
@@ -111,9 +111,7 @@ function sortTrips(trips) {
             pastTrips.push(trip);
         }
     })
-    console.log("pendingTrips", pendingTrips)
-    console.log("upcomingApprovedTrips", upcomingApprovedTrips)
-    console.log("pastTrips", pastTrips)
+
     return pendingTrips.concat(upcomingApprovedTrips, pastTrips)
 }
 
