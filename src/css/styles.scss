@@ -13,7 +13,7 @@ button {
 
 h1 {
   color: white;
-  font-size: 2em;
+  font-size: 2.05em;
 }
 
 h2 {
@@ -27,7 +27,7 @@ header {
 
   h1 {
     margin-bottom: 5px;
-    margin-left: 27px;
+    margin-left: 22px;
   }
   
   h2 {
@@ -83,6 +83,15 @@ span {
     transform: rotate(-4.25deg);
     transform-origin: 0% 100%;
   }
+
+  // .trip-header:hover {
+  //   filter: saturate(150%);
+  //   }
+
+  .trip-header:hover {
+    filter: brightness(120%);
+    }
+
 
   .name {
     margin-right: 15px;
@@ -203,6 +212,10 @@ span {
   transition: margin .5s ease;
 }
 
+label {
+  font-size: 1.05em;
+}
+
 .destination-name {
   align-self: center;
   margin: 0 10px 0 10px;
@@ -224,6 +237,7 @@ span {
 
 .destination-image {
   height: 90%;
+  align-self: center;
 }
 
 .trip-form {
@@ -231,16 +245,34 @@ span {
   align-items: center;
 
   input {
-    height: 25%;
-    margin-left: 3px;
+    height: 25px;
+    margin-left: 5px;
     margin-right: 10px;
   }
 
   .travelers-field,
   .duration-field {
     width: 50px;
+    border: none;
+  }
+
+  .departure-date-field {
+    width: 110px;
+    border: none;
+  }
+
+  button {
+    margin-left: 5px;
+    height: 25px;
+    border: none;
+  }
+
+  button:hover {
+    background-color: rgb(253, 181, 195);
   }
 }
+
+
 
 // .new-costs-container {
 //   // display: flex;
