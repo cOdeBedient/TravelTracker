@@ -78,7 +78,13 @@ ul {
   }
 
   .name {
-    margin-right: 1%
+    margin-right: 1%;
+    align-self: center;
+  }
+  
+  .date {
+    margin-right: 2%;
+    align-self: center;
   }
 
   .trip-details {
@@ -95,6 +101,10 @@ ul {
     }
   }
 }
+
+// .plane-container {
+//   width: 50%;
+// }
 
 .spent-container {
   width: 100%;
@@ -135,14 +145,24 @@ ul {
 
 .destination-header {
   display: flex;
-  align-content: center;
   width: 99%;
   height: 27px;
   background-color: rgb(219, 219, 219);
   margin-top: 5px;
   padding-left: 10px;
+  position: relative;
   // transform: rotate(4deg);
   // transform-origin: 0% 100%;
+}
+
+#plane {
+  height: 70%;
+  align-self: center;
+}
+
+.fly {
+  margin-left: 70%;
+  transition: margin .5s ease;
 }
 
 .destination-name {

@@ -69,11 +69,14 @@ tripsListContainer.addEventListener('click', function(event) {
     const clickedTripHeader = event.target.closest('.trip-header');
     const clickedTripDetails = clickedTrip.querySelector('.trip-details');
     clickedTripDetails.classList.toggle("collapsed");
+    const plane = clickedTripHeader.querySelector('img');
     const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
     if(isExpanded) {
         clickedTripHeader.setAttribute("aria-expanded", false);
+        plane.classList.remove('fly')
     } else {
         clickedTripHeader.setAttribute("aria-expanded", true);
+        plane.classList.add('fly');
     }
 
 })
@@ -83,6 +86,8 @@ destinationsListContainer.addEventListener('click', function(event) {
         const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
         if(!event.target.closest('.destination-details')) {
             clickedDestinationDetails.classList.toggle("hidden");
+            const plane = clickedDestinationHeader.querySelector('img');
+            plane.classList.add('fly');
             const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
             if(isExpanded) {
                 clickedDestinationHeader.setAttribute("aria-expanded", false);
@@ -186,7 +191,11 @@ function renderMyTrips() {
         newTrip.innerHTML = `
             <h3 class='name'>${trip.destination.destination}</h3>
             <h4 class='date'>${trip.date}</h4>
+            <img src='./images/plane.png' id='plane' alt='plane icon'>
             `;
+            // <div class='plane-container'>
+            //     
+            // </div>
         if(trip.status === 'pending') {
             newTrip.classList.add('pending');
         } else if(trip.status === 'past') {
@@ -217,7 +226,7 @@ function renderDestinations() {
         newDestination.tabIndex = 0;
         newDestination.setAttribute("aria-expanded", true);
         newDestination.id = `destination-${destination.id}`
-        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3>`
+        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/plane.png' id='plane' alt='plane icon'>`
         const newDestinationDetails = document.createElement('div')
         newDestinationDetails.className = 'destination-details';
         newDestinationDetails.id = `destination-${destination.id}-details`
