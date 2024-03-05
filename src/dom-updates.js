@@ -113,34 +113,38 @@ function handleFormClick(event) {
 
 function expandTripDetails(event) {
     const clickedTrip = event.target.closest('.trip-container');
-    const clickedTripHeader = event.target.closest('.trip-header');
-    const clickedTripDetails = clickedTrip.querySelector('.trip-details');
-    clickedTripDetails.classList.toggle("collapsed");
-    const plane = clickedTripHeader.querySelector('img');
-    plane.classList.toggle('fly');
-    plane.classList.toggle('fly-back');
-    const isExpanded = clickedTrip.getAttribute('aria-expanded') === 'true';
-    if(isExpanded) {
-        clickedTrip.setAttribute("aria-expanded", false);
-    } else {
-        clickedTrip.setAttribute("aria-expanded", true);
+    if(clickedTrip) {
+        const clickedTripHeader = clickedTrip.querySelector('.trip-header');
+        const clickedTripDetails = clickedTrip.querySelector('.trip-details');
+        clickedTripDetails.classList.toggle("collapsed");
+        const plane = clickedTripHeader.querySelector('img');
+        plane.classList.toggle('fly');
+        plane.classList.toggle('fly-back');
+        const isExpanded = clickedTrip.getAttribute('aria-expanded') === 'true';
+        if(isExpanded) {
+            clickedTrip.setAttribute("aria-expanded", false);
+        } else {
+            clickedTrip.setAttribute("aria-expanded", true);
+        }
     }
 }
 
 function expandDestinationDetails(event) {
     const clickedDestination = event.target.closest('.destination-container');
-    const clickedDestinationHeader = event.target.closest('.destination-header');
-    const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
-    if(!event.target.closest('.destination-details')) {
-        clickedDestinationDetails.classList.toggle("hidden");
-        // const plane = clickedDestinationHeader.querySelector('img');
-        // plane.classList.toggle('fly');
-        // plane.classList.toggle('fly-back');
-        const isExpanded = clickedDestination.getAttribute('aria-expanded') === 'true';
-        if(isExpanded) {
-            clickedDestination.setAttribute("aria-expanded", false);
-        } else {
-            clickedDestination.setAttribute("aria-expanded", true);
+    if(clickedDestination){
+        const clickedDestinationHeader = event.target.closest('.destination-header');
+        const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
+        if(!event.target.closest('.destination-details')) {
+            clickedDestinationDetails.classList.toggle("hidden");
+            // const plane = clickedDestinationHeader.querySelector('img');
+            // plane.classList.toggle('fly');
+            // plane.classList.toggle('fly-back');
+            const isExpanded = clickedDestination.getAttribute('aria-expanded') === 'true';
+            if(isExpanded) {
+                clickedDestination.setAttribute("aria-expanded", false);
+            } else {
+                clickedDestination.setAttribute("aria-expanded", true);
+            }
         }
     }
 }
