@@ -15,9 +15,19 @@ describe('traveler-info.js', function() {
   let traveler5Trips;
   let trip1;
   let trip2;
-  // let traveler1Destinations;
-  // let traveler2Destinations;
-  // let traveler4Destinations;
+  let traveler1UpdatedTrips;
+  let traveler2UpdatedTrips;
+  let traveler3UpdatedTrips;
+  let traveler5UpdatedTrips;
+  let compiledTrips1;
+  let compiledTrips2;
+  let compiledTrips3;
+  let compiledTrips5;
+  let traveler1YearSpent;
+  let traveler2YearSpent;
+  let traveler3YearSpent;
+  let traveler5YearSpent;
+
   beforeEach(function() {
     traveler1 = getTraveler(1, sampleTravelers);
     traveler2 = getTraveler(2, sampleTravelers);
@@ -28,9 +38,18 @@ describe('traveler-info.js', function() {
     traveler5Trips = getTrips(5, sampleTrips);
     trip1 = traveler1Trips[0];
     trip2 = traveler2Trips[0];
-    // traveler1Destinations = getDestinations(1, sampleTrips, sampleDestinations);
-    // traveler2Destinations = getDestinations(2, sampleTrips, sampleDestinations);
-    // traveler4Destinations = getDestinations(4, sampleTrips, sampleDestinations);
+    traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
+    traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
+    traveler3UpdatedTrips = appendDestinations(traveler3Trips, sampleDestinations)
+    traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
+    compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
+    compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
+    compiledTrips3 = compileTripData(traveler3UpdatedTrips, sampleDestinations);
+    compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
+    traveler1YearSpent = computeYearSpent(compiledTrips1);
+    traveler2YearSpent = computeYearSpent(compiledTrips2);
+    traveler3YearSpent = computeYearSpent(compiledTrips3);
+    traveler5YearSpent = computeYearSpent(compiledTrips5);
   });
 
   describe('get traveler', function() {
@@ -192,59 +211,19 @@ describe('traveler-info.js', function() {
 
   describe('compute year spent', function() {
     it('should return the total spent on trips this year by traveler with given id', function() {
-      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
-      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
-      let traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
-      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
-      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
-      let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
-      let traveler1YearSpent = computeYearSpent(compiledTrips1);
-      let traveler2YearSpent = computeYearSpent(compiledTrips2);
-
       expect(traveler1YearSpent).to.deep.equal({individual: 3839, group: 25003});
     });
 
     
     it('should not factor in pending trips', function() {
-      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
-      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
-      let traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
-      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
-      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
-      let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
-      let traveler1YearSpent = computeYearSpent(compiledTrips1);
-      let traveler2YearSpent = computeYearSpent(compiledTrips2);
-      let traveler5TotalSpent = computeYearSpent(compiledTrips5);
-
-      expect(traveler5TotalSpent).to.deep.equal({ individual: 0, group: 0 });
+      expect(traveler5YearSpent).to.deep.equal({ individual: 0, group: 0 });
     });
 
     it('should not factor in future trips', function() {
-      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
-      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
-      let traveler3UpdatedTrips = appendDestinations(traveler3Trips, sampleDestinations)
-      let traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
-      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
-      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
-      let compiledTrips3 = compileTripData(traveler3UpdatedTrips, sampleDestinations);
-      let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
-      let traveler1YearSpent = computeYearSpent(compiledTrips1);
-      let traveler2YearSpent = computeYearSpent(compiledTrips2);
-      let traveler3TotalSpent = computeYearSpent(compiledTrips3);
-
-      expect(traveler3TotalSpent).to.deep.equal({ individual: 0, group: 0 });
+      expect(traveler3YearSpent).to.deep.equal({ individual: 0, group: 0 });
     })
 
     it('should not factor in trips taken more than a year ago', function() {
-      let traveler1UpdatedTrips = appendDestinations(traveler1Trips, sampleDestinations)
-      let traveler2UpdatedTrips = appendDestinations(traveler2Trips, sampleDestinations)
-      let traveler5UpdatedTrips = appendDestinations(traveler5Trips, sampleDestinations)
-      let compiledTrips1 = compileTripData(traveler1UpdatedTrips, sampleDestinations);
-      let compiledTrips2 = compileTripData(traveler2UpdatedTrips, sampleDestinations);
-      let compiledTrips5 = compileTripData(traveler5UpdatedTrips, sampleDestinations);
-      let traveler1YearSpent = computeYearSpent(compiledTrips1);
-      let traveler2YearSpent = computeYearSpent(compiledTrips2);
-
       expect(traveler2YearSpent).to.deep.equal({ individual: 0, group: 0 });
     });
   });
