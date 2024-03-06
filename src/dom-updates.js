@@ -1,6 +1,6 @@
 import { handleFetch, handleTripPost } from './api-calls';
-import { updateTraveler, compileTripData } from './traveler-info'
-import { userLogins } from './login-data/user-logins'
+import { updateTraveler, compileTripData } from './traveler-info';
+import { userLogins } from './login-data/user-logins';
 
 // QUERY SELECTORS
 const tripsContainer = document.querySelector('.trips-container');
@@ -22,10 +22,6 @@ const destinationsHeading = document.querySelector('.destinations-heading');
 
 
 // EVENT LISTENERS
-
-// window.addEventListener('load', getAllData(42));
-
-
 loginSubmitButton.addEventListener('click', function(event) {
     event.preventDefault();
     logIn(event);
@@ -39,27 +35,24 @@ destinationsListContainer.addEventListener('click', function(event) {
 });
 
 destinationsListContainer.addEventListener('keyup', function(event) {
-    handleFormClick(event);
+    handleFormEntry(event);
+});
+
+destinationsListContainer.addEventListener('click', function(event) {
+    handleFormEntry(event);
 });
 
 tripsListContainer.addEventListener('keydown', function(event) {   
     if(event.key === 'Enter') {
-        expandTripDetails(event);
+        expandTripDetails(event, 'trip');
     }
 });
 
 tripsListContainer.addEventListener('click', function(event) {
-    expandTripDetails(event);
+    expandTripDetails(event, 'trip');
 });
 
-destinationsListContainer.addEventListener('click', function(event) {
-    expandDestinationDetails(event);
-})
-destinationsListContainer.addEventListener('keydown', function(event) {
-    if(event.key === 'Enter') {
-        expandDestinationDetails(event);
-    }
-})
+
 myTripsButton.addEventListener('click', showMyTrips);
 
 
@@ -74,7 +67,7 @@ function getAllData(id) {
     handleFetch(id)
     .then(([traveler, tripData, destinationData]) => {
         allTrips = tripData.trips;
-        allDestinations = destinationData.destinations;
+        allDestinations = destinationData.destinations.sort((a, b) => a.destination.localeCompare(b.destination));
         currentTraveler = updateTraveler(traveler, allTrips, allDestinations);
         renderDom();
     })
@@ -85,7 +78,7 @@ function getAllData(id) {
 
 function handleSubmitClick(event) {
     const clickedDestinationContainer = event.target.closest('.destination-container');
-    let destinationForm = event.target.closest('form')
+    let destinationForm = event.target.closest('form');
     let destinationId = destinationForm.id.split('-')[1];
     let newTripData = destinationForm.querySelectorAll('input');
     const [numTravelers, departureDate, duration] = newTripData;
@@ -93,15 +86,15 @@ function handleSubmitClick(event) {
         const plane = clickedDestinationContainer.querySelector('#plane');
         plane.classList.toggle('fly');
         plane.classList.toggle('fly-back');
-        setTimeout(function() {plane.classList.toggle('fly')}, 3000)
-        setTimeout(function() {plane.classList.toggle('fly-back')}, 3000)
+        setTimeout(function() {plane.classList.toggle('fly')}, 3000);
+        setTimeout(function() {plane.classList.toggle('fly-back')}, 3000);
         handleTripSubmit(event, destinationId, numTravelers, departureDate, duration);
     }
 }
 
-function handleFormClick(event) {
+function handleFormEntry(event) {
     if(event.target.tagName === "INPUT") {
-        let destinationForm = event.target.closest('form')
+        let destinationForm = event.target.closest('form');
         let destinationId = destinationForm.id.split('-')[1];
         let newTripData = destinationForm.querySelectorAll('input');
         const [numTravelers, departureDate, duration] = newTripData; 
@@ -117,7 +110,8 @@ function expandTripDetails(event) {
     if(clickedTrip) {
         const clickedTripHeader = clickedTrip.querySelector('.trip-header');
         const clickedTripDetails = clickedTrip.querySelector('.trip-details');
-        clickedTripDetails.classList.toggle("collapsed");
+        clickedTripDetails.classList.toggle('collapse')
+        clickedTripDetails.classList.toggle('expand');
         const plane = clickedTripHeader.querySelector('img');
         plane.classList.toggle('fly');
         plane.classList.toggle('fly-back');
@@ -126,23 +120,6 @@ function expandTripDetails(event) {
             clickedTrip.setAttribute("aria-expanded", false);
         } else {
             clickedTrip.setAttribute("aria-expanded", true);
-        }
-    }
-}
-
-function expandDestinationDetails(event) {
-    const clickedDestination = event.target.closest('.destination-container');
-    if(clickedDestination){
-        const clickedDestinationHeader = event.target.closest('.destination-header');
-        const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
-        if(!event.target.closest('.destination-details')) {
-            clickedDestinationDetails.classList.toggle("hidden");
-            const isExpanded = clickedDestination.getAttribute('aria-expanded') === 'true';
-            if(isExpanded) {
-                clickedDestination.setAttribute("aria-expanded", false);
-            } else {
-                clickedDestination.setAttribute("aria-expanded", true);
-            }
         }
     }
 }
@@ -157,11 +134,9 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
             currentTraveler = updateTraveler(currentTraveler, allTrips, allDestinations);
             renderDom()
         } else {
-            console.log('returnedTrip.statusText', returnedTrip.statusText)
-            console.log('returnedTrip.status,', returnedTrip.status)
             let code = returnedTrip.status;
             let message = returnedTrip.statusText;
-            throw new Error(`Oh no! Failed to Post: ${code} - ${message}.`)
+            throw new Error(`Oh no! Failed to Post: ${code} - ${message}.`);
         }
     })
     .catch(error => {
@@ -185,8 +160,8 @@ function findCostField(event) {
 function renderDom() {
     renderMyTrips();
     renderDestinations();
-    dollarsSpent.innerText = `$${currentTraveler.spentLastYear.group}`
-    destinationsHeading.innerHTML = `Plan Your Next Adventure, &nbsp<span>${currentTraveler.name}</span>!`
+    dollarsSpent.innerText = `$${currentTraveler.spentLastYear.group}`;
+    destinationsHeading.innerHTML = `Plan your next adventure, &nbsp<span>${currentTraveler.name}</span>!`;
 }
 
 function renderMyTrips() {
@@ -201,33 +176,34 @@ function renderMyTrips() {
         newTrip.id = `trip-${trip.id}`;
         newTrip.innerHTML = `
             <h3 class='name'>${trip.destination.destination}</h3>
-            <h4 class='date'>${trip.date}</h4>`
-        if(trip.status === 'pending') {
-            newTrip.classList.add('pending');
-            newTrip.innerHTML += `<h4 class='status'>pending...</h4>`
-        } else if(trip.status === 'past') {
-            newTrip.classList.add('past');
-        } else {
-            newTrip.innerHTML += `<h4 class='status'>upcoming</h4>`
-        }
-        newTrip.innerHTML += `<img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`;
-            // <div class='plane-container'>
-            //     
-            // </div>
-       
-        const newTripDetails = document.createElement('div')
-        newTripDetails.className = 'trip-details';
-        newTripDetails.id = `trip-${trip.id}-details`
+            <h4 class='date'>${trip.date}</h4>`;
+        const newTripDetails = document.createElement('div');
+        newTripDetails.className = 'trip-details collapse';
+        newTripDetails.id = `trip-${trip.id}-details`;
         newTripDetails.innerHTML = `
             <img class='trip-image' src="${trip.destination.image}" alt=${trip.destination.alt}>
             <h5 class='trip-travelers'>Number of Travelers: ${trip.travelers}</h5>
             <h5 class='trip-duration'>Length of Trip: ${trip.duration}</h5>
             <h5 class='trip-cost-ind'>Group Cost: $${trip.cost.totalGroup}</h5>
             <h5 class='trip-cost-grp'>Cost Per Person: $${trip.cost.totalPerPerson}
-            `
-            tripsListContainer.appendChild(newTripContainer);
-            newTripContainer.appendChild(newTrip);
-            newTripContainer.appendChild(newTripDetails);
+            `;
+        if(trip.status === 'pending') {
+            newTrip.classList.add('pending');
+            newTrip.innerHTML += `<h4 class='status'>... pending ...</h4>`;
+            newTripDetails.classList.add('pending-details');
+        } else if(trip.status === 'past') {
+            newTrip.classList.add('past');
+            newTrip.innerHTML += `<h4 class='status'>... past ...</h4>`;
+            newTripDetails.classList.add('past-details');
+        } else {
+            newTrip.classList.add('upcoming');
+            newTrip.innerHTML += `<h4 class='status'>... upcoming ...</h4>`;
+            newTripDetails.classList.add('upcoming-details');
+        }
+        newTrip.innerHTML += `<img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`;
+        tripsListContainer.appendChild(newTripContainer);
+        newTripContainer.appendChild(newTrip);
+        newTripContainer.appendChild(newTripDetails);
     })
 }
 
@@ -236,14 +212,14 @@ function renderDestinations() {
         const newDestinationContainer = document.createElement('div');
         newDestinationContainer.className = 'destination-container';
         newDestinationContainer.setAttribute("aria-expanded", true);
-        const newDestination = document.createElement('div')
+        const newDestination = document.createElement('div');
         newDestination.className = 'destination-header';
         newDestination.tabIndex = 0;
-        newDestination.id = `destination-${destination.id}`
-        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`
-        const newDestinationDetails = document.createElement('div')
+        newDestination.id = `destination-${destination.id}`;
+        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`;
+        const newDestinationDetails = document.createElement('div');
         newDestinationDetails.className = 'destination-details';
-        newDestinationDetails.id = `destination-${destination.id}-details`
+        newDestinationDetails.id = `destination-${destination.id}-details`;
         newDestinationDetails.innerHTML = `
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
             <form class='trip-form' id='form-${destination.id}'>
@@ -267,10 +243,8 @@ function renderDestinations() {
                     <h4 class='destination-cost-grp'>Trip Total:</h4>
                     <p></p>
                 </div>   
-            `
-            // <h5 class='destination-cost-ind'>Cost Per Person:</h5>
-            // <p></p>
-            destinationsListContainer.appendChild(newDestinationContainer)
+            `;
+            destinationsListContainer.appendChild(newDestinationContainer);
             newDestinationContainer.appendChild(newDestination);
             newDestinationContainer.appendChild(newDestinationDetails);
     })
@@ -287,10 +261,6 @@ function showMyTrips() {
     }
 }
 
-// function makeNewTrip(event) {
-//     return retrieveInputs(event);
-// }
-
 function retrieveInputs(event, destinationId, numTravelers, departureDate, duration) {
     event.preventDefault();
         return {
@@ -305,14 +275,9 @@ function retrieveInputs(event, destinationId, numTravelers, departureDate, durat
         }
 }
 
-function checkLogin(event) {
-
-}
-
 function logIn(event) {
     event.preventDefault();
     passwordError.innerText = '';
-    checkLogin(event);
     const username = usernameField.value;
     const password = passwordField.value;
     const foundUser = userLogins.find((login) => {
@@ -324,9 +289,9 @@ function logIn(event) {
         clearPasswordFields();
         getAllData(userId);
     } else if (userLogins.find (login => login.username === username)) {
-        passwordError.innerText = '* invalid password *'
+        passwordError.innerText = '* invalid password *';
     } else {
-        passwordError.innerText = '* username not found *'
+        passwordError.innerText = '* username not found *';
     }
 }
 
@@ -345,12 +310,9 @@ function toggleFromLogin() {
 function updateTripCost(event, destinationId, numTravelers, departureDate, duration, costField) {
     const selectedTrip = retrieveInputs(event, destinationId, numTravelers, departureDate, duration);
     const compiledTrip = compileTripData([selectedTrip], allDestinations);
-    console.log('compiledTrip', compiledTrip)
-    // const tripCostPerPerson = compiledTrip[0].cost.totalPerPerson;
     const tripCostGroup = compiledTrip[0].cost.totalGroup;
-    // perPerson.innerText = `$${tripCostPerPerson}`;
     costField.innerText = `$${tripCostGroup}`;
-}
+};
 
 function displayError(error) {
     mainPage.classList.add('hidden');
@@ -358,4 +320,4 @@ function displayError(error) {
     loginPage.classList.add('hidden');
     errorPage.classList.remove('hidden');
     errorPage.innerHTML = error;
-  };
+};

@@ -1,23 +1,46 @@
 body {
-  // background-color: rgb(247, 255, 128);
-  // background: rgba(252,70,107,1);
+  background-color: rgb(247, 255, 128);
+  // background-image: url('/src/images/sky.jpg');
+  // background-size: cover;
 }
 
 .background-color {
   background: rgb(251, 65, 102);
+  // background-image: url('/src/images/sky.jpg');
+  // background-size: contain;
+}
+
+.pending {
+  background-color: rgb(245, 255, 103) !important;
+}
+
+.pending-details {
+  background-color: rgb(248, 254, 173) !important;
+}
+
+.past {
+  background-color: rgb(154, 154, 154) !important;
+}
+
+.past-details {
+  background-color: rgb(185, 185, 185) !important;
+}
+
+.upcoming {
+  background-color: rgb(39, 255, 183) !important;
+}
+
+.upcoming-details {
+  background-color: rgb(154, 255, 221) !important;
 }
 
 button {
   cursor: pointer;
+  border: none;
 }
 
 h1 {
   color: white;
-  font-size: 2.05em;
-}
-
-h2 {
-  font-size: 20px;
 }
 
 header {
@@ -26,6 +49,7 @@ header {
   justify-content: space-between;
 
   h1 {
+    font-size: 2.05em;
     margin-bottom: 5px;
     margin-left: 22px;
   }
@@ -42,7 +66,6 @@ header {
     margin-right: 50px;
     margin-bottom: 40px;
     background: none;
-    border: none;
     color: white;
     font-size: 1.2em;
     font-weight: bold;
@@ -60,33 +83,35 @@ span {
 }
 
 .trips-heading {
-    width: fit-content;
-    transform: rotate(-4.25deg);
-    transform-origin: 0% 100%;
-    margin-bottom: 5px;
-    padding-left: 7px;
-    padding-right: 7px;
-    background-color: white;
+  width: fit-content;
+  transform: rotate(-4.25deg);
+  transform-origin: 0% 100%;
+  margin-bottom: 12px;
+  padding: 3px 7px 3px 7px;
+  margin-left: 20px;
+  background-color: white;
 }
 
 .trips-list {
-  // z-index: 2;
+
+  h5 {
+    font-size: 1.4em;
+  }
+
+  .trip-container {
+    transform: rotate(-4.25deg);
+    transform-origin: 0% 100%;
+    margin-left: -30px;
+    margin-right: -30px;
+  }
 
   .trip-header {
     display: flex;
     align-content: center;
     width: 100%;
-    height: 50px;
-    background-color: rgb(76, 254, 195);
+    height: 45px;
     margin-top: 8px;
-    padding-left: 10px;
-    transform: rotate(-4.25deg);
-    transform-origin: 0% 100%;
   }
-
-  // .trip-header:hover {
-  //   filter: saturate(150%);
-  //   }
 
   .trip-header:hover {
     filter: brightness(120%);
@@ -95,6 +120,7 @@ span {
 
   .name {
     margin-right: 15px;
+    margin-left: 55px;
     align-self: center;
     
   }
@@ -113,37 +139,32 @@ span {
   }
 
   .trip-details {
+    width: 100%;
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
     height: 0vh;
-    background-color: rgb(183, 250, 228);
-    transform: rotate(-4.25deg);
-    transform-origin: 0% 100%;
     overflow: hidden;
 
     img {
       height: 90%;
+      align-self: center;
     }
   }
 }
 
-
-
-// .plane-container {
-//   width: 50%;
-// }
-
 .spent-container {
   width: 100%;
   margin-right: 0;
-  margin-top: -60px;
+  margin-top: -82px;
   margin-bottom: 50px;
-  transform: rotate(-5deg);
+  transform: rotate(-4.25deg);
   transform-origin: 0% 100%;
   display: flex;
   justify-content: flex-end;
 
   h4 {
+
     font-size: 1.2em;
   }
 
@@ -161,23 +182,20 @@ span {
 
   p {
     margin-left: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
   }
 }
 
 .destinations-heading {
   text-align: center;
-  background-color: rgb(247, 255, 128);
+  background-color: rgb(245, 255, 102);
   margin-bottom: 5px;
   margin-top: -30px;
   font-size: 1.5em;
   padding-top: 3px;
   padding-bottom: 3px;
 }
-
-// .destinations-heading {
-//   transform: rotate(4deg);
-//   transform-origin: 0% 100%;
-// }
 
 .destination-header {
   display: flex;
@@ -186,9 +204,6 @@ span {
   background-color: rgb(219, 219, 219);
   margin-top: 5px;
   position: relative;
-  cursor: pointer;
-  // transform: rotate(4deg);
-  // transform-origin: 0% 100%;
 
   h3 {
     font-size: 1.2em;
@@ -230,9 +245,6 @@ label {
   height: 8vh;
   background-color: rgb(185, 185, 185);
   overflow: hidden;
-  // transform: rotate(4deg);
-  // transform-origin: 0% 0%;
-  // display: none;
 }
 
 .destination-image {
@@ -268,16 +280,9 @@ label {
   }
 
   button:hover {
-    background-color: rgb(253, 181, 195);
+    background-color: rgb(251, 255, 136);
   }
 }
-
-
-
-// .new-costs-container {
-//   // display: flex;
-//   margin-top: 10px;
-// }
 
 .new-costs {
   margin-top: 10px;
@@ -295,14 +300,6 @@ label {
     font-size: 1em;
     margin-right: 5px;
   }
-}
-
-.pending {
-  background-color: rgb(180, 222, 208) !important;
-}
-
-.past {
-  background-color: grey !important;
 }
 
 .login-title {
@@ -330,11 +327,11 @@ label {
 }
 
 .login-form {
-  
   width:600px;
   height: 600px;
   background: rgba(252,70,107,1);
   display: flex;
+
   flex-direction: column;
   justify-content: center;
   position: relative;
@@ -344,25 +341,19 @@ label {
   }
 
   input {
-    height: 78%;
     margin-left: 3px;
+    border: none;
   }
 }
 
 .username-container,
-.password-container,
-.button-container {
-  background-color: rgb(76, 254, 195);
-  display: flex;
-  margin-top: 5px;
-}
-
-
-.username-container,
 .button-container,
 .password-container {
-  width: 60%;
+  background-color: rgb(0, 255, 170);
+  display: flex;
   justify-content: flex-end;
+  margin-top: 5px;
+  width: 60%;
   margin-right: 40vh;
   transform: rotate(-5deg);
   transform-origin: 0% 100%;
@@ -390,17 +381,17 @@ label {
   background-color: rgb(76, 254, 195);
 }
 
-.collapsed {
+.collapse {
+  transition: height .5s ease;
+  height: 0vh !important;
+  padding: 0;
+}
+
+.expand {
   transition: height .5s ease;
   height: 10vh !important;
   padding: 0;
 }
-
-
-// .password-container {
-//   width: 60%;
-//   margin-left: 40%;;
-// }
 
 
 
