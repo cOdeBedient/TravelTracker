@@ -1,6 +1,6 @@
 import { handleFetch, handleTripPost } from './api-calls';
-import { updateTraveler, compileTripData } from './traveler-info'
-import { userLogins } from './login-data/user-logins'
+import { updateTraveler, compileTripData } from './traveler-info';
+import { userLogins } from './login-data/user-logins';
 
 // QUERY SELECTORS
 const tripsContainer = document.querySelector('.trips-container');
@@ -18,13 +18,11 @@ const passwordError = document.querySelector('.password-error');
 const body = document.querySelector('body');
 const myTripsButton = document.querySelector('.my-trips-button');
 const spentContainer = document.querySelector('.spent-container');
+const destinationsHeading = document.querySelector('.destinations-heading');
+const destInfoButton = document.querySelector('.toggle-destinations');
 
 
 // EVENT LISTENERS
-
-// window.addEventListener('load', getAllData(42));
-
-
 loginSubmitButton.addEventListener('click', function(event) {
     event.preventDefault();
     logIn(event);
@@ -38,28 +36,36 @@ destinationsListContainer.addEventListener('click', function(event) {
 });
 
 destinationsListContainer.addEventListener('keyup', function(event) {
-    handleFormClick(event);
+    handleFormEntry(event);
+});
+
+destinationsListContainer.addEventListener('click', function(event) {
+    handleFormEntry(event);
 });
 
 tripsListContainer.addEventListener('keydown', function(event) {   
     if(event.key === 'Enter') {
-        expandTripDetails(event);
+        expandTripDetails(event, 'trip');
     }
 });
 
 tripsListContainer.addEventListener('click', function(event) {
-    expandTripDetails(event);
+    expandTripDetails(event, 'trip');
 });
 
+destInfoButton.addEventListener('click', toggleDestinationInfo);
+
+myTripsButton.addEventListener('click', showMyTrips);
+
 destinationsListContainer.addEventListener('click', function(event) {
-    expandDestinationDetails(event);
-})
+    expandDestinationDetails(event, 'destination');
+});
+
 destinationsListContainer.addEventListener('keydown', function(event) {
     if(event.key === 'Enter') {
-        expandDestinationDetails(event);
+        expandDestinationDetails(event, 'destination');
     }
-})
-myTripsButton.addEventListener('click', showMyTrips);
+});
 
 
 // GLOBAL VARIABLES
@@ -73,7 +79,7 @@ function getAllData(id) {
     handleFetch(id)
     .then(([traveler, tripData, destinationData]) => {
         allTrips = tripData.trips;
-        allDestinations = destinationData.destinations;
+        allDestinations = destinationData.destinations.sort((a, b) => a.destination.localeCompare(b.destination));
         currentTraveler = updateTraveler(traveler, allTrips, allDestinations);
         renderDom();
     })
@@ -84,7 +90,7 @@ function getAllData(id) {
 
 function handleSubmitClick(event) {
     const clickedDestinationContainer = event.target.closest('.destination-container');
-    let destinationForm = event.target.closest('form')
+    let destinationForm = event.target.closest('form');
     let destinationId = destinationForm.id.split('-')[1];
     let newTripData = destinationForm.querySelectorAll('input');
     const [numTravelers, departureDate, duration] = newTripData;
@@ -92,55 +98,40 @@ function handleSubmitClick(event) {
         const plane = clickedDestinationContainer.querySelector('#plane');
         plane.classList.toggle('fly');
         plane.classList.toggle('fly-back');
-        setTimeout(function() {plane.classList.toggle('fly')}, 3000)
-        setTimeout(function() {plane.classList.toggle('fly-back')}, 3000)
+        setTimeout(function() {plane.classList.toggle('fly')}, 3000);
+        setTimeout(function() {plane.classList.toggle('fly-back')}, 3000);
         handleTripSubmit(event, destinationId, numTravelers, departureDate, duration);
     }
 }
 
-function handleFormClick(event) {
+function handleFormEntry(event) {
     if(event.target.tagName === "INPUT") {
-        let destinationForm = event.target.closest('form')
+        let destinationForm = event.target.closest('form');
         let destinationId = destinationForm.id.split('-')[1];
         let newTripData = destinationForm.querySelectorAll('input');
         const [numTravelers, departureDate, duration] = newTripData; 
         if(numTravelers.value && departureDate.value && duration.value) {
-            const costData = findCostFields(event);
-            updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData);
+            const costField = findCostField(event);
+            updateTripCost(event, destinationId, numTravelers, departureDate, duration, costField);
         }
     }
 }
 
 function expandTripDetails(event) {
     const clickedTrip = event.target.closest('.trip-container');
-    const clickedTripHeader = event.target.closest('.trip-header');
-    const clickedTripDetails = clickedTrip.querySelector('.trip-details');
-    clickedTripDetails.classList.toggle("collapsed");
-    const plane = clickedTripHeader.querySelector('img');
-    plane.classList.toggle('fly');
-    plane.classList.toggle('fly-back');
-    const isExpanded = clickedTripHeader.getAttribute('aria-expanded') === 'true';
-    if(isExpanded) {
-        clickedTripHeader.setAttribute("aria-expanded", false);
-    } else {
-        clickedTripHeader.setAttribute("aria-expanded", true);
-    }
-}
-
-function expandDestinationDetails(event) {
-    const clickedDestination = event.target.closest('.destination-container');
-    const clickedDestinationHeader = event.target.closest('.destination-header');
-    const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
-    if(!event.target.closest('.destination-details')) {
-        clickedDestinationDetails.classList.toggle("hidden");
-        // const plane = clickedDestinationHeader.querySelector('img');
-        // plane.classList.toggle('fly');
-        // plane.classList.toggle('fly-back');
-        const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
+    if(clickedTrip) {
+        const clickedTripHeader = clickedTrip.querySelector('.trip-header');
+        const clickedTripDetails = clickedTrip.querySelector('.trip-details');
+        clickedTripDetails.classList.toggle('collapse')
+        clickedTripDetails.classList.toggle('expand');
+        const plane = clickedTripHeader.querySelector('img');
+        plane.classList.toggle('fly');
+        plane.classList.toggle('fly-back');
+        const isExpanded = clickedTrip.getAttribute('aria-expanded') === 'true';
         if(isExpanded) {
-            clickedDestinationHeader.setAttribute("aria-expanded", false);
+            clickedTrip.setAttribute("aria-expanded", false);
         } else {
-            clickedDestinationHeader.setAttribute("aria-expanded", true);
+            clickedTrip.setAttribute("aria-expanded", true);
         }
     }
 }
@@ -155,11 +146,9 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
             currentTraveler = updateTraveler(currentTraveler, allTrips, allDestinations);
             renderDom()
         } else {
-            console.log('returnedTrip.statusText', returnedTrip.statusText)
-            console.log('returnedTrip.status,', returnedTrip.status)
             let code = returnedTrip.status;
             let message = returnedTrip.statusText;
-            throw new Error(`Oh no! Failed to Post: ${code} - ${message}.`)
+            throw new Error(`Oh no! Failed to Post: ${code} - ${message}.`);
         }
     })
     .catch(error => {
@@ -167,25 +156,57 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
     })
 }
 
+
+function toggleDestinationInfo() {
+    const details = destinationsListContainer.querySelectorAll('.destination-details');
+    if(destInfoButton.innerText === 'show all details') {
+        details.forEach((detail) => {
+            detail.classList.remove('hidden');
+        })
+        destInfoButton.innerHTML = 'hide all details';
+    } else {
+        details.forEach((detail) => {
+            detail.classList.add('hidden');
+        })
+        destInfoButton.innerHTML = 'show all details';
+    }
+}
+
+function expandDestinationDetails(event) {
+    const clickedDestination = event.target.closest('.destination-container');
+    if(clickedDestination){
+        const clickedDestinationHeader = event.target.closest('.destination-header');
+        const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
+        if(!event.target.closest('.destination-details')) {
+            clickedDestinationDetails.classList.toggle("hidden");
+            const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
+            if(isExpanded) {
+                clickedDestinationHeader.setAttribute("aria-expanded", false);
+            } else {
+                clickedDestinationHeader.setAttribute("aria-expanded", true);
+            }
+        }
+    }
+}
+
 function clearDestinationData(event, numTravelers, departureDate, duration) {
-    const costFields = findCostFields(event);
-    costFields.forEach((field) => {
-        field.innerText = ''
-    });
+    const costField = findCostField(event);
+    costField.innerText = ''
     numTravelers.value = '';
     departureDate.value = '';
     duration.value = '';
 }
 
-function findCostFields(event) {
+function findCostField(event) {
     const destinationDetails = event.target.closest('.destination-details');
-    return destinationDetails.querySelectorAll('p');
+    return destinationDetails.querySelector('p');
 }
 
 function renderDom() {
     renderMyTrips();
     renderDestinations();
-    dollarsSpent.innerText = `$${currentTraveler.spentLastYear.group}`
+    dollarsSpent.innerText = `$${currentTraveler.spentLastYear.group}`;
+    destinationsHeading.innerHTML = `Plan your next adventure, &nbsp<span>${currentTraveler.name}</span>!`;
 }
 
 function renderMyTrips() {
@@ -193,40 +214,41 @@ function renderMyTrips() {
     currentTraveler.trips.forEach((trip) => {
         const newTripContainer = document.createElement('div');
         newTripContainer.className = 'trip-container';
+        newTripContainer.setAttribute("aria-expanded", false);
         const newTrip = document.createElement('div');
-        newTrip.setAttribute("aria-expanded", false);
         newTrip.tabIndex = 0;
         newTrip.className = 'trip-header';
         newTrip.id = `trip-${trip.id}`;
         newTrip.innerHTML = `
             <h3 class='name'>${trip.destination.destination}</h3>
-            <h4 class='date'>${trip.date}</h4>`
-        if(trip.status === 'pending') {
-            newTrip.classList.add('pending');
-            newTrip.innerHTML += `<h4 class='status'>pending</h4>`
-        } else if(trip.status === 'past') {
-            newTrip.classList.add('past');
-        } else {
-            newTrip.innerHTML += `<h4 class='status'>upcoming</h4>`
-        }
-        newTrip.innerHTML += `<img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`;
-            // <div class='plane-container'>
-            //     
-            // </div>
-       
-        const newTripDetails = document.createElement('div')
-        newTripDetails.className = 'trip-details';
-        newTripDetails.id = `trip-${trip.id}-details`
+            <h4 class='date'>${trip.date}</h4>`;
+        const newTripDetails = document.createElement('div');
+        newTripDetails.className = 'trip-details collapse';
+        newTripDetails.id = `trip-${trip.id}-details`;
         newTripDetails.innerHTML = `
             <img class='trip-image' src="${trip.destination.image}" alt=${trip.destination.alt}>
             <h5 class='trip-travelers'>Number of Travelers: ${trip.travelers}</h5>
             <h5 class='trip-duration'>Length of Trip: ${trip.duration}</h5>
             <h5 class='trip-cost-ind'>Group Cost: $${trip.cost.totalGroup}</h5>
             <h5 class='trip-cost-grp'>Cost Per Person: $${trip.cost.totalPerPerson}
-            `
-            tripsListContainer.appendChild(newTripContainer);
-            newTripContainer.appendChild(newTrip);
-            newTripContainer.appendChild(newTripDetails);
+            `;
+        if(trip.status === 'pending') {
+            newTrip.classList.add('pending');
+            newTrip.innerHTML += `<h4 class='status'>... pending ...</h4>`;
+            newTripDetails.classList.add('pending-details');
+        } else if(trip.status === 'past') {
+            newTrip.classList.add('past');
+            newTrip.innerHTML += `<h4 class='status'>... past ...</h4>`;
+            newTripDetails.classList.add('past-details');
+        } else {
+            newTrip.classList.add('upcoming');
+            newTrip.innerHTML += `<h4 class='status'>... upcoming ...</h4>`;
+            newTripDetails.classList.add('upcoming-details');
+        }
+        newTrip.innerHTML += `<img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`;
+        tripsListContainer.appendChild(newTripContainer);
+        newTripContainer.appendChild(newTrip);
+        newTripContainer.appendChild(newTripDetails);
     })
 }
 
@@ -234,48 +256,40 @@ function renderDestinations() {
     allDestinations.forEach((destination) => {
         const newDestinationContainer = document.createElement('div');
         newDestinationContainer.className = 'destination-container';
-        const newDestination = document.createElement('div')
+        newDestinationContainer.setAttribute("aria-expanded", true);
+        const newDestination = document.createElement('div');
         newDestination.className = 'destination-header';
         newDestination.tabIndex = 0;
-        newDestination.setAttribute("aria-expanded", true);
-        newDestination.id = `destination-${destination.id}`
-        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`
-        const newDestinationDetails = document.createElement('div')
+        newDestination.id = `destination-${destination.id}`;
+        newDestination.innerHTML = `<h3 class='destination-name'>${destination.destination}</h3><img src='./images/new-plane.png' class='fly-back' id='plane' alt='plane icon'>`;
+        const newDestinationDetails = document.createElement('div');
         newDestinationDetails.className = 'destination-details';
-        newDestinationDetails.id = `destination-${destination.id}-details`
+        newDestinationDetails.id = `destination-${destination.id}-details`;
         newDestinationDetails.innerHTML = `
             <img class='destination-image' src="${destination.image}" alt=${destination.alt}>
             <form class='trip-form' id='form-${destination.id}'>
                 <div class="form-element">
-                    <label for="travelers">Number of Travelers:</label>
+                    <label for="travelers-${destination.destination}">Number of Travelers:</label>
                 </div>
-                <input class="travelers-field" id="travelers" type="number" min="1" placeholder="#ppl" required>
+                <input class="travelers-field" id="travelers-${destination.destination}" type="number" min="1" placeholder="#ppl" required>
                 <div class="form-element">
-                    <label for="departure">Departure Date:</label>
+                    <label for="departure-${destination.destination}">Departure Date:</label>
                 </div>
-                <input class="departure-date-field" id="departure" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
+                <input class="departure-date-field" id="departure-${destination.destination}" type="date" min="2024-03-03" max="2026-03-03" placeholder="MM/DD/YYYY" required>
                 <div class="form-element">
-                    <label for="duration">Trip Length:</label>
+                    <label for="duration-${destination.destination}">Trip Length:</label>
                 </div>
-                <input class="duration-field" id="duration" type="number" min="1"  placeholder="#days" required>
+                <input class="duration-field" id="duration-${destination.destination}" type="number" min="1"  placeholder="#days" required>
                 <div class="form-element">
                     <button class="submit-button" type="submit">Submit Trip!</button>
                 </div>
             </form>
-            <div class="new-costs-container">
                 <div class='new-costs'>
-                    <h5 class='destination-cost-ind'></h5>
-                    <p></p>
-                </div>
-                <div class='new-costs'>
-                    <h5 class='destination-cost-grp'>Trip Total:</h5>
+                    <h4 class='destination-cost-grp'>Trip Total:</h4>
                     <p></p>
                 </div>   
-            </div>
-            `
-            // <h5 class='destination-cost-ind'>Cost Per Person:</h5>
-            // <p></p>
-            destinationsListContainer.appendChild(newDestinationContainer)
+            `;
+            destinationsListContainer.appendChild(newDestinationContainer);
             newDestinationContainer.appendChild(newDestination);
             newDestinationContainer.appendChild(newDestinationDetails);
     })
@@ -292,10 +306,6 @@ function showMyTrips() {
     }
 }
 
-// function makeNewTrip(event) {
-//     return retrieveInputs(event);
-// }
-
 function retrieveInputs(event, destinationId, numTravelers, departureDate, duration) {
     event.preventDefault();
         return {
@@ -310,15 +320,9 @@ function retrieveInputs(event, destinationId, numTravelers, departureDate, durat
         }
 }
 
-function checkLogin(event) {
-
-}
-
 function logIn(event) {
     event.preventDefault();
     passwordError.innerText = '';
-    checkLogin(event);
-    // let userId = parseInt(usernameField.value.replace('traveler', ''));
     const username = usernameField.value;
     const password = passwordField.value;
     const foundUser = userLogins.find((login) => {
@@ -330,9 +334,9 @@ function logIn(event) {
         clearPasswordFields();
         getAllData(userId);
     } else if (userLogins.find (login => login.username === username)) {
-        passwordError.innerText = '* invalid password *'
+        passwordError.innerText = '* invalid password *';
     } else {
-        passwordError.innerText = '* username not found *'
+        passwordError.innerText = '* username not found *';
     }
 }
 
@@ -348,17 +352,12 @@ function toggleFromLogin() {
     body.classList.add('background-color');
 }
 
-function updateTripCost(event, destinationId, numTravelers, departureDate, duration, costData) {
+function updateTripCost(event, destinationId, numTravelers, departureDate, duration, costField) {
     const selectedTrip = retrieveInputs(event, destinationId, numTravelers, departureDate, duration);
     const compiledTrip = compileTripData([selectedTrip], allDestinations);
-    console.log('compiledTrip', compiledTrip)
-    const tripCostPerPerson = compiledTrip[0].cost.totalPerPerson;
     const tripCostGroup = compiledTrip[0].cost.totalGroup;
-    console.log('costData', costData)
-    const [perPerson, perGroup] = costData;
-    // perPerson.innerText = `$${tripCostPerPerson}`;
-    perGroup.innerText = `$${tripCostGroup}`;
-}
+    costField.innerText = `$${tripCostGroup}`;
+};
 
 function displayError(error) {
     mainPage.classList.add('hidden');
@@ -366,4 +365,4 @@ function displayError(error) {
     loginPage.classList.add('hidden');
     errorPage.classList.remove('hidden');
     errorPage.innerHTML = error;
-  };
+};
