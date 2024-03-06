@@ -9,7 +9,8 @@ by [Adam Bedient](https://github.com/cOdeBedient)
 
 ## Preview:
 <div align="center">
-
+  
+https://github.com/cOdeBedient/TravelTracker/assets/144140381/9d6ab33a-8194-46e2-8c29-59e890d382c6
 
 </div>
 
@@ -34,13 +35,13 @@ by [Adam Bedient](https://github.com/cOdeBedient)
 - run `cd fitlit-api`
 - run `npm install`
 - run `npm start` to run the local server
-- navigate to this [link]()
+- navigate to this [link](http://cOdeBedient.github.io/TravelTracker)
 - use `CTRL + C` to stop running the local server when finished browsing the dashboard
 
 ## Context:
 <!-- wins, challenges, time spent, etc -->
 - Individual project by programmer in his 10th week of learning coding.
-- Approximately 30 hours to complete test suite and functionality
+- Took approximately 40 hours to complete test suite and functionality
 - Goals:
   
   - Perform data manipulation with prototype methods
@@ -54,14 +55,14 @@ by [Adam Bedient](https://github.com/cOdeBedient)
 
   - Implementation of WAI-ARIA states for collapsed trip details to increase accessibility
   - fluid error handling to address incorrect inputs and network errors
-  - manipulation of elements via scss to create an simple but interesting interface.
+  - manipulation of elements via css to create an simple but interesting interface
   
 - Challenges:
   
-  - Accessing and manipulating interwoven datat across multiple datasets.
-  - Building an entire website interface and functional app from scratch.
-  - Developing cohesive user stories without strict guidelines.
+  - Accessing and manipulating interwoven data across multiple datasets
+  - Building an entire website interface and functional app from scratch
+  - Developing cohesive user stories without strict guidelines
 
 ## Future Improvements:
   - More refactoring of repetetive code, particularly in the DOM functions
-  - Dynamically toggle user trips on and off.
+  - Dynamically toggle user trips on and off
