@@ -223,6 +223,7 @@ span {
   background-color: rgb(219, 219, 219);
   margin-top: 5px;
   position: relative;
+  cursor: pointer;
 
   h3 {
     font-size: 1.2em;
@@ -296,10 +297,11 @@ label {
     margin-left: 5px;
     height: 25px;
     border: none;
+    background-color: rgb(252, 255, 157);
   }
 
-  button:hover {
-    background-color: rgb(251, 255, 136);
+  button:disabled {
+      background-color: rgb(226, 226, 226);
   }
 }
 
