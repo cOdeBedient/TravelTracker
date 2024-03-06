@@ -38,6 +38,10 @@ https://github.com/cOdeBedient/TravelTracker/assets/144140381/9d6ab33a-8194-46e2
 - navigate to this [link](http://cOdeBedient.github.io/TravelTracker)
 - use `CTRL + C` to stop running the local server when finished browsing the dashboard
 
+## To Log in:
+- username: "traveler[number between 1 and 50]"
+- password: "travel"
+
 ## Context:
 <!-- wins, challenges, time spent, etc -->
 - Individual project by programmer in his 10th week of learning coding.
