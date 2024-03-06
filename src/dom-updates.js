@@ -28,7 +28,7 @@ loginSubmitButton.addEventListener('click', function(event) {
     logIn(event);
 });
 
-destinationsListContainer.addEventListener('click', function(event) {
+destinationsListContainer.addEventListener('submit', function(event) {
     if(event.target.tagName === "BUTTON") {
         event.preventDefault();
         handleSubmitClick(event);
