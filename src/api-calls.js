@@ -12,7 +12,6 @@ function getDestinations() {
 
 function postTrip(trip, url) {
     const tripOptions = prepTripOptions(trip);
-    console.log('tripOptions', tripOptions)
     return fetch(url, tripOptions);
 }
 
@@ -38,11 +37,6 @@ function prepTripOptions(trip) {
 function handleTripPost(trip, url) {
     return postTrip(trip, url)
     // .then(response => response.json())
-}
-
-function submitTrip(trip, url) {
-    postTrip(trip, url)
-    .then(data => data)
 }
 
 function getData(id) {

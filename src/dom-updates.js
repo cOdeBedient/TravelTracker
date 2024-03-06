@@ -2,6 +2,7 @@ import { handleFetch, handleTripPost } from './api-calls';
 import { updateTraveler, compileTripData } from './traveler-info';
 import { userLogins } from './login-data/user-logins';
 
+
 // QUERY SELECTORS
 const tripsContainer = document.querySelector('.trips-container');
 const tripsListContainer = document.querySelector('.trips-list');
@@ -24,18 +25,15 @@ const destInfoButton = document.querySelector('.toggle-destinations');
 
 // EVENT LISTENERS
 loginSubmitButton.addEventListener('click', function(event) {
-    event.preventDefault();
     logIn(event);
 });
 
 destinationsListContainer.addEventListener('submit', function(event) {
-    if(event.target.tagName === "BUTTON") {
-        event.preventDefault();
-        handleSubmitClick(event);
-    }
+    event.preventDefault();
+    handleSubmitClick(event);
 });
 
-destinationsListContainer.addEventListener('input', function(event) {
+destinationsListContainer.addEventListener('keyup', function(event) {
     handleFormEntry(event);
 });
 
@@ -43,7 +41,7 @@ destinationsListContainer.addEventListener('input', function(event) {
     handleFormEntry(event);
 });
 
-tripsListContainer.addEventListener('keydown', function(event) {   
+tripsListContainer.addEventListener('keydown', function(event) { 
     if(event.key === 'Enter') {
         expandTripDetails(event, 'trip');
     }
@@ -89,8 +87,10 @@ function getAllData(id) {
 }
 
 function handleSubmitClick(event) {
+    event.preventDefault();
     const clickedDestinationContainer = event.target.closest('.destination-container');
     let destinationForm = event.target.closest('form');
+    let formButton = destinationForm.querySelector('button');
     let destinationId = destinationForm.id.split('-')[1];
     let newTripData = destinationForm.querySelectorAll('input');
     const [numTravelers, departureDate, duration] = newTripData;
@@ -98,6 +98,7 @@ function handleSubmitClick(event) {
         const plane = clickedDestinationContainer.querySelector('#plane');
         plane.classList.toggle('fly');
         plane.classList.toggle('fly-back');
+        formButton.disabled = true;
         setTimeout(function() {plane.classList.toggle('fly')}, 3000);
         setTimeout(function() {plane.classList.toggle('fly-back')}, 3000);
         handleTripSubmit(event, destinationId, numTravelers, departureDate, duration);
@@ -105,12 +106,15 @@ function handleSubmitClick(event) {
 }
 
 function handleFormEntry(event) {
-    if(event.target.closest('.trip-form')) {
+    let checkHeader = event.target.closest('.destination-header')
+    if((event.target.tagName != "BUTTON") && !checkHeader) {
         let destinationForm = event.target.closest('form');
+        let formButton = destinationForm.querySelector('button');
         let destinationId = destinationForm.id.split('-')[1];
         let newTripData = destinationForm.querySelectorAll('input');
         const [numTravelers, departureDate, duration] = newTripData; 
         if(numTravelers.value && departureDate.value && duration.value) {
+            formButton.disabled = false;
             const costField = findCostField(event);
             updateTripCost(event, destinationId, numTravelers, departureDate, duration, costField);
         }
@@ -118,6 +122,7 @@ function handleFormEntry(event) {
 }
 
 function expandTripDetails(event) {
+    event.preventDefault();
     const clickedTrip = event.target.closest('.trip-container');
     if(clickedTrip) {
         const clickedTripHeader = clickedTrip.querySelector('.trip-header');
@@ -137,6 +142,7 @@ function expandTripDetails(event) {
 }
 
 function handleTripSubmit(event, destinationId, numTravelers, departureDate, duration) {
+    event.preventDefault();
     const newTrip = retrieveInputs(event, destinationId, numTravelers, departureDate, duration);
     allTrips.push(newTrip);
     clearDestinationData(event, numTravelers, departureDate, duration);
@@ -156,7 +162,6 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
     })
 }
 
-
 function toggleDestinationInfo() {
     const details = destinationsListContainer.querySelectorAll('.destination-details');
     if(destInfoButton.innerText === 'show all details') {
@@ -173,6 +178,7 @@ function toggleDestinationInfo() {
 }
 
 function expandDestinationDetails(event) {
+    // event.preventDefault();
     const clickedDestination = event.target.closest('.destination-container');
     if(clickedDestination){
         const clickedDestinationHeader = event.target.closest('.destination-header');
@@ -190,6 +196,7 @@ function expandDestinationDetails(event) {
 }
 
 function clearDestinationData(event, numTravelers, departureDate, duration) {
+    event.preventDefault();
     const costField = findCostField(event);
     costField.innerText = ''
     numTravelers.value = '';
@@ -198,6 +205,7 @@ function clearDestinationData(event, numTravelers, departureDate, duration) {
 }
 
 function findCostField(event) {
+    event.preventDefault();
     const destinationDetails = event.target.closest('.destination-details');
     return destinationDetails.querySelector('p');
 }
@@ -281,7 +289,7 @@ function renderDestinations() {
                 </div>
                 <input class="duration-field" id="duration-${destination.destination}" type="number" min="1"  placeholder="#days" required>
                 <div class="form-element">
-                    <button class="submit-button" type="submit">Submit Trip!</button>
+                    <button class="submit-button" type="submit" disabled>Submit Trip!</button>
                 </div>
             </form>
                 <div class='new-costs'>
