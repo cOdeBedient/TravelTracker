@@ -7,20 +7,61 @@
   <title>Up And Away</title>
 </head>
 <body>
-  <header>
-    <h1>up&AWAY</h1>
-    <h2>Welcome to Your Fantasy Vacation, <span class="traveller">Rebecca</span></h2>
-  </header>
-  <main>
-    <section class="trips-container">
-      <h3>Trips:</h3>
-      <ul class="trips-list">
-        <!-- trips will go here -->
-      </ul>
+  <header class="hidden">
+    <section class="titles">
+      <h1>u &nbsp&nbsp&nbsp p &nbsp&nbsp&nbsp&nbsp&nbsp & &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp w &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp y</h1>
+      <h2>Y &nbsp o &nbsp u &nbsp r &nbsp&nbsp&nbsp&nbsp  F &nbsp a &nbsp n &nbsp t &nbsp a &nbsp s &nbsp y  &nbsp&nbsp&nbsp&nbsp V &nbsp a &nbsp c &nbsp a &nbsp t &nbsp i &nbsp o &nbsp n</h2>
     </section>
-    <section class="spent-container">
-      <h3>Total Spent:</h3>
-      <p class="dollars-spent">$0</p>
+    <button class="my-trips-button">my trips</button>
+  </header>
+  <p class="error-message hidden">
+    <!-- error message will go here -->
+  </p>
+  <section class="login-container hidden99999999">
+    <form class="login-form">
+      <div class="login-title">
+        <h1>u &nbsp&nbsp&nbsp p &nbsp&nbsp&nbsp&nbsp&nbsp & &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp w &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp y</h1>
+        <h2>Y &nbsp o &nbsp u &nbsp r &nbsp&nbsp&nbsp&nbsp  F &nbsp a &nbsp n &nbsp t &nbsp a &nbsp s &nbsp y  &nbsp&nbsp&nbsp&nbsp V &nbsp a &nbsp c &nbsp a &nbsp t &nbsp i &nbsp o &nbsp n
+      </div>
+      <div class="username-container">
+      <div class="login-form-element">
+          <label for="username">username:</label>
+      </div>
+      <input class="username-field" id="username" type="string" placeholder="username" required>
+      </div>
+      <div class="password-container">
+        <div class="login-form-element">
+          <label for="password">password:</label>
+        </div>
+        <input class="password-field" id="password" type="string" placeholder="password" required>
+      </div>
+      <div class="login-form-element button-container">
+        <button class="login-submit-button" type="submit">enter</button>
+      </div>
+      <p class="password-error"></p>
+    </form>
+  </section>
+  <main class="hidden">
+    <section class="trips-container hidden">
+      <h3 class="trips-heading">My Trips:</h3>
+      <div class="trips-list">
+        <!-- trips will go here -->
+      </div>
+    </section>
+    <section class="spent-container hidden">
+      <div>
+        <h4>Trip Spendings This Year:</h4>
+        <p class="dollars-spent">$0</p>
+      </div>
+    </section>
+    <section class="destinations-container">
+      <div class="destinations-heading-container">
+        <h3 class="destinations-heading">Plan your next adventure!</h3>
+        <button class="toggle-destinations">hide all details</button>
+      </div>
+      <div class="destinations-list">
+        <!-- destinations will go here -->
+      </div>
     </section>
   </main>
   <script src="bundle.js"></script>
