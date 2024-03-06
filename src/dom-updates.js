@@ -19,6 +19,7 @@ const body = document.querySelector('body');
 const myTripsButton = document.querySelector('.my-trips-button');
 const spentContainer = document.querySelector('.spent-container');
 const destinationsHeading = document.querySelector('.destinations-heading');
+const destInfoButton = document.querySelector('.toggle-destinations');
 
 
 // EVENT LISTENERS
@@ -52,8 +53,19 @@ tripsListContainer.addEventListener('click', function(event) {
     expandTripDetails(event, 'trip');
 });
 
+destInfoButton.addEventListener('click', toggleDestinationInfo);
 
 myTripsButton.addEventListener('click', showMyTrips);
+
+destinationsListContainer.addEventListener('click', function(event) {
+    expandDestinationDetails(event, 'destination');
+});
+
+destinationsListContainer.addEventListener('keydown', function(event) {
+    if(event.key === 'Enter') {
+        expandDestinationDetails(event, 'destination');
+    }
+});
 
 
 // GLOBAL VARIABLES
@@ -142,6 +154,39 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
     .catch(error => {
         displayError(error.message);
     })
+}
+
+
+function toggleDestinationInfo() {
+    const details = destinationsListContainer.querySelectorAll('.destination-details');
+    if(destInfoButton.innerText === 'show all details') {
+        details.forEach((detail) => {
+            detail.classList.remove('hidden');
+        })
+        destInfoButton.innerHTML = 'hide all details';
+    } else {
+        details.forEach((detail) => {
+            detail.classList.add('hidden');
+        })
+        destInfoButton.innerHTML = 'show all details';
+    }
+}
+
+function expandDestinationDetails(event) {
+    const clickedDestination = event.target.closest('.destination-container');
+    if(clickedDestination){
+        const clickedDestinationHeader = event.target.closest('.destination-header');
+        const clickedDestinationDetails = clickedDestination.querySelector('.destination-details');
+        if(!event.target.closest('.destination-details')) {
+            clickedDestinationDetails.classList.toggle("hidden");
+            const isExpanded = clickedDestinationHeader.getAttribute('aria-expanded') === 'true';
+            if(isExpanded) {
+                clickedDestinationHeader.setAttribute("aria-expanded", false);
+            } else {
+                clickedDestinationHeader.setAttribute("aria-expanded", true);
+            }
+        }
+    }
 }
 
 function clearDestinationData(event, numTravelers, departureDate, duration) {
