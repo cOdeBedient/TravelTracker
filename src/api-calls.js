@@ -36,7 +36,6 @@ function prepTripOptions(trip) {
 
 function handleTripPost(trip, url) {
     return postTrip(trip, url)
-    // .then(response => response.json())
 }
 
 function getData(id) {
