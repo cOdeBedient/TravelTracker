@@ -35,11 +35,11 @@ destinationsListContainer.addEventListener('submit', function(event) {
     }
 });
 
-destinationsListContainer.addEventListener('keyup', function(event) {
+destinationsListContainer.addEventListener('input', function(event) {
     handleFormEntry(event);
 });
 
-destinationsListContainer.addEventListener('click', function(event) {
+destinationsListContainer.addEventListener('input', function(event) {
     handleFormEntry(event);
 });
 
@@ -105,7 +105,7 @@ function handleSubmitClick(event) {
 }
 
 function handleFormEntry(event) {
-    if(event.target.tagName === "INPUT") {
+    if(event.target.closest('.trip-form')) {
         let destinationForm = event.target.closest('form');
         let destinationId = destinationForm.id.split('-')[1];
         let newTripData = destinationForm.querySelectorAll('input');
