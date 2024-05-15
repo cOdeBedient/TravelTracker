@@ -25,18 +25,9 @@ https://github.com/cOdeBedient/TravelTracker/assets/144140381/9d6ab33a-8194-46e2
   <img src="https://img.shields.io/badge/Lighthouse-F44B21?logo=lighthouse&logoColor=fff&style=for-the-badge" alt="lighthouse badge">
 </div>
 
-## Installation Instructions:
-- clone the local server to your machine
-    
-    ```
-    git clone git@github.com:turingschool-examples/travel-tracker-api.git
-    ```
-    
-- run `cd fitlit-api`
-- run `npm install`
-- run `npm start` to run the local server
-- navigate to this [link](http://cOdeBedient.github.io/TravelTracker)
-- use `CTRL + C` to stop running the local server when finished browsing the dashboard
+## Check out the app!:
+
+- app is live [here](http://cOdeBedient.github.io/TravelTracker)
 
 ## To Log in:
 - username: "traveler[number between 1 and 50]"
