@@ -107,6 +107,7 @@ span {
 
   .trip-header {
     display: flex;
+    // justify-content: flex-end;
     align-content: center;
     width: 100%;
     height: 45px;
@@ -227,34 +228,58 @@ span {
 
   h3 {
     font-size: 1.2em;
+    align-self: center;
+    margin: 0 10px 0 10px;
   }
+}
+
+// .plane-container {
+//   max-width: 100%;
+//   display: flex;
+//   align-items: center;
+  // justify-content: flex-end;
+// }
+
+// .trip-header {
+//   display: flex;
+//   align-content: center;
+//   width: 100%;
+//   height: 45px;
+//   margin-top: 8px;
+// }
+
+.fly {
+  margin-left: auto;
+  // margin-right: 30px;
+  transition: margin-left .5s ease;
+}
+
+.fly-back {
+  margin-left: 0%;
+  transition: margin-left .5s ease;
 }
 
 #plane {
   height: 50%;
   align-self: center;
-  display: inline-block;
+  // display: inline-block;
 }
 
-.fly {
-  margin-left: 70%;
-  margin-right: 30px;
-  transition: margin .5s ease;
-}
+// .fly {
+//   margin-left: 70%;
+//   margin-right: 30px;
+//   transition: margin .5s ease;
+// }
 
-.fly-back {
-  margin-left: 0%;
-  transition: margin .5s ease;
-}
+// .fly-back {
+//   margin-left: 0%;
+//   transition: margin .5s ease;
+// }
+
+
 
 label {
   font-size: 1.05em;
-}
-
-.destination-name {
-  align-self: center;
-  margin: 0 10px 0 10px;
-  font-size: .85em;
 }
 
 .destination-details {

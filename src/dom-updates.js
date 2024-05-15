@@ -146,7 +146,7 @@ function handleTripSubmit(event, destinationId, numTravelers, departureDate, dur
     const newTrip = retrieveInputs(event, destinationId, numTravelers, departureDate, duration);
     allTrips.push(newTrip);
     clearDestinationData(event, numTravelers, departureDate, duration);
-    handleTripPost(newTrip, 'http://localhost:3001/api/v1/trips')
+    handleTripPost(newTrip, 'https://up-and-away-api-f76be7fbb42b.herokuapp.com/api/v1/trips')
     .then(returnedTrip => {
         if(returnedTrip.ok) {
             currentTraveler = updateTraveler(currentTraveler, allTrips, allDestinations);
