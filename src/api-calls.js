@@ -1,13 +1,13 @@
 function getTraveler(id) {
-    return fetch(`http://localhost:3001/api/v1/travelers/${id}`);
+    return fetch(`https://up-and-away-api-f76be7fbb42b.herokuapp.com/api/v1/travelers/${id}`);
 }
 
 function getTrips() {
-    return fetch("http://localhost:3001/api/v1/trips");
+    return fetch("https://up-and-away-api-f76be7fbb42b.herokuapp.com/api/v1/trips");
 }
 
 function getDestinations() {
-    return fetch("http://localhost:3001/api/v1/destinations");
+    return fetch("https://up-and-away-api-f76be7fbb42b.herokuapp.com/api/v1/destinations");
 }
 
 function postTrip(trip, url) {
