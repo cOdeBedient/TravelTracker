@@ -27,7 +27,7 @@ https://github.com/cOdeBedient/TravelTracker/assets/144140381/9d6ab33a-8194-46e2
 
 ## Check out the app!:
 
-- app is live [here](http://cOdeBedient.github.io/TravelTracker)
+- app is live [here](https://codebedient.github.io/Up-and-A-w-a-y/)
 
 ## To Log in:
 - username: "traveler[number between 1 and 50]"
